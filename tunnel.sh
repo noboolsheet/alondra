@@ -2,7 +2,7 @@
 set -e
 
 # Publica ESTE sitio en internet por Cloudflare Tunnel (LOCALLY-MANAGED). El
-# conector cloudflared corre como contenedor unido a la red alondra_network y
+# conector cloudflared corre como contenedor unido a la red noboolsheet_network y
 # enruta el dominio -> este tunel -> http://alondra.app.prod:3000 segun las
 # reglas de ./cloudflared/config.yml.
 #
