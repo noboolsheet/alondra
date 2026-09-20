@@ -1,0 +1,48 @@
+# Dependencias y builds
+node_modules/
+dist/
+dist-ssr/
+build/
+coverage/
+*.tsbuildinfo
+
+# Secretos: un fichero por perfil, junto al compose (web/.env.dev, web/.env.prod).
+# Los envs NO-secreto del repo (puertos, nombres de contenedor) sí se versionan.
+.env
+.env.*
+!.env.example
+!envs/.env.dev
+!envs/.env.prod
+
+# Documentación interna de trabajo: briefs, dossiers, bios, documentos de
+# estrategia. No es parte del sitio y no tiene por qué acabar en el servidor.
+# Los originales viven en ../../_assets/<cliente>/
+docs/
+
+# Originales de imágenes: la pipeline (npm run images) genera los .webp de
+# public/images/, que son los únicos ficheros servidos.
+imagen-sources/
+images-resources/
+images-sources/
+docs-sources/
+*.docx
+*.xlsx
+*.pptx
+*.HEIC
+*.heic
+
+# Herramientas de desarrollo (no van al servidor)
+.impeccable/
+.lovable/
+.agents/
+skills-lock.json
+.claude/settings.local.json
+
+# Sistema operativo / editor
+.DS_Store
+*.log
+logs/
+*.local
+.vscode/*
+!.vscode/extensions.json
+.idea

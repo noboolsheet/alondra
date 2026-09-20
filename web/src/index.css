@@ -1,0 +1,246 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Alondra Music Academy — Brand Design System
+   Primary: #260B38 Deep Purple  |  Accent: #FFB236 Warm Yellow  |  Base: #FCF9FF Lavender White
+*/
+
+@layer base {
+  :root {
+    /* Base surfaces */
+    --background: 282 44% 95%;           /* soft lavender field — present, not washed-out white (light theme only) */
+    --foreground: 280 66% 13%;           /* #260B38 */
+
+    --card: 0 0% 100%;
+    --card-foreground: 280 66% 13%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 280 66% 13%;
+
+    /* Deep Purple */
+    --primary: 280 66% 13%;              /* #260B38 */
+    --primary-foreground: 270 100% 99%;
+
+    /* Warm Yellow */
+    --accent: 37 100% 60%;               /* #FFB236 — bright yellow for fills / icons / dark surfaces */
+    --accent-foreground: 280 66% 13%;
+    --accent-ink: 36 100% 28%;           /* darker amber for yellow-AS-TEXT on the lavender field (WCAG AA) */
+
+    --secondary: 280 34% 91%;            /* deepened so bg-secondary section banding reads on the new lavender field */
+    --secondary-foreground: 280 66% 13%;
+
+    --muted: 280 20% 94%;
+    --muted-foreground: 280 15% 40%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 280 30% 90%;
+    --input: 280 30% 90%;
+    --ring: 37 100% 60%;
+
+    --radius: 0.75rem;
+
+    /* Brand tokens */
+    --brand-purple: 280 66% 13%;
+    --brand-purple-soft: 280 50% 25%;
+    --brand-yellow: 37 100% 60%;
+    --brand-yellow-soft: 37 100% 88%;
+    --brand-lavender: 270 100% 99%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(280 66% 13%) 0%, hsl(280 55% 22%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(37 100% 60%) 0%, hsl(30 100% 55%) 100%);
+    --gradient-veil: linear-gradient(180deg, hsl(280 66% 13% / 0) 0%, hsl(280 66% 13% / 0.85) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 20px -6px hsl(280 66% 13% / 0.08);
+    --shadow-lift: 0 20px 40px -20px hsl(280 66% 13% / 0.25);
+    --shadow-glow: 0 0 40px hsl(37 100% 60% / 0.35);
+
+    /* Fonts */
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-sans: 'Nunito', system-ui, sans-serif;
+
+    --sidebar-background: 270 100% 99%;
+    --sidebar-foreground: 280 66% 13%;
+    --sidebar-primary: 280 66% 13%;
+    --sidebar-primary-foreground: 270 100% 99%;
+    --sidebar-accent: 280 30% 95%;
+    --sidebar-accent-foreground: 280 66% 13%;
+    --sidebar-border: 280 30% 90%;
+    --sidebar-ring: 37 100% 60%;
+  }
+
+  /* Dark theme — deep brand purple. Default on first visit (see index.html + ThemeContext). */
+  .dark {
+    --background: 280 45% 8%;             /* deep purple base */
+    --foreground: 270 60% 96%;           /* lavender white */
+
+    --card: 280 40% 12%;
+    --card-foreground: 270 60% 96%;
+
+    --popover: 280 40% 12%;
+    --popover-foreground: 270 60% 96%;
+
+    /* Inverted: primary is the light text color on dark surfaces */
+    --primary: 270 60% 96%;
+    --primary-foreground: 280 66% 13%;
+
+    /* Warm Yellow — unchanged */
+    --accent: 37 100% 60%;
+    --accent-foreground: 280 66% 13%;
+    --accent-ink: 37 100% 60%;           /* on dark surfaces the bright yellow already passes AA as text */
+
+    --secondary: 280 32% 18%;
+    --secondary-foreground: 270 60% 96%;
+
+    --muted: 280 28% 16%;
+    --muted-foreground: 280 15% 68%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 280 25% 22%;
+    --input: 280 25% 22%;
+    --ring: 37 100% 60%;
+
+    --brand-lavender: 280 45% 8%;
+
+    --shadow-soft: 0 4px 24px -6px hsl(280 80% 3% / 0.5);
+    --shadow-lift: 0 24px 48px -20px hsl(280 80% 3% / 0.7);
+    --shadow-glow: 0 0 40px hsl(37 100% 60% / 0.35);
+
+    --sidebar-background: 280 45% 8%;
+    --sidebar-foreground: 270 60% 96%;
+    --sidebar-primary: 270 60% 96%;
+    --sidebar-primary-foreground: 280 66% 13%;
+    --sidebar-accent: 280 32% 18%;
+    --sidebar-accent-foreground: 270 60% 96%;
+    --sidebar-border: 280 25% 22%;
+    --sidebar-ring: 37 100% 60%;
+  }
+
+  /* Regions painted on the dark brand surface (Footer, CTA banner). Pins the brand
+     tokens to their light-theme values so these blocks stay dark-purple with light
+     text in BOTH themes — independent of the global light/dark inversion. */
+  .on-brand-dark {
+    --primary: 280 66% 13%;
+    --primary-foreground: 270 100% 99%;
+    --secondary: 280 30% 95%;
+    --accent: 37 100% 60%;
+    --accent-foreground: 280 66% 13%;
+    --accent-ink: 37 100% 60%;           /* deep-purple region: bright yellow reads as text here */
+    --border: 280 30% 90%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight;
+    font-weight: 600;
+  }
+
+  ::selection {
+    background: hsl(var(--accent) / 0.4);
+    color: hsl(var(--primary));
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+}
+
+@layer components {
+  .container-narrow {
+    @apply max-w-4xl mx-auto px-5 sm:px-6;
+  }
+  .container-wide {
+    @apply max-w-6xl mx-auto px-5 sm:px-6;
+  }
+  .container-full {
+    @apply max-w-7xl mx-auto px-5 sm:px-6 lg:px-8;
+  }
+
+  .btn-cta {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-7 py-3.5 text-sm tracking-wide transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary text-primary font-semibold px-7 py-3.5 text-sm tracking-wide transition-all duration-300 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-[11px] font-bold tracking-[0.28em] uppercase;
+    color: hsl(var(--accent-ink));
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .bg-gradient-warm {
+    background: var(--gradient-warm);
+  }
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+  .shadow-lift {
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(0.9); opacity: 0.8; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Reduced motion — first-class per PRODUCT.md. Neutralizes CSS animation/transition
+   and smooth-scroll; framer-motion is handled via <MotionConfig reducedMotion="user">
+   plus per-component useReducedMotion() guards (Stats count-up, reviews autoplay). */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

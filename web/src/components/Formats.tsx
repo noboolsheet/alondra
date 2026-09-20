@@ -1,0 +1,50 @@
+import { motion } from "framer-motion";
+import { User, Users, Baby, type LucideIcon } from "lucide-react";
+import { useLang } from "@/i18n/LanguageContext";
+import { reveal, fadeUp, staggerParent, staggerSide } from "@/lib/motion";
+import { rich } from "@/lib/richtext";
+
+const FORMAT_ICON: Record<string, LucideIcon> = {
+  individual: User,
+  pianoLab: Users,
+  littleMozart: Baby,
+};
+
+export const Formats = () => {
+  const { t } = useLang();
+
+  return (
+    <section className="py-20 md:py-28">
+      <div className="container-full">
+        <motion.div {...reveal(fadeUp)} className="text-center mb-14 max-w-2xl mx-auto">
+          <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.formats.title}</h2>
+          <p className="mt-4 text-primary/70">{rich(t.formats.subtitle)}</p>
+        </motion.div>
+
+        <motion.div className="grid gap-6 md:grid-cols-3" {...reveal(staggerParent())}>
+          {t.programs.formats.map((f) => {
+            const Icon = FORMAT_ICON[f.key] ?? User;
+            return (
+              <motion.div
+                key={f.key}
+                variants={staggerSide(-1)}
+                className="rounded-3xl bg-card border border-border p-7 flex flex-col hover:shadow-lift transition-shadow"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-11 h-11 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-primary" strokeWidth={1.8} />
+                  </div>
+                  <span className="inline-flex items-center rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent-ink">
+                    {f.tag}
+                  </span>
+                </div>
+                <h3 className="mt-5 font-serif text-2xl text-primary">{f.title}</h3>
+                <p className="mt-3 text-sm text-primary/70 leading-relaxed">{rich(f.body)}</p>
+              </motion.div>
+            );
+          })}
+        </motion.div>
+      </div>
+    </section>
+  );
+};

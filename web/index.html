@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      // Set <html lang> from the URL prefix before anything renders. The attribute
+      // is hardcoded to "en" in this file, so a crawler that does not run the app
+      // would otherwise read a Spanish page as English.
+      (function () {
+        var seg = location.pathname.split("/")[1];
+        if (seg === "es" || seg === "fr") document.documentElement.lang = seg;
+      })();
+
+      // Apply saved theme before paint to avoid a flash. Defaults to dark.
+      (function () {
+        try {
+          var t = localStorage.getItem("alondra-theme");
+          document.documentElement.classList.toggle("dark", t !== "light");
+        } catch (e) {}
+      })();
+    </script>
+    <link rel="icon" href="/logo-minimal.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/logo-minimal.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#260B38" />
+    <title>Alondra Music Academy · In-Home Music Lessons in Miami</title>
+    <meta name="description" content="In-home private music lessons in Miami-Dade & Broward. Piano, violin, voice, guitar & flute. Every lesson integrates technique, rhythm, music reading and interpretation, with a teacher matched to your child." />
+    <meta name="author" content="Alondra Music Academy" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Alondra Music Academy" />
+    <meta property="og:url" content="https://alondrama.com/" />
+    <meta property="og:title" content="Alondra Music Academy · Private In-Home Music Lessons" />
+    <meta property="og:description" content="In-home private music lessons in Miami-Dade & Broward. A carefully selected teacher for every student, so they connect, enjoy learning and make steady progress." />
+
+    <!-- Preview image for links shared on Nextdoor, WhatsApp and Facebook.
+         usePageMeta swaps this for the visitor's language on each route. -->
+    <meta property="og:image" content="https://alondrama.com/images/og/og-en.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Alondra Music Academy - in-home music lessons in Miami-Dade and Broward" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://alondrama.com/images/og/og-en.jpg" />
+    <meta name="twitter:title" content="Alondra Music Academy" />
+    <meta name="twitter:description" content="Premium private music lessons at home in Miami-Dade & Broward." />
+
+    <!-- Opt out of GA on local dev so `npm run dev` doesn't pollute production data.
+         `ga-disable-<ID>` is Google's own kill switch and must be set before gtag.js loads. -->
+    <script>
+      (function () {
+        var h = location.hostname;
+        if (h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h.endsWith(".local")) {
+          window["ga-disable-G-4K99WS2BR6"] = true;
+        }
+      })();
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4K99WS2BR6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4K99WS2BR6');
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

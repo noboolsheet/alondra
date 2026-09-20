@@ -1,0 +1,34 @@
+name: stack-site-alondra-${DOCKER_PROFILE}
+
+# alondra: cliente activo. Un unico contenedor Express sirve el build estatico
+# (dist/) Y procesa los formularios (contacto/candidatura) enviando por Gmail.
+# En dev se accede directo por http://localhost:${ALONDRA_APP_EPORT} (sin Caddy).
+services:
+  frontend:
+    container_name: ${DOCKER_ALONDRA_APP_DDNS}.${DOCKER_PROFILE}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${ALONDRA_APP_IFACE}:${ALONDRA_APP_EPORT}:${ALONDRA_APP_IPORT}"
+    # Secretos (GMAIL_USER, GMAIL_APP_PASSWORD) desde alondra/.env, gitignored.
+    env_file:
+      - ./.env.${DOCKER_PROFILE}
+    environment:
+      - NODE_ENV=production
+      - PORT=${ALONDRA_APP_IPORT}
+      - CONTACT_TO=${ALONDRA_CONTACT_TO}
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:${ALONDRA_APP_IPORT}/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - custom_net_ref
+
+networks:
+  custom_net_ref:
+    name: ${DOCKER_NETWORK}
+    external: true

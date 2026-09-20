@@ -1,0 +1,38 @@
+name: stack-site-alondra-${DOCKER_PROFILE}
+
+# alondra: cliente activo. Un unico contenedor Express sirve el build estatico
+# (dist/) Y procesa los formularios (contacto/candidatura) enviando por Gmail.
+# A diferencia de las demos (unilp/utcs), aqui los formularios SI estan activos.
+services:
+  frontend:
+    container_name: ${DOCKER_ALONDRA_APP_DDNS}.${DOCKER_PROFILE}
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${ALONDRA_APP_IFACE}:${ALONDRA_APP_EPORT}:${ALONDRA_APP_IPORT}"
+    # Secretos (GMAIL_USER, GMAIL_APP_PASSWORD) desde alondra/.env, gitignored.
+    env_file:
+      - ./.env.${DOCKER_PROFILE}
+    environment:
+      - NODE_ENV=production
+      - PORT=${ALONDRA_APP_IPORT}
+      # Destinatario de los formularios (definido en envs/.env.$ENV). El remitente
+      # (GMAIL_USER) y la App Password vienen del .env gitignored.
+      - CONTACT_TO=${ALONDRA_CONTACT_TO}
+    # Healthcheck: pega al server dentro del contenedor. Si el bind quedo mal, el
+    # contenedor aparece 'unhealthy' en docker ps en vez de un 'Up' enganoso.
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:${ALONDRA_APP_IPORT}/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    networks:
+      - custom_net_ref
+
+networks:
+  custom_net_ref:
+    name: ${DOCKER_NETWORK}
+    external: true
