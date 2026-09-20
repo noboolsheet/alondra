@@ -1,0 +1,20 @@
+# Cloudflare Tunnel — locally managed. Este archivo SÍ se versiona (no es secreto).
+# Rellena los dos placeholders antes de levantar el túnel:
+#
+#   1) ad94d197-ed17-4426-a2f8-52cad1fa3e4c  -> el ID que imprime `cloudflared tunnel create alondra`
+#                      (es también el campo "TunnelID" del JSON de credenciales).
+#   2) alondrama.com -> el dominio real del cliente (apex + www).
+#
+# Las credenciales se copian a ./cloudflared/credentials.json (gitignored) y se
+# montan en el contenedor en /etc/cloudflared/credentials.json.
+
+tunnel: ad94d197-ed17-4426-a2f8-52cad1fa3e4c
+credentials-file: /etc/cloudflared/credentials.json
+
+# Reglas de enrutamiento (se evalúan en orden). El catch-all 404 final es obligatorio.
+ingress:
+  - hostname: alondrama.com
+    service: http://alondra.app.prod:3000
+  - hostname: www.alondrama.com
+    service: http://alondra.app.prod:3000
+  - service: http_status:404

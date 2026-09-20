@@ -46,3 +46,7 @@ logs/
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+# Cloudflare Tunnel: credenciales del túnel (SECRETO). El config.yml SÍ se versiona.
+cloudflared/*.json
+cloudflared/*.pem

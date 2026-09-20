@@ -26,13 +26,6 @@ else
     exit 1
 fi
 
-# 2b. Guarda de interfaz: el contenedor no debe publicar en 0.0.0.0. Caddy lo alcanza
-#     por nombre dentro de noboolsheet_network y `expose.sh` por localhost, así que
-#     127.0.0.1 basta y no deja el puerto abierto en la IP pública de vibox.
-if [[ "$DOCKER_IFACE" == *CAMBIAME* ]]; then
-    echo "❌ DOCKER_IFACE sigue sin rellenar en $ENV_DIR/.env.$ENV"
-    exit 1
-fi
 
 # 3. Ensure the Gmail secret file exists (GMAIL_APP_PASSWORD lives here, gitignored).
 if [ ! -f "$WEB_DIR/.env.$ENV" ]; then

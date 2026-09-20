@@ -1,0 +1,32 @@
+name: stack-site-alondra-tunnel
+
+# Cloudflare Tunnel (LOCALLY-MANAGED) para exponer alondra en internet sin IP
+# publica ni port-forwarding. El conector corre en la Raspberry Pi, se une a la
+# red externa alondra_network y enruta el dominio -> este tunel ->
+# http://alondra.app.prod:3000 segun las reglas de ./cloudflared/config.yml.
+#
+# La config y las credenciales se montan desde ./cloudflared:
+#   - config.yml         (versionado; NO secreto)
+#   - credentials.json   (gitignored; SECRETO, lo genera `cloudflared tunnel create`)
+#
+# Requisitos:
+#   - Sitio ya arriba:  ./deploy-alondra.sh prod  (crea alondra_network y el
+#     contenedor alondra.app.prod).
+#   - Setup del tunel hecho (login/create/route dns) — ver README.
+#
+# Arranque:  ./tunnel.sh up
+services:
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: alondra.cloudflared
+    restart: unless-stopped
+    command: tunnel --config /etc/cloudflared/config.yml --no-autoupdate run
+    volumes:
+      - ./cloudflared:/etc/cloudflared:ro
+    networks:
+      - custom_net_ref
+
+networks:
+  custom_net_ref:
+    name: noboolsheet_network   # red compartida del servidor
+    external: true

@@ -20,16 +20,25 @@ Un solo contenedor: el server Express sirve `dist/` **y** la API de formularios
 | Perfil | Puerto | Cómo se llega |
 |--------|--------|---------------|
 | `dev` | 4230 | `http://localhost:4230` |
-| `prod` | 4232 | Caddy lo publica en el dominio del cliente (`nbs-infra/caddy/CaddyFile`) |
+| `prod` | 4232 | público en `alondrama.com` por Cloudflare Tunnel (`./tunnel.sh up`) |
 
-El puerto se ata a `127.0.0.1`: el tráfico público entra por el 443 de Caddy, que
-alcanza el contenedor como `alondra.app.prod` dentro de `noboolsheet_network`.
+vibox no tiene IP pública, así que la puerta pública es un **túnel de Cloudflare**:
+el conector sale de casa, Cloudflare termina el TLS y enruta `alondrama.com` hacia
+el contenedor. No hay que abrir ningún puerto en el router.
+
+```sh
+./tunnel.sh up        # levanta el conector (config en web/cloudflared/config.yml)
+```
+
+Las credenciales del túnel (`web/cloudflared/credentials.json`) son **secretas** y
+están gitignored; el `config.yml` sí se versiona.
 
 ## Desplegar
 
 ```sh
-./deploy-alondra.sh {dev|prod}
-./expose.sh prod                 # preview puntual por Tailscale Funnel
+./deploy-alondra.sh {dev|prod}   # build + run
+./tunnel.sh up                   # publica el sitio en el dominio del cliente
+./expose.sh prod                 # preview puntual por Tailscale Funnel (sin dominio)
 ```
 
 Antes del primer despliegue, crear el fichero de secretos del perfil:
