@@ -16,7 +16,12 @@ import heicConvert from "heic-convert";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
-const SRC_DIR = path.join(ROOT, "imagen-sources");
+// Los originales viven FUERA del repo (pesaban 55 MB): en ../../_assets/alondra/imagenes/.
+// IMAGES_SRC_DIR permite apuntar ahí sin volver a meterlos en git; si no se pasa,
+// se usa la carpeta local (útil para soltar cuatro imágenes sueltas y probar).
+const SRC_DIR = process.env.IMAGES_SRC_DIR
+  ? path.resolve(ROOT, process.env.IMAGES_SRC_DIR)
+  : path.join(ROOT, "imagen-sources");
 const OUT_DIR = path.join(ROOT, "public", "images");
 
 const INPUT_EXTS = new Set([".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff", ".avif", ".heic", ".heif"]);

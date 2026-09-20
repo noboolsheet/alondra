@@ -47,9 +47,13 @@ Los `.webp` que sirve el sitio se generan desde los originales, que **no están 
 el repo** (pesaban 55 MB): viven en `../../_assets/alondra/imagenes/`.
 
 ```sh
-cd web && npm run images        # regenera public/images/
-cd web && npm run og            # regenera las imágenes Open Graph (1200x630)
+cd web
+IMAGES_SRC_DIR=../../../_assets/alondra/imagenes npm run images   # regenera public/images/
+npm run og                                                        # Open Graph (1200x630)
 ```
+
+Sin `IMAGES_SRC_DIR`, el script busca en `web/imagen-sources/` (vacía y gitignored),
+útil sólo para probar con un par de imágenes sueltas.
 
 Las Open Graph sí se versionan a propósito: usan una serif del sistema y un build
 en Linux las dibujaría con otra tipografía.
