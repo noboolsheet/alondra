@@ -48,5 +48,5 @@ logs/
 .idea
 
 # Cloudflare Tunnel: credenciales del túnel (SECRETO). El config.yml SÍ se versiona.
-cloudflared/*.json
-cloudflared/*.pem
+web/cloudflared/*.json
+web/cloudflared/*.pem
