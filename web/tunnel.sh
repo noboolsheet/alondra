@@ -22,8 +22,8 @@ set -e
 #   - ./cloudflared/credentials.json  (copiado desde `cloudflared tunnel create`)
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-COMPOSE_FILE="$SCRIPT_DIR/web/cloudflared.docker-compose.yml"
-CF_DIR="$SCRIPT_DIR/web/cloudflared"
+COMPOSE_FILE="$SCRIPT_DIR/cloudflared.docker-compose.yml"
+CF_DIR="$SCRIPT_DIR/cloudflared"
 CONFIG="$CF_DIR/config.yml"
 CREDS="$CF_DIR/credentials.json"
 CONTAINER="alondra.cloudflared"
@@ -32,8 +32,8 @@ CF=(docker compose -f "$COMPOSE_FILE")
 
 case "${1:-up}" in
     up)
-        if ! docker network inspect alondra_network >/dev/null 2>&1; then
-            echo "⚠️  La red alondra_network no existe todavia. Levanta el sitio primero:"
+        if ! docker network inspect noboolsheet_network >/dev/null 2>&1; then
+            echo "⚠️  La red noboolsheet_network no existe todavia. Levanta el sitio primero:"
             echo "    ./deploy-alondra.sh prod"
             exit 1
         fi
