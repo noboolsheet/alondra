@@ -37,6 +37,13 @@ docs-sources/
 .agents/
 skills-lock.json
 .claude/settings.local.json
+# Skill de impeccable, instalada por proyecto con `npx impeccable install --project`.
+# Son ~14 MB por repo, con un binario compilado por plataforma dentro: es herramienta
+# de la máquina, no código del proyecto, y una vez en la historia de git no se va ni
+# borrándola. Se reinstala con ese mismo comando en cada máquina donde haga falta.
+.claude/skills/
+.claude/agents/
+.codex/
 
 # Sistema operativo / editor
 .DS_Store
