@@ -3,7 +3,7 @@ set -e
 
 # Expone ESTE sitio publicamente por Tailscale Funnel para hacer un preview con el
 # cliente. El funnel apunta directo al puerto publicado del contenedor, asi que el
-# cliente recibe la URL https://<pi>.<tailnet>.ts.net y ve SOLO este sitio.
+# cliente recibe la URL https://<host>.<tailnet>.ts.net y ve SOLO este sitio.
 #
 # Uso:  ./expose.sh [dev|prod] [443|8443|10000]
 #   - 2do argumento: puerto HTTPS publico del funnel (default 443). Tailscale

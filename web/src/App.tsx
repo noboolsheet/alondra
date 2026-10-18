@@ -12,6 +12,7 @@ import type { Lang } from "@/i18n/translations";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { usePageviews } from "@/lib/analytics";
 import { usePageMeta } from "@/lib/pageMeta";
+import { useStructuredData } from "@/lib/structuredData";
 import Index from "./pages/Index";
 
 // Internal pages are code-split so the landing (home) ships a lean initial bundle.
@@ -51,6 +52,7 @@ const queryClient = new QueryClient();
 const RouteEffects = () => {
   usePageviews();
   usePageMeta();
+  useStructuredData();
   return null;
 };
 

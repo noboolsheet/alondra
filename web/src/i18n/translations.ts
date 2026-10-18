@@ -17,7 +17,7 @@ export interface Teacher {
   bio: string[];
 }
 
-type Dict = {
+export type Dict = {
   /** <title> y <meta description> por página. Lo consume usePageMeta(). */
   meta: Record<PageKey, { title: string; description: string }>;
   nav: { home: string; programs: string; about: string; registration: string; careers: string; contact: string; cta: string };

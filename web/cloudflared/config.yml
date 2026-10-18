@@ -1,22 +1,18 @@
 # Cloudflare Tunnel — locally managed. Este archivo SÍ se versiona (no es secreto).
 #
+# En servicio: el conector corre en vibox y sirve alondrama.com (apex + www).
+#
 # MUDANZA DE SERVIDOR O DE REPO: el túnel NO hay que rehacerlo. Su identidad son
 # tres cosas, y ninguna depende de dónde viva el repositorio:
 #   1. el UUID de abajo, registrado en tu cuenta de Cloudflare;
 #   2. ./credentials.json, el secreto que autentica al conector (gitignored, NO
 #      viaja por git: cópialo a mano de la máquina vieja a la nueva);
 #   3. los CNAME en Cloudflare DNS, que ya apuntan a <UUID>.cfargotunnel.com.
-# Copiando credentials.json a vibox, el mismo túnel sigue sirviendo el dominio.
 #
-# ⚠ NO dejes el conector corriendo en las dos máquinas a la vez: Cloudflare admite
-# varias réplicas del mismo túnel y reparte el tráfico entre ellas, así que
-# durante la migración unas visitas irían a la Pi y otras a vibox. Apaga el de la
-# Pi (./tunnel.sh down) antes de levantar el de vibox.
-# Rellena los dos placeholders antes de levantar el túnel:
-#
-#   1) ad94d197-ed17-4426-a2f8-52cad1fa3e4c  -> el ID que imprime `cloudflared tunnel create alondra`
-#                      (es también el campo "TunnelID" del JSON de credenciales).
-#   2) alondrama.com -> el dominio real del cliente (apex + www).
+# ⚠ NO dejes el conector corriendo en dos máquinas a la vez: Cloudflare admite
+# varias réplicas del mismo túnel y reparte el tráfico entre ellas, así que unas
+# visitas irían a una máquina y otras a la otra. Apaga el viejo (./tunnel.sh down)
+# antes de levantar el nuevo.
 #
 # Las credenciales se copian a ./cloudflared/credentials.json (gitignored) y se
 # montan en el contenedor en /etc/cloudflared/credentials.json.

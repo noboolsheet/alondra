@@ -189,7 +189,7 @@ Soft and reassuring is the governing feel: gentle radii, pill CTAs, diffuse purp
 
 ### Buttons
 - **Shape:** Full pill (`border-radius: 9999px`). CTAs and outline buttons are always pills.
-- **Primary CTA** (`btn-cta`): Golden Note background (`#FFB236`), Concert Purple text (`#260B38`), semibold, padding 14px 28px (`px-7 py-3.5`), letter-spacing wide. This is the trial-booking button — the gravitational center of every page.
+- **Primary CTA** (`btn-cta`): Golden Note background (`#FFB236`), Concert Purple text (`#260B38`), semibold, padding 14px 28px (`px-7 py-3.5`), letter-spacing wide. This is the discovery-call button — the gravitational center of every page.
 - **Hover / Focus:** Golden glow (`shadow-glow`) blooms and the button lifts `-2px` (`-translate-y-0.5`); returns on active. 300ms ease.
 - **Outline** (`btn-outline`): Transparent on lavender, 2px Concert Purple border, Concert Purple text. Hover fills with Concert Purple and flips text to lavender. Secondary actions ("Explore Programs").
 
@@ -206,7 +206,7 @@ Soft and reassuring is the governing feel: gentle radii, pill CTAs, diffuse purp
 - **Error:** Alert Red (`#E23636`) border + message. Placeholder text must still meet 4.5:1 (Muted Plum or darker, never a pale gray).
 
 ### Navigation
-- Header on Lavender Light with backdrop blur; nav links in Concert Purple, Golden Note on hover/active. Language switcher (en/es/fr) is a first-class control. The "Book a Trial" CTA lives in the header as a pill. Mobile collapses to a sheet/drawer.
+- Header on Lavender Light with backdrop blur; nav links in Concert Purple, Golden Note on hover/active. Language switcher (en/es/fr) is a first-class control. The header's CTA pill is the phone number, linking to WhatsApp; the in-page CTA to book the discovery call lives in the hero and in `CTABanner`. Mobile collapses to a sheet/drawer.
 
 ### Signature: The Eyebrow Kicker
 - The `eyebrow` (11px, 700, letter-spacing 0.28em, uppercase, Golden Note) is Alondra's one deliberate label system — often paired with a Sparkles icon in a bordered pill. It is a *named brand element used consistently*, not reflexive per-section scaffolding; keep it purposeful.
@@ -220,7 +220,7 @@ Soft and reassuring is the governing feel: gentle radii, pill CTAs, diffuse purp
 - **Do** keep the Golden Note (`#FFB236`) to ≤15% of any screen — it carries the CTA and the moments of delight, and its rarity is the point.
 - **Do** keep the body background lavender-white (`#FCF9FF`), tinted toward the brand purple.
 - **Do** tint every shadow toward Concert Purple (`#260B38`); use Soft at rest, Lift for featured, Glow for CTA hover.
-- **Do** lead every page toward the "Book a Trial" pill CTA — it is the gravitational center.
+- **Do** lead every page toward the "Book a discovery call" CTA — it is the gravitational center. The academy offers no trial or free class; never label a CTA as one.
 - **Do** ship real, tender imagery of children and music (Principle 1); make trust visible with badges and verified-faculty artifacts (Principle 2).
 - **Do** reserve the Fraunces italic accent for a single flourish per surface, in Golden Note.
 - **Do** hold layouts at en/es/fr word lengths — test the longest language at every breakpoint.
