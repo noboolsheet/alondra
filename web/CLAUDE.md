@@ -126,6 +126,16 @@ excluyen las *self-serving reviews*: la valoración del propio negocio, marcada 
 su propio sitio, sobre reseñas recogidas en otra plataforma. Hay un test que lo
 impide reintroducir. El razonamiento completo está en la cabecera del módulo.
 
+**Un solo host público.** El túnel enruta `alondrama.com` y `www.alondrama.com`
+al mismo contenedor, así que las cuatro variantes (http/https × apex/www)
+respondían 200 con la misma página — Search Console llegó a marcar 24 URLs como
+duplicadas por este motivo. `server/index.mjs` redirige con **301** cualquier
+variante al apex en https, leyendo el esquema de `x-forwarded-proto` (detrás del
+túnel el conector habla http con el contenedor). Sólo actúa sobre el dominio
+público y sólo en GET/HEAD: localhost, la LAN y el preview de Tailscale siguen
+sirviendo normal, y un 301 sobre un POST haría que el navegador lo reenviara como
+GET y los formularios dejarían de funcionar.
+
 `vite.config.ts` emite dos ficheros en el build desde ese mismo mapa de rutas,
 para que no puedan desincronizarse: `sitemap.xml` (con alternates hreflang) y
 `routes.json`. `server/index.mjs` lee `routes.json` para responder un **404 real**

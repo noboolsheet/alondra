@@ -8,6 +8,7 @@
 //   GMAIL_APP_PASSWORD  Gmail app password (16 chars, no spaces; needs 2FA enabled)
 //   CONTACT_TO          inbox that receives the messages (defaults to GMAIL_USER)
 //   PORT                server port (default 3001)
+//   CANONICAL_HOST      public hostname to redirect to (default alondrama.com)
 import "dotenv/config";
 import express from "express";
 import path from "node:path";
@@ -77,6 +78,42 @@ const sendFormEmail = async (res, { subject, heading, name, email, rows, attachm
 };
 
 const app = express();
+
+// --- Un solo host público --------------------------------------------------
+// El túnel enruta alondrama.com Y www.alondrama.com al mismo contenedor, así que
+// las cuatro variantes (http/https × apex/www) respondían 200 con la misma
+// página. Search Console lo confirmó: 24 URLs marcadas como duplicadas y casi
+// todas son variantes de host, más dos páginas canónicas para las que Google
+// eligió otra versión por su cuenta.
+//
+// El `canonical` que escribe usePageMeta las agrupa, pero sólo después de que
+// Google ejecute el JavaScript y decida hacernos caso — y en esos dos casos no
+// nos lo hizo. Un 301 resuelve la ambigüedad en la primera petición, sin
+// depender del renderizado ni de la buena voluntad del buscador.
+//
+// Dos cautelas deliberadas:
+//   • Sólo actúa sobre el dominio público. localhost, la IP de la LAN y el
+//     preview de Tailscale (*.ts.net) se quedan como están, o se rompe tanto el
+//     desarrollo como la demo con el cliente.
+//   • Sólo GET y HEAD. Un 301 sobre un POST hace que el navegador lo reenvíe
+//     como GET y pierda el cuerpo: los formularios dejarían de funcionar.
+const CANONICAL_HOST = process.env.CANONICAL_HOST || "alondrama.com";
+
+app.use((req, res, next) => {
+  if (req.method !== "GET" && req.method !== "HEAD") return next();
+
+  const host = String(req.headers.host || "").toLowerCase().split(":")[0];
+  if (host !== CANONICAL_HOST && host !== `www.${CANONICAL_HOST}`) return next();
+
+  // Detrás del túnel el conector habla http con el contenedor; el esquema que
+  // usó el visitante llega en x-forwarded-proto. Si no hay cabecera, asumimos
+  // https para no redirigir en bucle a quien ya venía bien.
+  const proto = String(req.headers["x-forwarded-proto"] || "https").split(",")[0].trim();
+  if (host === CANONICAL_HOST && proto === "https") return next();
+
+  return res.redirect(301, `https://${CANONICAL_HOST}${req.originalUrl}`);
+});
+
 app.use(express.json({ limit: "32kb" }));
 
 // --- Contact form → email -------------------------------------------------
