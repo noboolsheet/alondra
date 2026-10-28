@@ -571,6 +571,18 @@ export const translations: Record<Lang, Dict> = {
               "At Alondra Music Academy, Claudia creates a motivating learning environment where **technique, artistic expression and confidence** grow hand in hand. Her commitment is that every student enjoys the process of learning music, strengthens their skills and discovers a passion that will stay with them throughout their life.",
             ],
           },
+          {
+            slug: "profe-mayda",
+            name: "Mayda Placeres",
+            role: "Piano teacher",
+            photo: "/images/profe-mayda.webp",
+            summary: "A pianist and teacher with **more than three decades of experience** in the conservatories of Cuba and Mexico, who now teaches piano to children in Miami.",
+            bio: [
+              "Mayda Placeres trained at the National School of Music in Havana, where she earned her degree in Music with a **specialization in piano**, and later completed a postgraduate programme in Musical Heritage and Historiography at the Universidad San Gerónimo de La Habana. Her teaching career began at that same school, where she taught piano for **two decades**.",
+              "She went on to teach at the National Conservatory of Music of Mexico, in Mexico City, before settling in South Florida, where she has been teaching piano to children since 2022. Across thirty years and three countries, her work has combined an **advanced command of classical piano** with a deep knowledge of music theory and a steady focus on what actually works in a lesson: clear technique, effective teaching methods and a close relationship with each student.",
+              "At Alondra Music Academy, Mayda teaches piano to children and young people. Her lessons build **solid technical foundations** without losing the motivation that keeps a child coming back to the instrument — the balance she has refined over a career spent in conservatories and, above all, in front of students.",
+            ],
+          },
         ],
       },
       verification: {
@@ -1017,6 +1029,18 @@ export const translations: Record<Lang, Dict> = {
               "En Alondra Music Academy, Claudia crea un ambiente de aprendizaje motivador donde **la técnica, la expresión artística y la confianza** crecen de la mano. Su compromiso es que cada estudiante disfrute del proceso de aprender música, fortalezca sus habilidades y descubra una pasión que lo acompañe durante toda la vida.",
             ],
           },
+          {
+            slug: "profe-mayda",
+            name: "Mayda Placeres",
+            role: "Profesora de piano",
+            photo: "/images/profe-mayda.webp",
+            summary: "Pianista y profesora con **más de tres décadas de experiencia** en los conservatorios de Cuba y México, que hoy enseña piano a niños en Miami.",
+            bio: [
+              "Mayda Placeres se formó en la Escuela Nacional de Música de La Habana, donde obtuvo su título en Música con **especialización en piano**, y más tarde cursó un postgrado en Patrimonio Musical e Historiografía de la Música en la Universidad San Gerónimo de La Habana. Su carrera docente empezó en esa misma escuela, donde impartió clases de piano durante **dos décadas**.",
+              "Después enseñó en el Conservatorio Nacional de Música de México, en Ciudad de México, antes de instalarse en el sur de Florida, donde da clases de piano a niños desde 2022. A lo largo de treinta años y tres países, su trabajo ha combinado un **dominio avanzado del piano clásico** con un profundo conocimiento de la teoría musical y una atención constante a lo que de verdad funciona en una clase: técnica clara, métodos de enseñanza eficaces y una relación cercana con cada estudiante.",
+              "En Alondra Music Academy, Mayda enseña piano a niños y jóvenes. Sus clases construyen **bases técnicas sólidas** sin perder la motivación que hace que un niño quiera volver al instrumento: el equilibrio que ha ido afinando en una carrera hecha en conservatorios y, sobre todo, delante de los alumnos.",
+            ],
+          },
         ],
       },
       verification: {
@@ -1454,6 +1478,18 @@ export const translations: Record<Lang, Dict> = {
               "Rencontrez Claudia D. Rodríguez, euphoniumiste, chanteuse et éducatrice musicale de talent, passionnée par la formation d'élèves alliant **excellence, créativité et amour de la musique**. Sa solide préparation académique et sa vaste expérience d'enseignante et d'interprète lui permettent d'offrir un enseignement dynamique et personnalisé, inspirant des **élèves de tous âges** à développer leur plein potentiel.",
               "Diplômée de l'Université des Arts (ISA) de Cuba avec une licence en Musique et une **spécialisation en Euphonium**, et formée au prestigieux Conservatoire Esteban Salas, Claudia a enseigné l'euphonium, le tuba, le piano et la musique de chambre dans des institutions musicales reconnues. Elle a également mené une belle carrière d'instrumentiste et de chanteuse, se produisant dans des orchestres d'harmonie, des chœurs professionnels et des ensembles internationaux, sur des scènes à Cuba comme à l'étranger.",
               "À Alondra Music Academy, Claudia crée un environnement d'apprentissage motivant où **la technique, l'expression artistique et la confiance** grandissent de pair. Son engagement : que chaque élève prenne plaisir à apprendre la musique, renforce ses compétences et découvre une passion qui l'accompagnera toute sa vie.",
+            ],
+          },
+          {
+            slug: "profe-mayda",
+            name: "Mayda Placeres",
+            role: "Professeure de piano",
+            photo: "/images/profe-mayda.webp",
+            summary: "Pianiste et professeure forte de **plus de trois décennies d’expérience** dans les conservatoires de Cuba et du Mexique, elle enseigne aujourd’hui le piano aux enfants à Miami.",
+            bio: [
+              "Mayda Placeres s’est formée à l’École nationale de musique de La Havane, où elle a obtenu son diplôme de musique avec une **spécialisation en piano**, puis a suivi un troisième cycle en patrimoine musical et historiographie de la musique à l’Universidad San Gerónimo de La Habana. Sa carrière d’enseignante a commencé dans cette même école, où elle a donné des cours de piano pendant **deux décennies**.",
+              "Elle a ensuite enseigné au Conservatoire national de musique du Mexique, à Mexico, avant de s’installer dans le sud de la Floride, où elle enseigne le piano aux enfants depuis 2022. En trente ans et trois pays, son travail a associé une **maîtrise avancée du piano classique** à une connaissance approfondie de la théorie musicale et à une attention constante à ce qui fonctionne vraiment en cours : une technique claire, des méthodes d’enseignement efficaces et une relation proche avec chaque élève.",
+              "À Alondra Music Academy, Mayda enseigne le piano aux enfants et aux adolescents. Ses cours posent des **bases techniques solides** sans perdre la motivation qui donne envie à un enfant de revenir à son instrument : l’équilibre qu’elle a affiné au fil d’une carrière menée dans les conservatoires et, surtout, face aux élèves.",
             ],
           },
         ],
