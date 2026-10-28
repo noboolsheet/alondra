@@ -30,8 +30,11 @@ const typed = (nodes: Record<string, unknown>[], type: string) =>
 describe("datos estructurados", () => {
   it("la portada declara la academia como negocio de área de servicio", async () => {
     const nodes = await graph("/");
-    const [org] = typed(nodes, "MusicSchool");
+    const [org] = typed(nodes, "LocalBusiness");
     expect(org).toBeDefined();
+    // Los dos tipos, y ninguno inventado: un @type que schema.org no define
+    // invalida todo lo que cuelga de él. `MusicSchool` lo parecía y no existe.
+    expect(org["@type"]).toEqual(["LocalBusiness", "EducationalOrganization"]);
     expect(org.name).toBe("Alondra Music Academy");
     // Lo que hace falta que Google entienda: se desplaza, no tiene local.
     expect(org.areaServed).toEqual(

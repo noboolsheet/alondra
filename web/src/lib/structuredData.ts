@@ -52,7 +52,19 @@ const areaServed = (t: Dict) => [
 ];
 
 /**
- * La academia: MusicSchool (que es un LocalBusiness) sin dirección de calle.
+ * La academia, sin dirección de calle.
+ *
+ * El tipo es un par, y conviene saber por qué. `MusicSchool` **no existe** en
+ * schema.org —parece que sí, por analogía con MusicVenue o MusicStore, pero el
+ * vocabulario no lo define— y un tipo inventado no es que se ignore: invalida
+ * todas las propiedades que cuelgan de él y arrastra a las referencias que lo
+ * apuntan (`publisher`, `about`). Lo detectó el validador de schema.org.
+ *
+ * `EducationalOrganization` aporta la semántica de centro educativo, y
+ * `LocalBusiness` es lo que hace legales `priceRange`, `currenciesAccepted` y
+ * `openingHoursSpecification`, que sólo existen ahí. Los dos tipos a la vez son
+ * JSON-LD válido y la forma estándar de describir una escuela que además es un
+ * negocio local.
  *
  * Omitir `streetAddress` es deliberado y no un descuido: no hay local al que
  * acuda nadie, y publicar la dirección de casa de Ilena como si fuera una sede
@@ -60,7 +72,7 @@ const areaServed = (t: Dict) => [
  * `areaServed` son lo que describe el negocio de verdad.
  */
 const organization = (t: Dict, lang: Lang): JsonLd => ({
-  "@type": "MusicSchool",
+  "@type": ["LocalBusiness", "EducationalOrganization"],
   "@id": ORG_ID,
   name: "Alondra Music Academy",
   url: SITE_ORIGIN + pathFor("home", lang),
@@ -224,7 +236,9 @@ export const graphFor = (t: Dict, lang: Lang, page: PageKey): JsonLd => {
     isPartOf: { "@id": SITE_ID },
     about: { "@id": ORG_ID },
     inLanguage: lang,
-    primaryImageOfPage: `${SITE_ORIGIN}/images/og/og-${lang}.jpg`,
+    // Un string suelto aquí se interpreta como el NOMBRE de la imagen, no como
+    // su URL: `primaryImageOfPage` espera un ImageObject.
+    primaryImageOfPage: { "@type": "ImageObject", url: `${SITE_ORIGIN}/images/og/og-${lang}.jpg` },
   };
 
   if (isHome) webPage.mainEntity = faqEntities(t);

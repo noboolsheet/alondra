@@ -108,11 +108,18 @@ hreflang, para que una URL desconocida no pueda declararse como una página real
 (`src/lib/structuredData.ts`) inyecta un `<script type="application/ld+json">` por
 ruta y lo retira en el 404, con la misma lógica que el canonical. El grafo sale
 entero de `translations.ts`, así que viaja en el idioma de la página y no puede
-contradecir a la copy: `MusicSchool` con `areaServed` (lo que declara que Alondra
-es un negocio de **área de servicio**, que se desplaza al domicilio y no tiene
-local), `WebSite`, la `WebPage` de la ruta, migas en las internas, `FAQPage` en la
-portada, un `Course` por disciplina en `/music-lessons`, el `Service` con los dos
-precios reales en `/pricing` y las `Person` del equipo en `/about`.
+contradecir a la copy: la academia como `["LocalBusiness", "EducationalOrganization"]`
+con `areaServed` (lo que declara que Alondra es un negocio de **área de servicio**,
+que se desplaza al domicilio y no tiene local), `WebSite`, la `WebPage` de la ruta,
+migas en las internas, `FAQPage` en la portada, un `Course` por disciplina en
+`/music-lessons`, el `Service` con los dos precios reales en `/pricing` y las
+`Person` del equipo en `/about`.
+
+**Los tipos se comprueban, no se deducen.** El grafo salió a producción con
+`@type: "MusicSchool"`, que parece existir —por analogía con `MusicVenue` o
+`MusicStore`— y schema.org no define. Un tipo inventado no se ignora: invalida
+todas sus propiedades y arrastra a quien lo referencia. Antes de usar un tipo que
+no hayas visto en el vocabulario, pásalo por `validator.schema.org`.
 
 **No lleva `aggregateRating`, y es deliberado** — las directrices de Google
 excluyen las *self-serving reviews*: la valoración del propio negocio, marcada en
