@@ -68,6 +68,23 @@ Ya está montado y corriendo en vibox. Lo normal es sólo:
 ../tunnel.sh down
 ```
 
+### Actualizar el conector
+
+Cloudflare avisa por correo cuando la versión de `cloudflared` se queda atrás.
+
+```sh
+../tunnel.sh version         # la que corre frente a la última publicada
+../tunnel.sh update          # pull de la imagen + recrear el contenedor
+```
+
+El conector corre con `--no-autoupdate` a propósito: un `cloudflared` que se
+autoactualiza reemplaza su binario **dentro** del contenedor y ese cambio se
+pierde al reiniciar. En Docker la unidad que se actualiza es la imagen.
+
+Actualizar **no toca la identidad del túnel** — el UUID, las credenciales y los
+CNAME siguen igual, así que el dominio no corre riesgo. Sólo hay un corte de
+unos segundos mientras el contenedor se recrea.
+
 ⚠️ **No dejes el conector corriendo en dos máquinas a la vez.** Cloudflare admite
 réplicas del mismo túnel y reparte el tráfico entre ellas, así que unas visitas
 irían a una y otras a la otra.

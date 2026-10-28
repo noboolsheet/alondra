@@ -15,6 +15,18 @@ set -e
 #   ./tunnel.sh down      # lo apaga y elimina el contenedor
 #   ./tunnel.sh status    # estado del contenedor cloudflared
 #   ./tunnel.sh logs      # sigue los logs del conector
+#   ./tunnel.sh version   # version en ejecucion frente a la ultima publicada
+#   ./tunnel.sh update    # baja la ultima imagen y recrea el conector
+#
+# Sobre actualizar: el conector corre con --no-autoupdate a proposito. Un
+# cloudflared que se autoactualiza reemplaza su binario DENTRO del contenedor, y
+# ese cambio se pierde en el siguiente arranque; en Docker la unidad que se
+# actualiza es la imagen. Por eso "update" hace pull + recreate.
+#
+# Actualizar el conector NO toca la identidad del tunel: el UUID, las
+# credenciales y los CNAME del DNS siguen siendo los mismos, asi que el dominio
+# no corre ningun riesgo. Lo unico que ocurre es un corte de unos segundos
+# mientras el contenedor se recrea.
 #
 # Requisitos (setup una sola vez, ver README):
 #   - ./deploy-alondra.sh prod   (red + contenedor alondra.app.prod arriba)
@@ -57,8 +69,29 @@ case "${1:-up}" in
     logs)
         docker logs -f "$CONTAINER"
         ;;
+    version)
+        echo "— en ejecucion —"
+        docker logs "$CONTAINER" 2>&1 | grep -ioEm1 'version [0-9][0-9.]*' \
+            || echo "  (sin linea de version en los logs; mira ./tunnel.sh logs)"
+        docker inspect --format '  imagen {{.Config.Image}} · contenedor creado {{.Created}}' \
+            "$CONTAINER" 2>/dev/null || echo "  (el contenedor no esta corriendo)"
+        echo "— ultima publicada —"
+        docker run --rm cloudflare/cloudflared:latest --version 2>/dev/null \
+            || echo "  (no se pudo consultar)"
+        ;;
+    update)
+        echo "⬆️  Bajando la ultima imagen de cloudflared ..."
+        "${CF[@]}" pull
+        echo "♻️  Recreando el conector (corte de unos segundos) ..."
+        "${CF[@]}" up -d
+        sleep 4
+        echo
+        docker logs "$CONTAINER" 2>&1 | grep -iE 'version|Registered tunnel connection' | head -6
+        echo
+        echo "✅ Comprueba que vuelve a haber 4 conexiones registradas:  ./tunnel.sh logs"
+        ;;
     *)
-        echo "Uso: $0 {up|down|status|logs}"
+        echo "Uso: $0 {up|down|status|logs|version|update}"
         exit 1
         ;;
 esac
