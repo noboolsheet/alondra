@@ -61,11 +61,11 @@ export const CoverageMap = () => {
                   <h3 className="font-sans font-bold text-xl">{t.coverage.contactsTitle}</h3>
                 </div>
                 <div className="mt-3 grid gap-3 text-sm">
-                  <a href={`tel:${t.contact.infoPhone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2.5 min-w-0 text-primary hover:text-accent transition-colors">
+                  <a data-track-loc="coverage" href={`tel:${t.contact.infoPhone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2.5 min-w-0 text-primary hover:text-accent transition-colors">
                     <Phone className="w-4 h-4 flex-shrink-0 text-accent" />
                     <span className="break-words min-w-0">{t.contact.infoPhone}</span>
                   </a>
-                  <a href={`mailto:${t.contact.infoEmail}`} className="flex items-center gap-2.5 min-w-0 text-primary hover:text-accent transition-colors">
+                  <a data-track-loc="coverage" href={`mailto:${t.contact.infoEmail}`} className="flex items-center gap-2.5 min-w-0 text-primary hover:text-accent transition-colors">
                     <Mail className="w-4 h-4 flex-shrink-0 text-accent" />
                     <span className="break-all min-w-0">{t.contact.infoEmail}</span>
                   </a>

@@ -100,7 +100,7 @@ export const Header = () => {
               {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <LanguageSwitcher />
-            <a
+            <a data-track-loc="header"
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -164,7 +164,7 @@ export const Header = () => {
                 })}
                 <div className="pt-4 space-y-3">
                   <LanguageSwitcher variant="mobile" />
-                  <a
+                  <a data-track-loc="header_menu"
                     href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noopener noreferrer"

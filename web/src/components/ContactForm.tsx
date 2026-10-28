@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
 import { useLang } from "@/i18n/LanguageContext";
+import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
 
 export const ContactForm = () => {
@@ -10,6 +11,7 @@ export const ContactForm = () => {
   const [company, setCompany] = useState(""); // honeypot — real users never fill this
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const track = useTrack();
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [accepted, setAccepted] = useState(false);
@@ -40,6 +42,9 @@ export const ContactForm = () => {
       });
       if (!res.ok) throw new Error("Request failed");
       setSent(true);
+      // En la respuesta OK, nunca en el clic del boton: si se mide el clic se
+      // cuentan como leads los envios que fallaron.
+      track("generate_lead", { form: "contact", city: data.city || "" });
     } catch {
       setSubmitError(t.contact.errorSend);
     } finally {

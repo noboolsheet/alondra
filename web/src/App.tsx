@@ -10,7 +10,7 @@ import { ThemeProvider } from "@/theme/ThemeContext";
 import { PageKey, pathFor } from "@/i18n/routes";
 import type { Lang } from "@/i18n/translations";
 import { ScrollToTop } from "./components/ScrollToTop";
-import { usePageviews } from "@/lib/analytics";
+import { usePageviews, useOutboundTracking } from "@/lib/analytics";
 import { usePageMeta } from "@/lib/pageMeta";
 import { useStructuredData } from "@/lib/structuredData";
 import Index from "./pages/Index";
@@ -53,6 +53,7 @@ const RouteEffects = () => {
   usePageviews();
   usePageMeta();
   useStructuredData();
+  useOutboundTracking();
   return null;
 };
 

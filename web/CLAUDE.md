@@ -148,8 +148,23 @@ que `npm run dev` en localhost no contamine los datos de producción. Como esto 
 una SPA, la etiqueta sola sólo reportaría la página de entrada: `usePageviews()`
 (`src/lib/analytics.ts`) emite un `page_view` en cada cambio de ruta posterior.
 `track()`, en el mismo módulo, es un no-op seguro cuando gtag no está (bloqueador,
-dev local). **Hoy `track()` no se llama desde ningún sitio: no hay eventos de
-conversión instrumentados.**
+dev local).
+
+**Las conversiones se miden con seis eventos.** `useTrack()` añade solos el idioma
+y la página; `useOutboundTracking()` (montado en `RouteEffects`) registra con **un
+único listener delegado** los clics a WhatsApp, teléfono y correo — la alternativa
+eran quince `onClick` repartidos por siete componentes, y la número dieciséis se
+olvida. Cada enlace saliente lleva un `data-track-loc` con su origen (`hero`,
+`header`, `footer`, `coverage`, `widget`, `contact_page`): sin ese parámetro sabes
+que hubo 40 clics a WhatsApp pero no de dónde salieron, que es lo que decide dónde
+va el botón. Los formularios emiten `generate_lead` y `application_submit`
+**en la respuesta OK del fetch**, nunca en el clic del botón, o se contarían como
+leads los envíos que fallaron. Falta la parte de consola, que no es código:
+marcar los eventos clave y registrar `lang`, `page` y `location` como dimensiones
+personalizadas — que no son retroactivas.
+
+Para probarlos en local, `?ga=on` levanta la guarda de localhost y enciende
+`debug_mode`, así que los eventos aparecen en DebugView sin ensuciar producción.
 
 **Los formularios van contra un backend de correo real.** `server/index.mjs` es un
 Express (nodemailer sobre Gmail SMTP) que expone `POST /api/send-contact` y

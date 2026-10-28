@@ -49,10 +49,15 @@
          `ga-disable-<ID>` is Google's own kill switch and must be set before gtag.js loads. -->
     <script>
       (function () {
+        // ?ga=on levanta la guarda para una sesion de prueba manual y enciende
+        // DebugView. Sin esto no hay forma de comprobar los eventos en local:
+        // la guarda los apaga justo donde se desarrolla.
+        var forced = /(?:^|[?&])ga=on(?:&|$)/.test(location.search);
         var h = location.hostname;
-        if (h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h.endsWith(".local")) {
+        if (!forced && (h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h.endsWith(".local"))) {
           window["ga-disable-G-4K99WS2BR6"] = true;
         }
+        window.__alondraGaDebug = forced;
       })();
     </script>
 
@@ -63,7 +68,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
-      gtag('config', 'G-4K99WS2BR6');
+      gtag('config', 'G-4K99WS2BR6', window.__alondraGaDebug ? { debug_mode: true } : {});
     </script>
   </head>
   <body>

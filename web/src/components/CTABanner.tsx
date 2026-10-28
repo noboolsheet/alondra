@@ -3,11 +3,13 @@ import { PageLink } from "@/components/PageLink";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
+import { useTrack } from "@/lib/analytics";
 import { reveal, scaleIn } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
 
 export const CTABanner = () => {
   const { t } = useLang();
+  const track = useTrack();
   return (
     <section className="py-16">
       <div className="container-full">
@@ -24,7 +26,11 @@ export const CTABanner = () => {
             </h2>
             <p className="mt-4 text-primary-foreground/80 max-w-xl mx-auto">{rich(t.ctaBanner.body, "font-semibold text-primary-foreground")}</p>
             <div className="mt-8 flex justify-center">
-              <PageLink to="contact" className="btn-cta text-base">
+              <PageLink
+                to="contact"
+                className="btn-cta text-base"
+                onClick={() => track("cta_click", { location: "cta_banner", label: "discovery_call" })}
+              >
                 {t.ctaBanner.button}
                 <ArrowRight className="w-4 h-4" />
               </PageLink>

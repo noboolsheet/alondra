@@ -59,7 +59,7 @@ export const RegistrationWidget = () => {
               <h4 className="font-serif text-xl text-primary">{t.widget.errorTitle}</h4>
               <p className="max-w-sm text-sm text-primary/70 leading-relaxed">{rich(t.widget.directHelp)}</p>
               <div className="flex flex-wrap items-center justify-center gap-3">
-                <a
+                <a data-track-loc="widget"
                   href={`https://wa.me/${phoneDigits.replace(/^\+/, "")}`}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -83,7 +83,7 @@ export const RegistrationWidget = () => {
         {status !== "error" && (
           <p className="mt-4 text-center text-sm text-primary/70">
             {rich(t.widget.directHelp)}{" "}
-            <a href={`mailto:${t.contact.infoEmail}`} className="font-semibold text-accent-ink underline underline-offset-2">
+            <a data-track-loc="widget" href={`mailto:${t.contact.infoEmail}`} className="font-semibold text-accent-ink underline underline-offset-2">
               {t.contact.infoEmail}
             </a>
           </p>

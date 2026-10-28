@@ -3,10 +3,12 @@ import { PageLink } from "@/components/PageLink";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
+import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
 
 export const Hero = () => {
   const { t } = useLang();
+  const track = useTrack();
 
   return (
     <section className="relative min-h-[92vh] flex items-center overflow-hidden">
@@ -61,7 +63,7 @@ export const Hero = () => {
             </PageLink>
             {/* Mobile: the discovery-call CTA opens WhatsApp directly (uses the
                 contact phone number). Desktop keeps the routed contact page. */}
-            <a
+            <a data-track-loc="hero"
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -70,7 +72,11 @@ export const Hero = () => {
               {t.hero.ctaPrimary}
               <ArrowRight className="w-4 h-4" />
             </a>
-            <PageLink to="contact" className="btn-cta hidden sm:inline-flex">
+            <PageLink
+              to="contact"
+              className="btn-cta hidden sm:inline-flex"
+              onClick={() => track("cta_click", { location: "hero", label: "discovery_call" })}
+            >
               {t.hero.ctaPrimary}
               <ArrowRight className="w-4 h-4" />
             </PageLink>

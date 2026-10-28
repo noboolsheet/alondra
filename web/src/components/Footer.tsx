@@ -24,10 +24,10 @@ export const Footer = () => {
             <p className="mt-5 text-sm text-primary-foreground/70 leading-relaxed">{rich(t.footer.tagline, "font-semibold text-primary-foreground")}</p>
             {/* Contact */}
             <div className="mt-6 flex flex-col gap-2 text-sm text-primary-foreground/70">
-              <a href={`mailto:${t.contact.infoEmail}`} className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors">
+              <a data-track-loc="footer" href={`mailto:${t.contact.infoEmail}`} className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors">
                 <Mail className="w-4 h-4" /> {t.contact.infoEmail}
               </a>
-              <a href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors">
+              <a data-track-loc="footer" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors">
                 <Phone className="w-4 h-4" /> {t.contact.infoPhone}
               </a>
             </div>
@@ -39,7 +39,7 @@ export const Footer = () => {
               <a href="https://www.facebook.com/people/Alondra-Music-Academy/61590624003294/#" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <Facebook className="w-4 h-4" />
               </a>
-              <a href="https://wa.me/17868431028" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
+              <a data-track-loc="footer" href="https://wa.me/17868431028" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <WhatsAppIcon className="w-4 h-4" />
               </a>
             </div>

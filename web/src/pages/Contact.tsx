@@ -30,7 +30,7 @@ const Contact = () => {
             <div className="on-brand-dark rounded-3xl bg-gradient-hero p-8 text-primary-foreground">
               <h2 className="font-serif text-2xl">{t.contact.infoTitle}</h2>
               <div className="mt-6 space-y-4">
-                <a href={`mailto:${t.contact.infoEmail}`} className="flex items-start gap-4 group">
+                <a data-track-loc="contact_page" href={`mailto:${t.contact.infoEmail}`} className="flex items-start gap-4 group">
                   <div className="w-11 h-11 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
                     <Mail className="w-5 h-5 text-accent" />
                   </div>
@@ -39,7 +39,7 @@ const Contact = () => {
                     <div className="text-primary-foreground mt-0.5 break-all group-hover:text-accent transition-colors">{t.contact.infoEmail}</div>
                   </div>
                 </a>
-                <a href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="flex items-start gap-4 group">
+                <a data-track-loc="contact_page" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="flex items-start gap-4 group">
                   <div className="w-11 h-11 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
                     <Phone className="w-5 h-5 text-accent" />
                   </div>

@@ -20,7 +20,7 @@ export interface Teacher {
 export type Dict = {
   /** <title> y <meta description> por página. Lo consume usePageMeta(). */
   meta: Record<PageKey, { title: string; description: string }>;
-  nav: { home: string; programs: string; about: string; registration: string; careers: string; contact: string; cta: string };
+  nav: { home: string; programs: string; about: string; registration: string; careers: string; contact: string };
   hero: {
     eyebrow: string;
     title1: string;
@@ -67,6 +67,7 @@ export type Dict = {
     verified: string;
     photoLabel: string;
     moreLink: string;
+    teamTitle: string;
     director: Teacher;
   };
   coverage: {
@@ -257,14 +258,14 @@ export const translations: Record<Lang, Dict> = {
       cookies: { title: "Cookie Policy | Alondra Music Academy", description: "How Alondra Music Academy uses cookies, local storage and analytics on this website." },
       legal: { title: "Legal Notice | Alondra Music Academy", description: "Terms governing the use of the Alondra Music Academy website." },
     },
-    nav: { home: "Home", programs: "Programs", about: "Academy", registration: "Registration", careers: "Work with us", contact: "Contact", cta: "Book a call" },
+    nav: { home: "Home", programs: "Programs", about: "Academy", registration: "Registration", careers: "Work with us", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
       title1: "Give your child the superpower of music.",
       title2: "Discover their potential today.",
       subtitle:
-        "The standard of the **world's finest conservatories**, adapted to your child's pace. Discover a **personalized method** that drives their all-around growth. Enroll today!",
-      ctaPrimary: "Book a discovery call",
+        "**The right teacher makes the difference.** We match your child with the one who truly connects with them — and lessons they look forward to, at home across Miami-Dade and Broward.",
+      ctaPrimary: "Book a free 15-minute call",
       ctaSecondary: "Explore Programs",
       stat1: "12+", stat1Label: "Years of experience",
       stat2: "500+", stat2Label: "Students taught by Ilena",
@@ -289,7 +290,7 @@ export const translations: Record<Lang, Dict> = {
     instruments: {
       eyebrow: "Programs",
       title: "Disciplines",
-      subtitle: "The standard of the **world's finest conservatories**, tailored to your child.",
+      subtitle: "Technique from the conservatory tradition — and the songs your child actually wants to play.",
       modalities: [
         { title: "Private 1-on-1", body: "Fully personalized progression, at your pace." },
         { title: "Small Group", body: "Social learning that inspires and motivates." },
@@ -313,11 +314,12 @@ export const translations: Record<Lang, Dict> = {
     },
     teachers: {
       eyebrow: "Our Faculty",
-      title: "Meet our director",
-      subtitle: "Led personally by our **founding director**. We guarantee an education of excellence with a team of rigorously vetted, **background-checked professionals**, passionate about your child's development.",
+      title: "The teacher who fits your child",
+      subtitle: "**Ilena personally selects** the teacher who best connects with each student, from a team of rigorously vetted, **background-checked professionals**.",
       verified: "Verified Instructor",
       photoLabel: "Director photo",
       moreLink: "Learn about {name}",
+      teamTitle: "The team who teaches",
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -368,7 +370,7 @@ export const translations: Record<Lang, Dict> = {
     ctaBanner: {
       title: "Ready to begin your musical journey?",
       body: "Book a **free discovery call** and we'll match your child with the ideal instructor.",
-      button: "Book a discovery call",
+      button: "Book a free 15-minute call",
     },
     widget: {
       title: "Complete your enrollment",
@@ -385,7 +387,7 @@ export const translations: Record<Lang, Dict> = {
       hero: {
         eyebrow: "Programs & Methods",
         title: "A path for every musician",
-        subtitle: "Seven disciplines, taught in three formats, every path anchored in **world-class pedagogy** and shaped around you. The standard of the **world's finest conservatories**, tailored to your child. Click each discipline to discover the method and the results they'll achieve.",
+        subtitle: "Seven disciplines, taught in three formats, each path shaped around your child. Click a discipline to see the method and how progress shows up.",
       },
       offer: {
         theoryFree: "Music theory is included free with every discipline.",
@@ -671,7 +673,7 @@ export const translations: Record<Lang, Dict> = {
       infoHoursValue: "Mon–Sat · 8 AM – 8 PM · Sun closed",
     },
     footer: {
-      tagline: "The standard of the **world's finest conservatories**, adapted to your child's pace. Discover a **personalized method** that drives their all-around growth. Enroll today!",
+      tagline: "**Connection that inspires. Progress you can hear.** In-home music lessons across Miami-Dade and Broward.",
       columns: [
         { title: "Academy", links: [{ label: "Home", page: "home" }, { label: "Programs", page: "programs" }, { label: "Academy", page: "about" }, { label: "Work with us", page: "careers" }] },
         { title: "Enroll", links: [{ label: "Registration", page: "registration" }, { label: "Contact", page: "contact" }] },
@@ -780,14 +782,14 @@ export const translations: Record<Lang, Dict> = {
       cookies: { title: "Política de Cookies | Alondra Music Academy", description: "Cómo Alondra Music Academy usa cookies, almacenamiento local y analítica en este sitio web." },
       legal: { title: "Notas Legales | Alondra Music Academy", description: "Términos que rigen el uso del sitio web de Alondra Music Academy." },
     },
-    nav: { home: "Inicio", programs: "Programas", about: "Academia", registration: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto", cta: "Reserva tu llamada" },
+    nav: { home: "Inicio", programs: "Programas", about: "Academia", registration: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
       title1: "Dale a tu hijo el superpoder de la música.",
       title2: "Descubre su potencial hoy mismo.",
       subtitle:
-        "Clases privadas de música a domicilio, con **métodos de clase mundial personalizados** para cada estudiante, de niños a adultos, fortaleciendo lo cognitivo, lo emocional y el amor de por vida por el arte.",
-      ctaPrimary: "Reserva una llamada de conocimiento",
+        "**El profesor adecuado hace la diferencia.** Elegimos para tu hijo el que mejor conecta con él, y clases a las que le apetece volver, en casa y en todo Miami-Dade y Broward.",
+      ctaPrimary: "Agenda tu llamada gratuita de 15 min",
       ctaSecondary: "Ver Programas",
       stat1: "12+", stat1Label: "Años de experiencia",
       stat2: "500+", stat2Label: "Estudiantes formados por Ilena",
@@ -812,7 +814,7 @@ export const translations: Record<Lang, Dict> = {
     instruments: {
       eyebrow: "Programas",
       title: "Disciplinas",
-      subtitle: "El estándar de los **mejores conservatorios del mundo**, a la medida de tu hijo.",
+      subtitle: "La técnica de la tradición del conservatorio y las canciones que tu hijo de verdad quiere tocar.",
       modalities: [
         { title: "Individual 1 a 1", body: "Progresión totalmente personalizada, a tu ritmo." },
         { title: "Grupo Reducido", body: "Aprendizaje social que inspira y motiva." },
@@ -836,11 +838,12 @@ export const translations: Record<Lang, Dict> = {
     },
     teachers: {
       eyebrow: "Nuestro Staff",
-      title: "Conoce a nuestra directora",
-      subtitle: "Liderada personalmente por nuestra **directora fundadora**. Garantizamos una educación de excelencia con un equipo de profesionales rigurosamente evaluados, de **antecedentes verificados** y apasionados por el desarrollo de tu hijo.",
+      title: "El profesor que encaja con tu hijo",
+      subtitle: "**Ilena elige personalmente** al profesor que mejor conecta con cada estudiante, de un equipo de profesionales con **antecedentes comprobados**.",
       verified: "Instructor Verificado",
       photoLabel: "Foto de la directora",
       moreLink: "Conoce a {name}",
+      teamTitle: "El equipo que enseña",
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -891,7 +894,7 @@ export const translations: Record<Lang, Dict> = {
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
       body: "Reserva una **llamada de conocimiento gratuita** y encontramos el instructor ideal para tu hijo.",
-      button: "Reserva una llamada de conocimiento",
+      button: "Agenda tu llamada gratuita de 15 min",
     },
     widget: {
       title: "Completa tu inscripción",
@@ -908,7 +911,7 @@ export const translations: Record<Lang, Dict> = {
       hero: {
         eyebrow: "Programas y Métodos",
         title: "Un camino para cada músico",
-        subtitle: "Siete disciplinas, impartidas en tres formatos, cada camino anclado en **pedagogía de clase mundial** y pensado para ti. El estándar de los **mejores conservatorios del mundo**, a la medida de tu hijo. Haz clic en cada disciplina para descubrir el método y los resultados que alcanzará.",
+        subtitle: "Siete disciplinas, impartidas en tres formatos, cada camino pensado para tu hijo. Haz clic en cada disciplina para ver el método y cómo se nota el progreso.",
       },
       offer: {
         theoryFree: "La teoría musical está incluida gratis en todas las disciplinas.",
@@ -1122,7 +1125,7 @@ export const translations: Record<Lang, Dict> = {
       infoHoursValue: "Lun–Sáb · 8:00 – 20:00 · Dom cerrado",
     },
     footer: {
-      tagline: "El estándar de los **mejores conservatorios del mundo**, adaptado al ritmo de tu hijo. Descubre un **método personalizado** que impulsa su crecimiento integral. ¡Inscríbelo ya!",
+      tagline: "**Conexión que inspira. Progreso que se escucha.** Clases de música a domicilio en Miami-Dade y Broward.",
       columns: [
         { title: "Academia", links: [{ label: "Inicio", page: "home" }, { label: "Programas", page: "programs" }, { label: "Academia", page: "about" }, { label: "Trabaja con nosotros", page: "careers" }] },
         { title: "Inscripción", links: [{ label: "Inscripción", page: "registration" }, { label: "Contacto", page: "contact" }] },
@@ -1231,14 +1234,14 @@ export const translations: Record<Lang, Dict> = {
       cookies: { title: "Politique de cookies | Alondra Music Academy", description: "Comment Alondra Music Academy utilise les cookies, le stockage local et la mesure d'audience sur ce site." },
       legal: { title: "Mentions légales | Alondra Music Academy", description: "Conditions régissant l'utilisation du site web d'Alondra Music Academy." },
     },
-    nav: { home: "Accueil", programs: "Programmes", about: "Académie", registration: "Inscription", careers: "Travaillez avec nous", contact: "Contact", cta: "Réserver un appel" },
+    nav: { home: "Accueil", programs: "Programmes", about: "Académie", registration: "Inscription", careers: "Travaillez avec nous", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
       title1: "Offrez à votre enfant le superpouvoir de la musique.",
       title2: "Révélez son potentiel dès aujourd'hui.",
       subtitle:
-        "Cours de musique privés à domicile, avec des **méthodes de classe mondiale personnalisées** pour chaque élève, des enfants aux adultes, cultivant force cognitive, équilibre émotionnel et amour durable de l'art.",
-      ctaPrimary: "Réserver un appel de découverte",
+        "**Le bon professeur fait toute la différence.** Nous choisissons pour votre enfant celui avec qui il s’entend le mieux, et des cours où il a envie de revenir, chez vous, dans tout Miami-Dade et Broward.",
+      ctaPrimary: "Réservez votre appel gratuit de 15 min",
       ctaSecondary: "Voir les programmes",
       stat1: "12+", stat1Label: "Années d'expérience",
       stat2: "500+", stat2Label: "Élèves formés par Ilena",
@@ -1263,7 +1266,7 @@ export const translations: Record<Lang, Dict> = {
     instruments: {
       eyebrow: "Programmes",
       title: "Disciplines",
-      subtitle: "Le standard des **meilleurs conservatoires du monde**, à la mesure de votre enfant.",
+      subtitle: "La technique de la tradition du conservatoire, et les morceaux que votre enfant a vraiment envie de jouer.",
       modalities: [
         { title: "Privé 1 à 1", body: "Progression **entièrement personnalisée**, à votre rythme." },
         { title: "Petit groupe", body: "Apprentissage social qui inspire et motive." },
@@ -1287,11 +1290,12 @@ export const translations: Record<Lang, Dict> = {
     },
     teachers: {
       eyebrow: "Notre Équipe",
-      title: "Rencontrez notre directrice",
-      subtitle: "Dirigée personnellement par notre **directrice fondatrice**. Nous garantissons une éducation d'excellence avec une équipe de professionnels rigoureusement évalués, aux **antécédents vérifiés** et passionnés par le développement de votre enfant.",
+      title: "Le professeur qui convient à votre enfant",
+      subtitle: "**Ilena choisit personnellement** le professeur qui s’accorde le mieux avec chaque élève, au sein d’une équipe de professionnels **rigoureusement vérifiés**.",
       verified: "Professeur Vérifié",
       photoLabel: "Photo de la directrice",
       moreLink: "Découvrir {name}",
+      teamTitle: "L’équipe qui enseigne",
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -1342,7 +1346,7 @@ export const translations: Record<Lang, Dict> = {
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",
       body: "Réservez un **appel de découverte gratuit** et nous trouverons le professeur idéal pour votre enfant.",
-      button: "Réserver un appel de découverte",
+      button: "Réservez votre appel gratuit de 15 min",
     },
     widget: {
       title: "Finalisez votre inscription",
@@ -1359,7 +1363,7 @@ export const translations: Record<Lang, Dict> = {
       hero: {
         eyebrow: "Programmes & Méthodes",
         title: "Un chemin pour chaque musicien",
-        subtitle: "Sept disciplines, enseignées en trois formats, chaque parcours ancré dans une **pédagogie de classe mondiale** et pensé pour vous. Le standard des **meilleurs conservatoires du monde**, à la mesure de votre enfant. Cliquez sur chaque discipline pour découvrir la méthode et les résultats qu'il atteindra.",
+        subtitle: "Sept disciplines, enseignées en trois formats, chaque parcours pensé pour votre enfant. Cliquez sur une discipline pour découvrir la méthode et comment les progrès se manifestent.",
       },
       offer: {
         theoryFree: "La théorie musicale est incluse gratuitement dans toutes les disciplines.",
@@ -1573,7 +1577,7 @@ export const translations: Record<Lang, Dict> = {
       infoHoursValue: "Lun–Sam · 8h – 20h · Dim fermé",
     },
     footer: {
-      tagline: "Le standard des **meilleurs conservatoires du monde**, adapté au rythme de votre enfant. Découvrez une **méthode personnalisée** qui stimule son développement global. Inscrivez-le dès maintenant !",
+      tagline: "**Une connexion qui inspire. Des progrès qui s’entendent.** Cours de musique à domicile à Miami-Dade et Broward.",
       columns: [
         { title: "Académie", links: [{ label: "Accueil", page: "home" }, { label: "Programmes", page: "programs" }, { label: "Académie", page: "about" }, { label: "Travaillez avec nous", page: "careers" }] },
         { title: "Inscription", links: [{ label: "Inscription", page: "registration" }, { label: "Contact", page: "contact" }] },

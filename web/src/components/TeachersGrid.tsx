@@ -5,9 +5,22 @@ import { useLang } from "@/i18n/LanguageContext";
 import { reveal, fadeUp, portraitIn } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
 
+/**
+ * Quién enseñará a tu hijo.
+ *
+ * La portada mostraba únicamente a la directora, y eso es el riesgo estratégico
+ * que la Fase 4 señala como el principal: si la web sólo enseña a Ilena, cada
+ * lead nuevo llega pidiéndola a ella — y su horario está completo, así que esa
+ * demanda ya no se puede servir. Por eso ahora el bloque se lee en dos tiempos:
+ * Ilena es quien **elige** al profesor, y debajo está el equipo que **enseña**.
+ *
+ * No dice en ningún sitio que Ilena no dé clases, porque sí las da. Lo que hace
+ * es mover la confianza del nombre propio al criterio con el que selecciona.
+ */
 export const TeachersGrid = () => {
   const { t } = useLang();
   const director = t.teachers.director;
+  const team = t.about.team.members;
 
   return (
     <section className="py-20 md:py-28">
@@ -49,6 +62,43 @@ export const TeachersGrid = () => {
             </PageLink>
           </motion.div>
         </div>
+
+        {/* El equipo que da las clases. Tarjetas compactas: aquí basta con la cara,
+            el nombre y el instrumento — la biografía completa vive a un clic. */}
+        <motion.h3
+          {...reveal(fadeUp)}
+          className="mt-20 md:mt-24 mb-10 text-center font-serif text-2xl md:text-3xl text-primary"
+        >
+          {t.teachers.teamTitle}
+        </motion.h3>
+
+        <ul className="grid gap-6 grid-cols-2 lg:grid-cols-5 max-w-5xl mx-auto list-none p-0">
+          {team.map((m, i) => (
+            <motion.li
+              key={m.slug}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="flex flex-col text-center"
+            >
+              <PageLink to="careers" hash={m.slug} className="group focus-visible:outline-none">
+                <img
+                  src={m.photo}
+                  alt={m.name}
+                  loading="lazy"
+                  width={1254}
+                  height={1254}
+                  className="aspect-square w-full object-cover object-center rounded-2xl shadow-soft transition-shadow group-hover:shadow-lift group-focus-visible:ring-2 group-focus-visible:ring-accent group-focus-visible:ring-offset-2 group-focus-visible:ring-offset-background"
+                />
+                <span className="mt-4 block font-serif text-lg text-primary group-hover:text-accent-ink transition-colors">
+                  {m.name}
+                </span>
+              </PageLink>
+              <span className="mt-1 text-xs text-primary/60 leading-snug">{m.role}</span>
+            </motion.li>
+          ))}
+        </ul>
       </div>
     </section>
   );

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Upload, FileText, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLang } from "@/i18n/LanguageContext";
+import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB — keep in sync with the server
@@ -17,6 +18,7 @@ export const ApplicationForm = () => {
   const [accepted, setAccepted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const track = useTrack();
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -73,6 +75,7 @@ export const ApplicationForm = () => {
       const res = await fetch("/api/send-application", { method: "POST", body: fd });
       if (!res.ok) throw new Error("Request failed");
       setSent(true);
+      track("application_submit", { form: "careers" });
     } catch {
       setSubmitError(t.careers.errorSend);
     } finally {
