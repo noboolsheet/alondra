@@ -215,6 +215,15 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
 
 ## Convenciones
 
+- **Nada de raya larga (—) en la copy.** Ni en `translations.ts`, ni en reseñas,
+  ni en nada que lea un visitante: delata que el texto lo escribió una IA, y
+  «que no parezca de IA» es un requisito explícito de este sitio. Usa coma, dos
+  puntos, punto y coma, paréntesis o punto. La **semirraya (–) sí se queda** en
+  rangos reales (`Lun–Sáb`, `1–3 meses`, `$35–$50`). En comentarios de código da
+  igual. Comprobación: `grep -c '—' src/i18n/translations.ts` debe dar **0**.
+- **Las reseñas en su idioma original no se tocan.** Ni erratas, ni puntuación:
+  son palabras textuales de una clienta y alterarlas es territorio de la FTC.
+  Sus traducciones sí se pueden ajustar.
 - **Alias de ruta `@/` → `src/`** (configurado en `vite.config.ts`,
   `vitest.config.ts` y los `tsconfig`). Úsalo en todos los imports internos.
 - **Estilos con Tailwind + variables CSS.** Los tokens de marca y las clases de

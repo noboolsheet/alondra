@@ -49,7 +49,7 @@ export const googleReviews: GoogleReview[] = [
     originalLang: "es",
     text: {
       es: "Excelente maestra tiene un don natural para los niños y los sabe tratar según edad y necesidades ; muy responsable y carińosa siempre atenta a cambios para poder brindar el servicio con calidad a los niños; y la comucacion con padres y terapistas es muy buena también ,se preocupa para que fluya bien y estemos todos en la misma página respecto a las metas del niñ@",
-      en: "An excellent teacher — she has a natural gift with children and knows how to work with them according to their age and needs. Very responsible and caring, always attentive to changes so she can give the children a quality service. Communication with parents and therapists is very good too; she makes sure everything flows well and that we are all on the same page about the child's goals.",
+      en: "An excellent teacher: she has a natural gift with children and knows how to work with them according to their age and needs. Very responsible and caring, always attentive to changes so she can give the children a quality service. Communication with parents and therapists is very good too; she makes sure everything flows well and that we are all on the same page about the child's goals.",
       fr: "Une excellente enseignante : elle a un don naturel avec les enfants et sait s'adapter à leur âge et à leurs besoins. Très responsable et affectueuse, toujours attentive aux changements afin d'offrir un service de qualité aux enfants. La communication avec les parents et les thérapeutes est elle aussi très bonne ; elle veille à ce que tout se passe bien et à ce que nous soyons tous d'accord sur les objectifs de l'enfant.",
     },
   },
