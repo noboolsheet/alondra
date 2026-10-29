@@ -447,14 +447,14 @@ export const translations: Record<Lang, Dict> = {
     stepUp: {
       eyebrow: "Step Up For Students",
       title: "If your family has Step Up funds, you can use them here",
-      body: "We are a **direct provider**, so the lessons are paid from the scholarship without you having to front the money and claim it back. It is not the only thing that makes it workable, though: the paperwork is where most families get stuck.",
+      body: "We are a **direct provider**, so the lessons are paid from the scholarship without you having to front the money and claim it back. You apply for and manage the scholarship yourself with Step Up; what happens here is that the funds are accepted.",
       points: [
         { title: "Direct provider", body: "The funds go to the academy. No advancing money, no waiting for a refund." },
-        { title: "We help with the paperwork", body: "The part that takes an afternoon the first time. We have done it before and we walk you through it." },
-        { title: "In English, Spanish or French", body: "Including the paperwork. If the forms are not in your language, that is where families give up." },
+        { title: "The scholarship is yours to manage", body: "You apply and handle the paperwork directly with Step Up. We take no part in that process and cannot advise on it." },
+        { title: "In English, Spanish or French", body: "The lessons, and anything you need to ask us, in the language you speak at home." },
         { title: "At home, like every lesson", body: "Using the scholarship changes nothing about how the class works." },
       ],
-      note: "We do not decide who qualifies: that is Step Up's call, and their requirements change. What we do is make the funds simple to use once you have them.",
+      note: "We do not decide who qualifies and we do not process applications: both belong to Step Up, and their requirements change. Check the current ones on their site.",
     },
     ctaBanner: {
       title: "Ready to begin your musical journey?",
@@ -986,14 +986,14 @@ export const translations: Record<Lang, Dict> = {
     stepUp: {
       eyebrow: "Step Up For Students",
       title: "Si tu familia tiene fondos de Step Up, puedes usarlos aquí",
-      body: "Somos **proveedor directo**, así que las clases se pagan desde la beca sin que tengas que adelantar el dinero y reclamarlo después. Pero no es lo único que lo hace viable: donde se atascan casi todas las familias es en el trámite.",
+      body: "Somos **proveedor directo**, así que las clases se pagan desde la beca sin que tengas que adelantar el dinero y reclamarlo después. La solicitud y la gestión de la beca las llevas tú con Step Up; lo que pasa aquí es que los fondos se aceptan.",
       points: [
         { title: "Proveedor directo", body: "Los fondos van a la academia. Sin adelantar dinero y sin esperar un reembolso." },
-        { title: "Te ayudamos con el trámite", body: "La parte que la primera vez se lleva una tarde. Ya lo hemos hecho y te acompañamos." },
-        { title: "En inglés, español o francés", body: "El trámite incluido. Si los formularios no están en tu idioma, es ahí donde se abandona." },
+        { title: "La beca la gestionas tú", body: "La solicitud y el papeleo los llevas directamente con Step Up. Nosotros no intervenimos en ese trámite ni podemos asesorarte sobre él." },
+        { title: "En inglés, español o francés", body: "Las clases, y todo lo que necesites preguntarnos, en el idioma que hablas en casa." },
         { title: "A domicilio, como siempre", body: "Usar la beca no cambia nada de cómo funciona la clase." },
       ],
-      note: "No decidimos quién califica: eso lo decide Step Up y sus requisitos cambian. Lo que hacemos es que usar los fondos sea sencillo una vez los tienes.",
+      note: "No decidimos quién califica ni tramitamos solicitudes: las dos cosas son de Step Up, y sus requisitos cambian. Consulta los vigentes en su web.",
     },
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
@@ -1460,14 +1460,14 @@ export const translations: Record<Lang, Dict> = {
     stepUp: {
       eyebrow: "Step Up For Students",
       title: "Si votre famille a des fonds Step Up, vous pouvez les utiliser ici",
-      body: "Nous sommes **prestataire direct**, donc les cours sont payés par la bourse sans que vous ayez à avancer l’argent puis à le réclamer. Ce n’est pas le seul point : c’est sur les démarches que la plupart des familles se bloquent.",
+      body: "Nous sommes **prestataire direct**, donc les cours sont payés par la bourse sans que vous ayez à avancer l’argent puis à le réclamer. La demande et la gestion de la bourse, c’est vous qui vous en occupez auprès de Step Up ; ici, les fonds sont simplement acceptés.",
       points: [
         { title: "Prestataire direct", body: "Les fonds vont à l’académie. Rien à avancer, aucun remboursement à attendre." },
-        { title: "Nous aidons pour les démarches", body: "La partie qui prend un après-midi la première fois. Nous l’avons déjà faite et nous vous accompagnons." },
-        { title: "En anglais, espagnol ou français", body: "Les démarches comprises. Si les formulaires ne sont pas dans votre langue, c’est là qu’on abandonne." },
+        { title: "La bourse, c’est vous qui la gérez", body: "La demande et les démarches se font directement avec Step Up. Nous n’intervenons pas dans ce processus et ne pouvons pas vous conseiller dessus." },
+        { title: "En anglais, espagnol ou français", body: "Les cours, et tout ce que vous avez à nous demander, dans la langue que vous parlez à la maison." },
         { title: "À domicile, comme toujours", body: "Utiliser la bourse ne change rien au déroulement du cours." },
       ],
-      note: "Nous ne décidons pas qui est éligible : c’est Step Up qui le décide et ses critères évoluent. Ce que nous faisons, c’est rendre l’usage des fonds simple une fois que vous les avez.",
+      note: "Nous ne décidons pas qui est éligible et nous ne traitons pas les demandes : les deux relèvent de Step Up, dont les critères évoluent. Consultez les critères en vigueur sur leur site.",
     },
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",
