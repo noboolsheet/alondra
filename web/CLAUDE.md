@@ -197,6 +197,29 @@ soft 404, y es además la lista de la que el prerenderizado saca qué ficheros
 escribir. Si falta `routes.json`, el server cae a responder 200 en todo: una lista
 de rutas obsoleta nunca debe tumbar el sitio.
 
+**Terceros y consentimiento: el sitio NO pide consentimiento de cookies, y es
+deliberado.** No hay banner ni CMP, y la política de cookies no afirma que lo
+haya: remite a los ajustes del navegador y a la exclusión de Google Analytics,
+que es lo que de verdad ofrece. El negocio es de Florida y su público son
+familias de Miami-Dade y Broward; Estados Unidos no exige consentimiento previo
+y la ley de privacidad de Florida sólo alcanza a empresas desde mil millones de
+ingresos. Antes de «arreglarlo» añadiendo un banner, lee la tarea del artefacto:
+cuesta conversión en un sitio cuyo problema declarado es que llegan pocos leads.
+
+Lo que sí conviene saber es qué carga sin preguntar, porque la lista tiene que
+seguir siendo corta y conocida:
+
+| Tercero | Dónde | Cuándo |
+|---|---|---|
+| `gtag.js` de Google Analytics (542 KB) | todas | al cargar |
+| iframe del mapa de Google | portada y contacto | con `loading="lazy"`, al acercarse |
+| iframe de My Music Staff | `/enrollment` | con `loading="lazy"`, al acercarse |
+
+Los enlaces a WhatsApp, Instagram y Facebook son `<a href>`: no cargan nada ni
+ponen cookies. El servidor no manda ninguna cabecera `Set-Cookie` propia; el
+idioma y el tema viven en `localStorage`, que es almacenamiento funcional de
+primera parte. **Si añades un tercero que cargue solo, apunta aquí por qué.**
+
 **Analítica.** GA4 se carga desde `index.html`, con una guarda `ga-disable-*` para
 que `npm run dev` en localhost no contamine los datos de producción. Como esto es
 una SPA, la etiqueta sola sólo reportaría la página de entrada: `usePageviews()`
@@ -303,7 +326,13 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
   colores de marca son variables CSS en HSL (`--brand-purple`, `--brand-yellow`,
   `--brand-lavender`) expuestas por `tailwind.config.ts` (`primary`, `accent`,
   `lavender`…). Tipografías: `font-serif` (**Fraunces**) y `font-sans`
-  (**Nunito**), cargadas con `@fontsource` en `main.tsx`. **El tema oscuro es el
+  (**Nunito**), cargadas con `@fontsource` en `main.tsx` y servidas desde el
+  propio dominio: 34 `.woff2` en `dist/assets/`. **No las cambies al CDN de
+  Google Fonts**, aunque parezca que ahorra peso. Pedir una fuente a
+  `fonts.gstatic.com` manda la IP del visitante a Google antes de que haya
+  aceptado nada, que es el caso que han sancionado en Europa, y es justo el
+  único tercero que hoy este sitio no tiene. Comprobación:
+  `grep -rl 'fonts.googleapis\|fonts.gstatic' dist/` no debe devolver nada. **El tema oscuro es el
   de arranque y es parte de la marca**: no pases el sitio a claro por defecto.
 - **Tests** con Vitest + Testing Library en entorno jsdom; los globals están
   activados y `src/test/setup.ts` corre primero (matchers de jest-dom más
