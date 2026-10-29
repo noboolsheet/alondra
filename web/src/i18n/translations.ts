@@ -287,7 +287,7 @@ export const translations: Record<Lang, Dict> = {
       subtitle:
         "**The right teacher makes the difference.** We match your child with the one who truly connects with them, and lessons they look forward to, at home across Miami-Dade and Broward.",
       ctaPrimary: "Book a free 15-minute call",
-      ctaSecondary: "Explore Programs",
+      ctaSecondary: "Explore formats",
       stat1: "12+", stat1Label: "Years of experience",
       stat2: "500+", stat2Label: "Students taught by Ilena",
       stat3: "100%", stat3Label: "Verified instructors",
@@ -825,7 +825,7 @@ export const translations: Record<Lang, Dict> = {
       subtitle:
         "**El profesor adecuado hace la diferencia.** Elegimos para tu hijo el que mejor conecta con él, y clases a las que le apetece volver, en casa y en todo Miami-Dade y Broward.",
       ctaPrimary: "Agenda tu llamada gratuita de 15 min",
-      ctaSecondary: "Ver Programas",
+      ctaSecondary: "Ver los formatos",
       stat1: "12+", stat1Label: "Años de experiencia",
       stat2: "500+", stat2Label: "Estudiantes formados por Ilena",
       stat3: "100%", stat3Label: "Profesores verificados",
@@ -1298,7 +1298,7 @@ export const translations: Record<Lang, Dict> = {
       subtitle:
         "**Le bon professeur fait toute la différence.** Nous choisissons pour votre enfant celui avec qui il s’entend le mieux, et des cours où il a envie de revenir, chez vous, dans tout Miami-Dade et Broward.",
       ctaPrimary: "Réservez votre appel gratuit de 15 min",
-      ctaSecondary: "Voir les programmes",
+      ctaSecondary: "Voir les formats",
       stat1: "12+", stat1Label: "Années d'expérience",
       stat2: "500+", stat2Label: "Élèves formés par Ilena",
       stat3: "100%", stat3Label: "Professeurs vérifiés",
