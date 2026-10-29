@@ -179,6 +179,7 @@ export type Dict = {
   registration: {
     hero: { eyebrow: string; title: string; subtitle: string };
     enrollCta: string;
+    enrollQualifier: string;
     pricingTitle: string;
     pricingSubtitle: string;
     priceFrom: string;
@@ -636,6 +637,7 @@ export const translations: Record<Lang, Dict> = {
     registration: {
       hero: { eyebrow: "Pricing", title: "What a lesson costs", subtitle: "Two formats, both taught at your home across Miami-Dade and Broward. Household and frequency discounts apply from the second member." },
       enrollCta: "Register now",
+      enrollQualifier: "Already had your discovery call?",
       pricingTitle: "Transparent rates, no surprises",
       pricingSubtitle: "**No forced contracts or hidden fees**. Choose the format that fits your child's goals and learning pace.",
       priceFrom: "from",
@@ -1109,6 +1111,7 @@ export const translations: Record<Lang, Dict> = {
     registration: {
       hero: { eyebrow: "Precios", title: "Lo que cuesta una clase", subtitle: "Dos formatos, los dos a domicilio en Miami-Dade y Broward. Hay descuento por hogar y por frecuencia desde el segundo miembro." },
       enrollCta: "Inscribirme ahora",
+      enrollQualifier: "¿Ya hiciste tu llamada?",
       pricingTitle: "Tarifas transparentes y sin sorpresas",
       pricingSubtitle: "**Sin contratos forzosos ni cargos ocultos**. Elige el formato ideal para los objetivos y el ritmo de aprendizaje de tu hijo.",
       priceFrom: "desde",
@@ -1582,6 +1585,7 @@ export const translations: Record<Lang, Dict> = {
     registration: {
       hero: { eyebrow: "Tarifs", title: "Ce que coûte un cours", subtitle: "Deux formats, tous les deux à domicile dans Miami-Dade et Broward. Réductions par foyer et par fréquence dès le deuxième membre." },
       enrollCta: "S'inscrire maintenant",
+      enrollQualifier: "Vous avez déjà fait votre appel ?",
       pricingTitle: "Des tarifs transparents, sans surprises",
       pricingSubtitle: "**Sans contrats forcés ni frais cachés**. Choisissez le format idéal pour les objectifs et le rythme d'apprentissage de votre enfant.",
       priceFrom: "à partir de",

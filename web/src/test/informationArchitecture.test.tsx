@@ -100,6 +100,24 @@ describe("arquitectura de información", () => {
     expect(document.querySelector('#instrument-piano [data-state="open"]')).toBeNull();
   });
 
+  it("precios cierra con un solo dorado y la inscripción detrás de su pregunta", async () => {
+    at("/pricing", <Registration />);
+    // La página tenía dos llamadas en dorado pidiendo cosas distintas. El CTA del
+    // sitio es uno: la llamada de descubrimiento. La inscripción es la puerta de
+    // quien ya pasó por ella, y por eso va cualificada y en secundario.
+    // Dentro de `main`: la píldora de WhatsApp de la cabecera también es dorada,
+    // pero es el teléfono, está en todas las páginas y no compite por la decisión.
+    // Y `ctaBanner.button` sale además como enlace de texto en StepUp, así que lo
+    // que se cuenta es el botón, no la cadena.
+    await waitFor(() => expect(document.querySelectorAll("main .btn-cta")).toHaveLength(1));
+    expect(document.querySelector("main .btn-cta")).toHaveTextContent(translations.en.ctaBanner.button);
+    expect(screen.getByText(translations.en.registration.enrollQualifier)).toBeInTheDocument();
+
+    const enroll = screen.getByText(translations.en.registration.enrollCta).closest("a");
+    expect(enroll).toHaveAttribute("href", "/enrollment");
+    expect(enroll).toHaveClass("btn-outline-invert");
+  });
+
   it("precios no carga el iframe de My Music Staff y la inscripción sí", async () => {
     at("/pricing", <Registration />);
     expect(screen.getByText(translations.en.registration.lessonLengthTitle)).toBeInTheDocument();

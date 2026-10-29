@@ -1,7 +1,6 @@
-import { ShieldCheck, Clock, ArrowRight, Check, Gift } from "lucide-react";
+import { ShieldCheck, Clock, Check, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
-import { PageLink } from "@/components/PageLink";
 import { StepUp } from "@/components/StepUp";
 import { CTABanner } from "@/components/CTABanner";
 import { useLang } from "@/i18n/LanguageContext";
@@ -123,19 +122,19 @@ const Registration = () => {
           argumento de financiación y sólo pesa cuando ya se ha visto el precio. */}
       <StepUp />
 
-      {/* La salida al cierre. En dorado a petición del cliente: en secundario no
-          se veía. Convive con la llamada de descubrimiento del CTABanner, así que
-          si `cta_click` muestra que se comen el uno al otro, aquí es donde mirar. */}
-      <section className="pb-16 md:pb-24">
-        <div className="container-narrow text-center">
-          <PageLink to="enroll" className="btn-cta inline-flex">
-            {t.registration.enrollCta}
-            <ArrowRight className="w-4 h-4" />
-          </PageLink>
-        </div>
-      </section>
-
-      <CTABanner />
+      {/* Un solo bloque de cierre con las dos puertas. La página tenía el botón
+          de inscripción en dorado y, justo debajo, el CTABanner también en
+          dorado: dos llamadas pidiendo cosas distintas a la vez. La frase que
+          encabeza el secundario es la que hace el filtro, y no es nuestra: es la
+          misma que abre el widget de My Music Staff. */}
+      <CTABanner
+        secondary={{
+          to: "enroll",
+          label: t.registration.enrollCta,
+          qualifier: t.registration.enrollQualifier,
+          trackLocation: "pricing_enroll",
+        }}
+      />
     </Layout>
   );
 };

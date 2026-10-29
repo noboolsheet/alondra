@@ -1,13 +1,33 @@
-import { Link } from "react-router-dom";
 import { PageLink } from "@/components/PageLink";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
+import type { PageKey } from "@/i18n/routes";
 import { useLang } from "@/i18n/LanguageContext";
 import { useTrack } from "@/lib/analytics";
 import { reveal, scaleIn } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
 
-export const CTABanner = () => {
+/**
+ * El cierre de cada página, y el único dorado que debe haber en pantalla.
+ *
+ * `secondary` existe para la página de precios, que terminaba con dos llamadas
+ * en dorado: la de descubrimiento y la de inscribirse. No competían de verdad
+ * (la propia página de inscripción pregunta «¿ya hiciste tu llamada?», o sea
+ * que va después), pero presentadas igual obligaban a elegir. Ahora van en el
+ * mismo bloque y en orden: el dorado sigue siendo la llamada, y debajo una
+ * frase que cualifica al secundario para que sólo lo pulse quien ya pasó por
+ * ella. Si se añade un tercer destino aquí, vuelve el problema.
+ */
+type Secondary = {
+  to: PageKey;
+  label: string;
+  /** La pregunta que filtra: quien no pueda responderla que sí, no es su botón. */
+  qualifier: string;
+  /** Valor de `location` en el evento, para poder comparar el reparto en GA4. */
+  trackLocation: string;
+};
+
+export const CTABanner = ({ secondary }: { secondary?: Secondary }) => {
   const { t } = useLang();
   const track = useTrack();
   return (
@@ -35,6 +55,22 @@ export const CTABanner = () => {
                 <ArrowRight className="w-4 h-4" />
               </PageLink>
             </div>
+
+            {secondary && (
+              <div className="mt-10 pt-8 border-t border-primary-foreground/15">
+                <p className="text-sm text-primary-foreground/70">{secondary.qualifier}</p>
+                <div className="mt-4 flex justify-center">
+                  <PageLink
+                    to={secondary.to}
+                    className="btn-outline-invert"
+                    onClick={() => track("cta_click", { location: secondary.trackLocation, label: "enroll" })}
+                  >
+                    {secondary.label}
+                    <ArrowRight className="w-4 h-4" />
+                  </PageLink>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
