@@ -188,7 +188,11 @@ export type Dict = {
     mapTitle: string;
     formTitle: string;
     formSubtitle: string;
-    fields: { name: string; email: string; phone: string; city: string; message: string; submit: string; terms: string };
+    fields: { name: string; student: string; age: string; email: string; phone: string; zip: string;
+      instrument: string; channel: string; source: string; availability: string; message: string;
+      choose: string; submit: string; terms: string; promo: string };
+    channelOptions: string[];
+    sourceOptions: string[];
     sending: string;
     errorSend: string;
     successTitle: string;
@@ -212,6 +216,7 @@ export type Dict = {
     required: string;
     email: string;
     phone: string;
+    zip: string;
   };
   legal: {
     eyebrow: string;
@@ -658,10 +663,18 @@ export const translations: Record<Lang, Dict> = {
       formTitle: "Get in touch",
       formSubtitle: "Tell us who the lessons are for. We reply within 24 hours.",
       fields: {
-        name: "Full name", email: "Email", phone: "Phone", city: "City", message: "Leave us a message",
+        name: "Full name", student: "Student's name or initial", age: "Student's age",
+        email: "Email", phone: "Phone", zip: "ZIP code",
+        instrument: "Instrument of interest", channel: "How should we reply?",
+        source: "How did you hear about Alondra?", availability: "Rough availability",
+        message: "Anything else we should know?",
+        choose: "Select an option",
         submit: "Send message",
         terms: "I accept the terms and conditions for the processing of my personal data.",
+        promo: "I would also like to receive news from the academy by email. (Optional)",
       },
+      channelOptions: ["WhatsApp", "Phone call", "Email"],
+      sourceOptions: ["Nextdoor", "Google search", "Instagram or Facebook", "A family recommended you", "Somewhere else"],
       sending: "Sending…",
       errorSend: "We couldn't send your message. Please try again or email us at alondramusicacademy@gmail.com.",
       successTitle: "Thank you!",
@@ -684,7 +697,7 @@ export const translations: Record<Lang, Dict> = {
       privacy: "Privacy",
       terms: "Terms",
     },
-    errors: { required: "This field is required", email: "Please enter a valid email", phone: "Please enter a valid phone" },
+    errors: { required: "This field is required", email: "Please enter a valid email", phone: "Please enter a valid phone", zip: "Enter a 5-digit ZIP code" },
     legal: {
       eyebrow: "Legal",
       updated: "Last updated: July 20, 2026",
@@ -1114,7 +1127,19 @@ export const translations: Record<Lang, Dict> = {
       mapTitle: "Mapa de cobertura",
       formTitle: "Contáctanos",
       formSubtitle: "Cuéntanos para quién son las clases. Respondemos en menos de 24 horas.",
-      fields: { name: "Nombre completo", email: "Correo", phone: "Teléfono", city: "Ciudad", message: "Déjanos un mensaje", submit: "Enviar mensaje", terms: "Acepto los términos y condiciones del tratamiento de mis datos personales." },
+      fields: {
+        name: "Nombre completo", student: "Nombre o inicial del estudiante", age: "Edad del estudiante",
+        email: "Correo", phone: "Teléfono", zip: "Código postal",
+        instrument: "Instrumento de interés", channel: "¿Cómo prefieres que te respondamos?",
+        source: "¿Cómo conociste Alondra?", availability: "Disponibilidad aproximada",
+        message: "¿Algo más que debamos saber?",
+        choose: "Selecciona una opción",
+        submit: "Enviar mensaje",
+        terms: "Acepto los términos y condiciones del tratamiento de mis datos personales.",
+        promo: "También quiero recibir novedades de la academia por correo. (Opcional)",
+      },
+      channelOptions: ["WhatsApp", "Llamada telefónica", "Correo electrónico"],
+      sourceOptions: ["Nextdoor", "Búsqueda en Google", "Instagram o Facebook", "Me la recomendó una familia", "En otro sitio"],
       sending: "Enviando…",
       errorSend: "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos a alondramusicacademy@gmail.com.",
       successTitle: "¡Gracias!",
@@ -1137,7 +1162,7 @@ export const translations: Record<Lang, Dict> = {
       privacy: "Privacidad",
       terms: "Términos",
     },
-    errors: { required: "Este campo es obligatorio", email: "Ingresa un correo válido", phone: "Ingresa un teléfono válido" },
+    errors: { required: "Este campo es obligatorio", email: "Ingresa un correo válido", phone: "Ingresa un teléfono válido", zip: "Escribe un código postal de 5 dígitos" },
     legal: {
       eyebrow: "Legal",
       updated: "Última actualización: 20 de julio de 2026",
@@ -1567,7 +1592,19 @@ export const translations: Record<Lang, Dict> = {
       mapTitle: "Carte de couverture",
       formTitle: "Contactez-nous",
       formSubtitle: "Dites-nous pour qui sont les cours. Nous répondons sous 24 heures.",
-      fields: { name: "Nom complet", email: "Email", phone: "Téléphone", city: "Ville", message: "Laissez-nous un message", submit: "Envoyer le message", terms: "J'accepte les conditions de traitement de mes données personnelles." },
+      fields: {
+        name: "Nom complet", student: "Prénom ou initiale de l’élève", age: "Âge de l’élève",
+        email: "E-mail", phone: "Téléphone", zip: "Code postal",
+        instrument: "Instrument souhaité", channel: "Comment préférez-vous qu’on vous réponde ?",
+        source: "Comment avez-vous connu Alondra ?", availability: "Disponibilités approximatives",
+        message: "Autre chose à nous signaler ?",
+        choose: "Choisissez une option",
+        submit: "Envoyer le message",
+        terms: "J’accepte les conditions de traitement de mes données personnelles.",
+        promo: "Je souhaite aussi recevoir les actualités de l’académie par e-mail. (Facultatif)",
+      },
+      channelOptions: ["WhatsApp", "Appel téléphonique", "E-mail"],
+      sourceOptions: ["Nextdoor", "Recherche Google", "Instagram ou Facebook", "Une famille me l’a recommandée", "Ailleurs"],
       sending: "Envoi…",
       errorSend: "Nous n'avons pas pu envoyer votre message. Réessayez ou écrivez-nous à alondramusicacademy@gmail.com.",
       successTitle: "Merci !",
@@ -1590,7 +1627,7 @@ export const translations: Record<Lang, Dict> = {
       privacy: "Confidentialité",
       terms: "Conditions",
     },
-    errors: { required: "Ce champ est requis", email: "Entrez un email valide", phone: "Entrez un téléphone valide" },
+    errors: { required: "Ce champ est requis", email: "Entrez un email valide", phone: "Entrez un téléphone valide", zip: "Saisissez un code postal à 5 chiffres" },
     legal: {
       eyebrow: "Légal",
       updated: "Dernière mise à jour : 20 juillet 2026",

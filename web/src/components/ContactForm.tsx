@@ -5,9 +5,33 @@ import { useLang } from "@/i18n/LanguageContext";
 import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
 
+/**
+ * Los campos salen de la Fase 18, no del gusto de nadie.
+ *
+ * Cada uno existe porque evita una ida y vuelta por WhatsApp antes de poder
+ * calificar al lead: el código postal decide cobertura y desplazamiento (por eso
+ * sustituye a «ciudad», que no basta), la edad y el instrumento deciden profesor,
+ * y el canal preferido es consentimiento — no se mueve a una familia a WhatsApp
+ * sin que lo elija.
+ *
+ * `source` es el único modo de atribuir un lead que llega por Nextdoor o por
+ * recomendación, donde no hay UTM que seguir: es el complemento humano de los
+ * eventos de GA4, y viaja con el evento `generate_lead`.
+ *
+ * La casilla de promoción va SEPARADA de la de términos a propósito: enviar el
+ * formulario autoriza a responder esa consulta por ese canal y nada más.
+ */
+const EMPTY = {
+  name: "", student: "", age: "", email: "", phone: "", zip: "",
+  instrument: "", channel: "", source: "", availability: "", message: "",
+};
+
+/** Obligatorios. El resto ayudan, pero no valen una fricción extra. */
+const REQUIRED = ["name", "email", "phone", "zip", "instrument", "channel", "source"] as const;
+
 export const ContactForm = () => {
   const { t } = useLang();
-  const [data, setData] = useState({ name: "", email: "", phone: "", city: "", message: "" });
+  const [data, setData] = useState(EMPTY);
   const [company, setCompany] = useState(""); // honeypot — real users never fill this
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
@@ -15,16 +39,14 @@ export const ContactForm = () => {
   const [sending, setSending] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [accepted, setAccepted] = useState(false);
+  const [promo, setPromo] = useState(false);
 
   const validate = () => {
     const e: Record<string, string> = {};
-    if (!data.name.trim()) e.name = t.errors.required;
-    if (!data.email.trim()) e.email = t.errors.required;
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = t.errors.email;
-    if (!data.phone.trim()) e.phone = t.errors.required;
-    else if (!/^[\d\s+\-()]{7,}$/.test(data.phone)) e.phone = t.errors.phone;
-    if (!data.city.trim()) e.city = t.errors.required;
-    if (!data.message.trim()) e.message = t.errors.required;
+    for (const key of REQUIRED) if (!data[key].trim()) e[key] = t.errors.required;
+    if (data.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = t.errors.email;
+    if (data.phone.trim() && !/^[\d\s+\-()]{7,}$/.test(data.phone)) e.phone = t.errors.phone;
+    if (data.zip.trim() && !/^\d{5}(-\d{4})?$/.test(data.zip.trim())) e.zip = t.errors.zip;
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -38,13 +60,13 @@ export const ContactForm = () => {
       const res = await fetch("/api/send-contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, company }),
+        body: JSON.stringify({ ...data, promo, company }),
       });
       if (!res.ok) throw new Error("Request failed");
       setSent(true);
       // En la respuesta OK, nunca en el clic del boton: si se mide el clic se
       // cuentan como leads los envios que fallaron.
-      track("generate_lead", { form: "contact", city: data.city || "" });
+      track("generate_lead", { form: "contact", source: data.source, instrument: data.instrument });
     } catch {
       setSubmitError(t.contact.errorSend);
     } finally {
@@ -76,6 +98,26 @@ export const ContactForm = () => {
     </div>
   );
 
+  /** Desplegable nativo: en móvil abre el selector del sistema, que para una
+      familia rellenando esto desde el teléfono es mucho menos trabajo. */
+  const select = (name: keyof typeof data, label: string, options: string[]) => (
+    <div>
+      <label htmlFor={name} className="block text-xs font-semibold tracking-wide uppercase text-primary/70 mb-2">{label}</label>
+      <select
+        id={name}
+        value={data[name]}
+        onChange={(e) => setData({ ...data, [name]: e.target.value })}
+        className="w-full rounded-xl border border-primary/20 bg-background px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-accent/40 transition-all"
+      >
+        <option value="">{t.contact.fields.choose}</option>
+        {options.map((o) => (
+          <option key={o} value={o}>{o}</option>
+        ))}
+      </select>
+      {errors[name] && <p className="mt-1.5 text-xs text-destructive">{errors[name]}</p>}
+    </div>
+  );
+
   return (
     <div className="rounded-3xl bg-card border border-border shadow-soft p-6 sm:p-10">
       <AnimatePresence mode="wait">
@@ -94,7 +136,8 @@ export const ContactForm = () => {
             <div className="mt-6 rounded-2xl bg-secondary/50 p-5 text-left max-w-sm mx-auto space-y-1.5 text-sm">
               <p><span className="text-primary/70">{t.contact.fields.name}:</span> <span className="text-primary font-medium">{data.name}</span></p>
               <p><span className="text-primary/70">{t.contact.fields.email}:</span> <span className="text-primary font-medium">{data.email}</span></p>
-              <p><span className="text-primary/70">{t.contact.fields.city}:</span> <span className="text-primary font-medium">{data.city}</span></p>
+              <p><span className="text-primary/70">{t.contact.fields.instrument}:</span> <span className="text-primary font-medium">{data.instrument}</span></p>
+              <p><span className="text-primary/70">{t.contact.fields.channel}:</span> <span className="text-primary font-medium">{data.channel}</span></p>
             </div>
             <button
               onClick={() => {
@@ -102,7 +145,8 @@ export const ContactForm = () => {
                 setSubmitError("");
                 setCompany("");
                 setAccepted(false);
-                setData({ name: "", email: "", phone: "", city: "", message: "" });
+                setPromo(false);
+                setData(EMPTY);
               }}
               className="mt-6 text-sm font-semibold text-primary underline underline-offset-4 hover:text-accent transition-colors"
             >
@@ -124,9 +168,15 @@ export const ContactForm = () => {
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               {field("name", t.contact.fields.name)}
+              {field("student", t.contact.fields.student)}
+              {field("age", t.contact.fields.age)}
+              {field("zip", t.contact.fields.zip)}
               {field("email", t.contact.fields.email, "email")}
               {field("phone", t.contact.fields.phone, "tel")}
-              {field("city", t.contact.fields.city)}
+              {select("instrument", t.contact.fields.instrument, t.instruments.items.map((i) => i.name))}
+              {select("channel", t.contact.fields.channel, t.contact.channelOptions)}
+              {select("source", t.contact.fields.source, t.contact.sourceOptions)}
+              {field("availability", t.contact.fields.availability)}
             </div>
             {field("message", t.contact.fields.message, "text", true)}
             {/* Honeypot — hidden from real users, catches bots */}
@@ -149,6 +199,17 @@ export const ContactForm = () => {
                 className="mt-0.5 h-4 w-4 flex-shrink-0 accent-accent cursor-pointer"
               />
               <span>{t.contact.fields.terms}</span>
+            </label>
+            {/* Separada de los terminos a proposito: enviar el formulario
+                autoriza a responder esa consulta, no a mandar promociones. */}
+            <label className="flex items-start gap-3 text-sm text-primary/70 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={promo}
+                onChange={(e) => setPromo(e.target.checked)}
+                className="mt-0.5 h-4 w-4 flex-shrink-0 accent-accent cursor-pointer"
+              />
+              <span>{t.contact.fields.promo}</span>
             </label>
             {submitError && <p className="text-sm text-destructive">{submitError}</p>}
             <div className="flex justify-end">

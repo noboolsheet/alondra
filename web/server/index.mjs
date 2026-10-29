@@ -118,24 +118,41 @@ app.use(express.json({ limit: "32kb" }));
 
 // --- Contact form → email -------------------------------------------------
 app.post("/api/send-contact", async (req, res) => {
-  const { name = "", email = "", phone = "", city = "", message = "", company = "" } = req.body ?? {};
+  const {
+    name = "", student = "", age = "", email = "", phone = "", zip = "",
+    instrument = "", channel = "", source = "", availability = "", message = "",
+    promo = false, company = "",
+  } = req.body ?? {};
   if (String(company).trim() !== "") return res.json({ ok: true }); // honeypot
-  if (!name.trim() || !email.trim() || !phone.trim() || !city.trim() || !message.trim()) {
+
+  // Los obligatorios son los de la Fase 18. `message` ya NO lo es: con siete
+  // campos por delante, exigir ademas un texto libre solo pierde envios.
+  const required = { name, email, phone, zip, instrument, channel, source };
+  if (Object.values(required).some((v) => !String(v).trim())) {
     return res.status(400).json({ ok: false, error: "Missing required fields" });
   }
   if (!EMAIL_RE.test(email.trim())) return res.status(400).json({ ok: false, error: "Invalid email" });
 
   return sendFormEmail(res, {
-    subject: `Nuevo mensaje de contacto — ${name}`,
+    subject: `Nuevo contacto: ${name} · ${instrument} · ${zip}`,
     heading: "Nuevo mensaje de contacto",
     name,
     email,
+    // El orden es el de la llamada: primero a quien se llama y por donde, luego
+    // de que va, y al final de donde vino. Ilena lee esto antes de marcar.
     rows: [
-      ["Name", name],
+      ["Responder por", channel],
+      ["Telefono", phone],
       ["Email", email],
-      ["Phone", phone],
-      ["City", city],
-      ["Message", message],
+      ["Adulto", name],
+      ["Estudiante", student || "—"],
+      ["Edad", age || "—"],
+      ["Instrumento", instrument],
+      ["Codigo postal", zip],
+      ["Disponibilidad", availability || "—"],
+      ["Mensaje", message || "—"],
+      ["Como nos conocio", source],
+      ["Acepta promociones", promo ? "Si" : "No"],
     ],
   });
 });
