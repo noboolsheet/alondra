@@ -55,6 +55,8 @@ export const CTABanner = ({ secondary }: { secondary?: Secondary }) => {
                 <ArrowRight className="w-4 h-4" />
               </PageLink>
             </div>
+            {/* Misma promesa real que en el hero: mensaje ahora, llamada en 48 h. */}
+            <p className="mt-4 text-sm text-primary-foreground/70">{t.ctaBanner.note}</p>
 
             {secondary && (
               <div className="mt-10 pt-8 border-t border-primary-foreground/15">

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { PageLink } from "@/components/PageLink";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { motion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
 import { useTrack } from "@/lib/analytics";
@@ -62,15 +63,17 @@ export const Hero = () => {
               <ArrowUpRight className="w-4 h-4" />
             </PageLink>
             {/* Mobile: the discovery-call CTA opens WhatsApp directly (uses the
-                contact phone number). Desktop keeps the routed contact page. */}
+                contact phone number). Desktop keeps the routed contact page.
+                Its label names WhatsApp: the same words on both would promise
+                the same destination and deliver two. */}
             <a data-track-loc="hero"
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-cta sm:hidden"
             >
-              {t.hero.ctaPrimary}
-              <ArrowRight className="w-4 h-4" />
+              {t.hero.ctaPrimaryWhatsApp}
+              <WhatsAppIcon className="w-4 h-4" />
             </a>
             <PageLink
               to="contact"
@@ -81,6 +84,16 @@ export const Hero = () => {
               <ArrowRight className="w-4 h-4" />
             </PageLink>
           </motion.div>
+
+          {/* Lo que de verdad pasa al pulsar: el boton no abre un calendario. */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="mt-4 text-sm text-primary/70 max-w-md"
+          >
+            {t.hero.ctaNote}
+          </motion.p>
         </div>
       </div>
     </section>

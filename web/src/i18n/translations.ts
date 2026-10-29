@@ -27,6 +27,10 @@ export type Dict = {
     title2: string;
     subtitle: string;
     ctaPrimary: string;
+    /** Etiqueta del CTA movil, que abre WhatsApp y debe decirlo. */
+    ctaPrimaryWhatsApp: string;
+    /** Microcopy bajo el CTA: dice lo que de verdad pasa al pulsarlo. */
+    ctaNote: string;
     ctaSecondary: string;
     stat1: string;
     stat1Label: string;
@@ -116,6 +120,8 @@ export type Dict = {
     title: string;
     body: string;
     button: string;
+    /** Misma promesa real que hero.ctaNote; el boton no promete calendario. */
+    note: string;
   };
   widget: {
     title: string;
@@ -282,15 +288,17 @@ export const translations: Record<Lang, Dict> = {
       cookies: { title: "Cookie Policy | Alondra Music Academy", description: "How Alondra Music Academy uses cookies, local storage and analytics on this website." },
       legal: { title: "Legal Notice | Alondra Music Academy", description: "Terms governing the use of the Alondra Music Academy website." },
     },
-    nav: { home: "Home", programs: "Formats", teachers: "Teachers", about: "Academy", registration: "Prices", enroll: "Enrollment", careers: "Work with us", contact: "Contact" },
+    nav: { home: "Home", programs: "Lessons", teachers: "Teachers", about: "Academy", registration: "Prices", enroll: "Enrollment", careers: "Work with us", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
-      title1: "Give your child the superpower of music.",
-      title2: "Discover their potential today.",
+      title1: "Music lessons at home in Miami,",
+      title2: "with the teacher who fits your child.",
       subtitle:
         "**The right teacher makes the difference.** We match your child with the one who truly connects with them, and lessons they look forward to, at home across Miami-Dade and Broward.",
-      ctaPrimary: "Book a free 15-minute call",
-      ctaSecondary: "Explore formats",
+      ctaPrimary: "Request your free 15-minute call",
+      ctaPrimaryWhatsApp: "Request your call on WhatsApp",
+      ctaNote: "Tell us your child's age and we call you within 48 hours.",
+      ctaSecondary: "Explore lessons",
       stat1: "12+", stat1Label: "Years of experience",
       stat2: "500+", stat2Label: "Students taught by Ilena",
       stat3: "100%", stat3Label: "Verified instructors",
@@ -311,7 +319,7 @@ export const translations: Record<Lang, Dict> = {
         { title: "Technique", body: "How the sound is produced: posture, hands, breathing, attack. It is what lets a child play what they can already read, and it gets corrected lesson by lesson, not once at the start." },
         { title: "Rhythm", body: "The pulse underneath everything: subdivision, reading rhythm, playing in time, and holding it when somebody else is playing too." },
         { title: "Music reading", body: "Reading the score: notes, clefs, chord symbols. The goal is for a child to face a new piece on their own, without needing to hear it first." },
-        { title: "Interpretation", body: "Giving it meaning: dynamics, phrasing, intention. It is the difference between playing the right notes and making music, and it is what you hear at a recital." },
+        { title: "Interpretation", body: "Giving it meaning: dynamics, phrasing, intention. It is the difference between playing the right notes and making music." },
       ],
     },
     instruments: {
@@ -342,9 +350,9 @@ export const translations: Record<Lang, Dict> = {
         name: "Ilena Peña Fernández",
         role: "Founder & Pedagogical Director · Teacher of violin, voice, piano & sound art",
         photo: "/images/profe-ilena.webp",
-        summary: "Meet Ilena Peña Fernández, founder and director of Alondra Music Academy, a violinist, sound engineer and educator with **more than 12 years of experience** in music teaching, who also practised as a music therapist earlier in her career, before board certification became a requirement in the United States. Throughout her career she has devoted her life to training and inspiring children, young people and adults, convinced that music is a powerful tool for developing **creativity, discipline, confidence and personal growth**. Her calling for teaching and her commitment to excellence have made her a professional who blends knowledge, sensitivity and passion into every lesson.",
+        summary: "Meet Ilena Peña Fernández, founder and director of Alondra Music Academy, a violinist, sound engineer and educator with **more than 12 years of experience** in music teaching, who also practised as a music therapist earlier in her career, before board certification became a requirement in the United States. Throughout her career she has devoted her life to training and inspiring children, young people and adults, convinced that music is a powerful tool for developing creativity, discipline, confidence and personal growth. Her calling for teaching and her commitment to excellence have made her a professional who blends knowledge, sensitivity and passion into every lesson.",
         bio: [
-          "Meet Ilena Peña Fernández, founder and director of Alondra Music Academy, a violinist, sound engineer and educator with **more than 12 years of experience** in music teaching, who also practised as a music therapist earlier in her career, before board certification became a requirement in the United States. Throughout her career she has devoted her life to training and inspiring children, young people and adults, convinced that music is a powerful tool for developing **creativity, discipline, confidence and personal growth**. Her calling for teaching and her commitment to excellence have made her a professional who blends knowledge, sensitivity and passion into every lesson.",
+          "Meet Ilena Peña Fernández, founder and director of Alondra Music Academy, a violinist, sound engineer and educator with **more than 12 years of experience** in music teaching, who also practised as a music therapist earlier in her career, before board certification became a requirement in the United States. Throughout her career she has devoted her life to training and inspiring children, young people and adults, convinced that music is a powerful tool for developing creativity, discipline, confidence and personal growth. Her calling for teaching and her commitment to excellence have made her a professional who blends knowledge, sensitivity and passion into every lesson.",
           "A graduate of the University of the Arts (ISA) of Cuba with a degree in Music and a specialization in Musical Sound Direction, and trained as a violinist at the prestigious Esteban Salas Conservatory, Ilena has built a distinguished career as a teacher of music, musical theatre and music therapy. In parallel, she has developed a successful career as a sound engineer in renowned recording studios and music productions, working with major artists and high-level projects. This professional experience allows her to offer a **comprehensive education** that combines performance, technique, creativity and a deep understanding of the artistic process.",
           "As the founder of Alondra Music Academy, Ilena has created an academy where **academic excellence and personalized attention** are the foundation of every program. Her methodology adapts to the strengths, needs and goals of each student, fostering dynamic, motivating and meaningful learning. More than teaching an instrument, her purpose is to awaken a love of music, to shape confident and creative musicians, and to give each student the tools they need to **reach their full potential** both on and off the stage. At Alondra she personally teaches violin, voice, piano and sound art.",
         ],
@@ -443,7 +451,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Do you provide the instrument?", a: "At the start, yes: if you need a few days to get your own, we bring the instrument to the lesson so your child doesn't lose time. But it is a temporary arrangement, and we do recommend buying one: **your child needs an instrument at home to practise during the week**, and that practice between lessons is where the progress actually happens. We'll give you **expert buying and setup guidance** so you choose the right one, easily and safely." },
         { q: "Can siblings share a lesson slot?", a: "Yes, we offer **sibling discounts** and split-lesson formats when age-appropriate." },
         { q: "What if we need to reschedule?", a: "If you let us know **more than 24 hours in advance**, the class is rescheduled with no problem. For last-minute cancellations, the session is considered delivered, except in cases of demonstrable emergencies or medical issues. In addition, if there are frequent absences within the same month, 50% of the classes will be made up to protect your child's continuity." },
-        { q: "Are there recitals or performances?", a: "Yes. **Seasonal recitals** are part of the academy's program: they are the occasion for each student to share their progress with family and community. Dates are announced to enrolled families in advance." },
+        { q: "Are there recitals or performances?", a: "Nothing is scheduled right now. When we set a date for a performance, enrolled families are the first to know." },
         { q: "How do I enroll?", a: "It's very simple! Just click our Contact Us button to message us on WhatsApp, or fill out the form on the site. Within 48 hours we'll set up your **free discovery phone call** to get to know your child and match them with the ideal specialist teacher." },
       ],
     },
@@ -461,8 +469,9 @@ export const translations: Record<Lang, Dict> = {
     },
     ctaBanner: {
       title: "Ready to begin your musical journey?",
-      body: "Book a **free discovery call** and we'll match your child with the ideal instructor.",
-      button: "Book a free 15-minute call",
+      body: "Request a **free discovery call** and we'll match your child with the ideal instructor.",
+      button: "Request your free 15-minute call",
+      note: "Tell us your child's age and we call you within 48 hours.",
     },
     widget: {
       title: "Complete your enrollment",
@@ -822,15 +831,17 @@ export const translations: Record<Lang, Dict> = {
       cookies: { title: "Política de Cookies | Alondra Music Academy", description: "Cómo Alondra Music Academy usa cookies, almacenamiento local y analítica en este sitio web." },
       legal: { title: "Notas Legales | Alondra Music Academy", description: "Términos que rigen el uso del sitio web de Alondra Music Academy." },
     },
-    nav: { home: "Inicio", programs: "Formatos", teachers: "Profesores", about: "Academia", registration: "Precios", enroll: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto" },
+    nav: { home: "Inicio", programs: "Clases", teachers: "Profesores", about: "Academia", registration: "Precios", enroll: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
-      title1: "Dale a tu hijo el superpoder de la música.",
-      title2: "Descubre su potencial hoy mismo.",
+      title1: "Clases de música en casa, en Miami,",
+      title2: "con el profesor que encaja con tu hijo.",
       subtitle:
         "**El profesor adecuado hace la diferencia.** Elegimos para tu hijo el que mejor conecta con él, y clases a las que le apetece volver, en casa y en todo Miami-Dade y Broward.",
-      ctaPrimary: "Agenda tu llamada gratuita de 15 min",
-      ctaSecondary: "Ver los formatos",
+      ctaPrimary: "Solicita tu llamada gratuita de 15 min",
+      ctaPrimaryWhatsApp: "Solicítala por WhatsApp",
+      ctaNote: "Cuéntanos la edad de tu hijo y te llamamos en menos de 48 horas.",
+      ctaSecondary: "Ver las clases",
       stat1: "12+", stat1Label: "Años de experiencia",
       stat2: "500+", stat2Label: "Estudiantes formados por Ilena",
       stat3: "100%", stat3Label: "Profesores verificados",
@@ -851,7 +862,7 @@ export const translations: Record<Lang, Dict> = {
         { title: "Técnica", body: "Cómo se produce el sonido: postura, manos, respiración, ataque. Es lo que permite tocar lo que ya se sabe leer, y se corrige clase a clase, no una sola vez al principio." },
         { title: "Ritmo", body: "El pulso que va por debajo de todo: subdivisión, lectura rítmica, tocar a tiempo, y sostenerlo cuando hay alguien más tocando." },
         { title: "Lectura musical", body: "Leer la partitura: notas, claves, cifrado. El objetivo es que el niño se enfrente solo a una pieza nueva, sin necesidad de escucharla antes." },
-        { title: "Interpretación", body: "Darle sentido: dinámica, fraseo, intención. Es la diferencia entre tocar las notas correctas y hacer música, y es lo que se escucha en un recital." },
+        { title: "Interpretación", body: "Darle sentido: dinámica, fraseo, intención. Es la diferencia entre tocar las notas correctas y hacer música." },
       ],
     },
     instruments: {
@@ -882,9 +893,9 @@ export const translations: Record<Lang, Dict> = {
         name: "Ilena Peña Fernández",
         role: "Fundadora y Directora Pedagógica · Profesora de violín, canto, piano y arte del sonido",
         photo: "/images/profe-ilena.webp",
-        summary: "Conoce a Ilena Peña Fernández, fundadora y directora de Alondra Music Academy, violinista, ingeniera de sonido y educadora con **más de 12 años de experiencia** en la enseñanza musical, que además ejerció como musicoterapeuta en una etapa anterior de su carrera, antes de que la certificación de junta fuera un requisito en Estados Unidos. A lo largo de su carrera ha dedicado su vida a formar e inspirar a niños, jóvenes y adultos, convencida de que la música es una poderosa herramienta para desarrollar **la creatividad, la disciplina, la confianza y el crecimiento personal**. Su vocación por la enseñanza y su compromiso con la excelencia la han convertido en una profesional que combina conocimiento, sensibilidad y pasión en cada clase.",
+        summary: "Conoce a Ilena Peña Fernández, fundadora y directora de Alondra Music Academy, violinista, ingeniera de sonido y educadora con **más de 12 años de experiencia** en la enseñanza musical, que además ejerció como musicoterapeuta en una etapa anterior de su carrera, antes de que la certificación de junta fuera un requisito en Estados Unidos. A lo largo de su carrera ha dedicado su vida a formar e inspirar a niños, jóvenes y adultos, convencida de que la música es una poderosa herramienta para desarrollar la creatividad, la disciplina, la confianza y el crecimiento personal. Su vocación por la enseñanza y su compromiso con la excelencia la han convertido en una profesional que combina conocimiento, sensibilidad y pasión en cada clase.",
         bio: [
-          "Conoce a Ilena Peña Fernández, fundadora y directora de Alondra Music Academy, violinista, ingeniera de sonido y educadora con **más de 12 años de experiencia** en la enseñanza musical, que además ejerció como musicoterapeuta en una etapa anterior de su carrera, antes de que la certificación de junta fuera un requisito en Estados Unidos. A lo largo de su carrera ha dedicado su vida a formar e inspirar a niños, jóvenes y adultos, convencida de que la música es una poderosa herramienta para desarrollar **la creatividad, la disciplina, la confianza y el crecimiento personal**. Su vocación por la enseñanza y su compromiso con la excelencia la han convertido en una profesional que combina conocimiento, sensibilidad y pasión en cada clase.",
+          "Conoce a Ilena Peña Fernández, fundadora y directora de Alondra Music Academy, violinista, ingeniera de sonido y educadora con **más de 12 años de experiencia** en la enseñanza musical, que además ejerció como musicoterapeuta en una etapa anterior de su carrera, antes de que la certificación de junta fuera un requisito en Estados Unidos. A lo largo de su carrera ha dedicado su vida a formar e inspirar a niños, jóvenes y adultos, convencida de que la música es una poderosa herramienta para desarrollar la creatividad, la disciplina, la confianza y el crecimiento personal. Su vocación por la enseñanza y su compromiso con la excelencia la han convertido en una profesional que combina conocimiento, sensibilidad y pasión en cada clase.",
           "Graduada de la Universidad de las Artes (ISA) de Cuba como Licenciada en Música, con especialización en Dirección Musical de Sonido, y formada como violinista en el prestigioso Conservatorio Esteban Salas, Ilena ha construido una destacada trayectoria como profesora de música, teatro musical y musicoterapeuta. Paralelamente, ha desarrollado una exitosa carrera como ingeniera de sonido en reconocidos estudios de grabación y producciones musicales, trabajando con importantes artistas y proyectos de alto nivel. Esta experiencia profesional le permite ofrecer una **enseñanza integral** que combina interpretación, técnica, creatividad y una profunda comprensión del proceso artístico.",
           "Como fundadora de Alondra Music Academy, Ilena ha creado una academia donde **la excelencia académica y la atención personalizada** son la base de cada programa. Su metodología se adapta a las fortalezas, necesidades y objetivos de cada estudiante, promoviendo un aprendizaje dinámico, motivador y significativo. Más que enseñar a tocar un instrumento, su propósito es despertar el amor por la música, formar músicos seguros y creativos, y brindar a cada alumno las herramientas necesarias para **alcanzar su máximo potencial** tanto dentro como fuera del escenario. En Alondra imparte personalmente clases de violín, canto, piano y arte del sonido.",
         ],
@@ -983,7 +994,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "¿Ustedes proveen el instrumento?", a: "Al principio sí: si necesitas unos días para conseguir el tuyo, llevamos el instrumento a la clase para que tu hijo no pierda tiempo. Pero es una solución temporal, y sí recomendamos comprar uno: **el niño necesita un instrumento en casa para practicar durante la semana**, y es esa práctica entre clase y clase donde ocurre de verdad el progreso. Te damos una **guía experta de compra y configuración** para que elijas el adecuado de forma fácil y segura." },
         { q: "¿Pueden los hermanos compartir clase?", a: "Sí, ofrecemos **descuentos para hermanos** y formatos de clase compartida cuando la edad lo permite." },
         { q: "¿Qué pasa si necesitamos reprogramar?", a: "Si nos avisas con **más de 24 horas de anticipación**, la clase se reprograma sin problema. Para cancelaciones de última hora, la sesión se considerará impartida, salvo en casos de emergencias o imprevistos médicos demostrables. Además, si se presentan ausencias frecuentes en un mismo mes, se repondrá el 50% de las clases para cuidar la continuidad de tu hijo." },
-        { q: "¿Hay recitales o presentaciones?", a: "Sí. Los **recitales de temporada** forman parte del programa de la academia: son la ocasión para que cada estudiante comparta su progreso con su familia y su comunidad. Las fechas se anuncian con antelación a las familias inscritas." },
+        { q: "¿Hay recitales o presentaciones?", a: "Ahora mismo no hay ninguno programado. Cuando fijemos la fecha de una presentación, las familias inscritas serán las primeras en saberlo." },
         { q: "¿Cómo me inscribo?", a: "¡Es muy sencillo! Solo haz clic en nuestro botón de Contáctanos para escribirnos por WhatsApp o completa el formulario del sitio. En menos de 48 horas coordinaremos tu **llamada telefónica de descubrimiento gratuita** para conocer a tu hijo y asignarle al profesor especialista ideal." },
       ],
     },
@@ -1001,8 +1012,9 @@ export const translations: Record<Lang, Dict> = {
     },
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
-      body: "Reserva una **llamada de conocimiento gratuita** y encontramos el instructor ideal para tu hijo.",
-      button: "Agenda tu llamada gratuita de 15 min",
+      body: "Pide una **llamada de conocimiento gratuita** y encontramos el instructor ideal para tu hijo.",
+      button: "Solicita tu llamada gratuita de 15 min",
+      note: "Cuéntanos la edad de tu hijo y te llamamos en menos de 48 horas.",
     },
     widget: {
       title: "Completa tu inscripción",
@@ -1297,15 +1309,17 @@ export const translations: Record<Lang, Dict> = {
       cookies: { title: "Politique de cookies | Alondra Music Academy", description: "Comment Alondra Music Academy utilise les cookies, le stockage local et la mesure d'audience sur ce site." },
       legal: { title: "Mentions légales | Alondra Music Academy", description: "Conditions régissant l'utilisation du site web d'Alondra Music Academy." },
     },
-    nav: { home: "Accueil", programs: "Formats", teachers: "Professeurs", about: "Académie", registration: "Tarifs", enroll: "Inscription", careers: "Travaillez avec nous", contact: "Contact" },
+    nav: { home: "Accueil", programs: "Cours", teachers: "Professeurs", about: "Académie", registration: "Tarifs", enroll: "Inscription", careers: "Travaillez avec nous", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
-      title1: "Offrez à votre enfant le superpouvoir de la musique.",
-      title2: "Révélez son potentiel dès aujourd'hui.",
+      title1: "Des cours de musique à domicile, à Miami,",
+      title2: "avec le professeur qui convient à votre enfant.",
       subtitle:
         "**Le bon professeur fait toute la différence.** Nous choisissons pour votre enfant celui avec qui il s’entend le mieux, et des cours où il a envie de revenir, chez vous, dans tout Miami-Dade et Broward.",
-      ctaPrimary: "Réservez votre appel gratuit de 15 min",
-      ctaSecondary: "Voir les formats",
+      ctaPrimary: "Demandez votre appel gratuit de 15 min",
+      ctaPrimaryWhatsApp: "Demandez-le sur WhatsApp",
+      ctaNote: "Dites-nous l'âge de votre enfant et nous vous appelons sous 48 heures.",
+      ctaSecondary: "Voir les cours",
       stat1: "12+", stat1Label: "Années d'expérience",
       stat2: "500+", stat2Label: "Élèves formés par Ilena",
       stat3: "100%", stat3Label: "Professeurs vérifiés",
@@ -1326,7 +1340,7 @@ export const translations: Record<Lang, Dict> = {
         { title: "Technique", body: "Comment le son se produit : posture, mains, respiration, attaque. C’est ce qui permet de jouer ce qu’on sait déjà lire, et cela se corrige cours après cours, pas une seule fois au début." },
         { title: "Rythme", body: "La pulsation sous tout le reste : subdivision, lecture rythmique, jouer en mesure, et la tenir quand quelqu’un d’autre joue aussi." },
         { title: "Lecture musicale", body: "Lire la partition : notes, clés, chiffrage. Le but est que l’enfant aborde seul un morceau nouveau, sans avoir besoin de l’entendre avant." },
-        { title: "Interprétation", body: "Lui donner du sens : nuances, phrasé, intention. C’est la différence entre jouer les bonnes notes et faire de la musique, et c’est ce qui s’entend lors d’un récital." },
+        { title: "Interprétation", body: "Lui donner du sens : nuances, phrasé, intention. C’est la différence entre jouer les bonnes notes et faire de la musique." },
       ],
     },
     instruments: {
@@ -1357,9 +1371,9 @@ export const translations: Record<Lang, Dict> = {
         name: "Ilena Peña Fernández",
         role: "Fondatrice et Directrice pédagogique · Professeure de violon, chant, piano et art sonore",
         photo: "/images/profe-ilena.webp",
-        summary: "Rencontrez Ilena Peña Fernández, fondatrice et directrice d'Alondra Music Academy, violoniste, ingénieure du son et éducatrice forte de **plus de 12 ans d'expérience** dans l'enseignement musical, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière, avant que la certification professionnelle ne devienne obligatoire aux États-Unis. Tout au long de sa carrière, elle a consacré sa vie à former et inspirer enfants, jeunes et adultes, convaincue que la musique est un puissant outil pour développer **la créativité, la discipline, la confiance et l'épanouissement personnel**. Sa vocation pour l'enseignement et son exigence d'excellence font d'elle une professionnelle qui allie savoir, sensibilité et passion dans chaque cours.",
+        summary: "Rencontrez Ilena Peña Fernández, fondatrice et directrice d'Alondra Music Academy, violoniste, ingénieure du son et éducatrice forte de **plus de 12 ans d'expérience** dans l'enseignement musical, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière, avant que la certification professionnelle ne devienne obligatoire aux États-Unis. Tout au long de sa carrière, elle a consacré sa vie à former et inspirer enfants, jeunes et adultes, convaincue que la musique est un puissant outil pour développer la créativité, la discipline, la confiance et l'épanouissement personnel. Sa vocation pour l'enseignement et son exigence d'excellence font d'elle une professionnelle qui allie savoir, sensibilité et passion dans chaque cours.",
         bio: [
-          "Rencontrez Ilena Peña Fernández, fondatrice et directrice d'Alondra Music Academy, violoniste, ingénieure du son et éducatrice forte de **plus de 12 ans d'expérience** dans l'enseignement musical, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière, avant que la certification professionnelle ne devienne obligatoire aux États-Unis. Tout au long de sa carrière, elle a consacré sa vie à former et inspirer enfants, jeunes et adultes, convaincue que la musique est un puissant outil pour développer **la créativité, la discipline, la confiance et l'épanouissement personnel**. Sa vocation pour l'enseignement et son exigence d'excellence font d'elle une professionnelle qui allie savoir, sensibilité et passion dans chaque cours.",
+          "Rencontrez Ilena Peña Fernández, fondatrice et directrice d'Alondra Music Academy, violoniste, ingénieure du son et éducatrice forte de **plus de 12 ans d'expérience** dans l'enseignement musical, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière, avant que la certification professionnelle ne devienne obligatoire aux États-Unis. Tout au long de sa carrière, elle a consacré sa vie à former et inspirer enfants, jeunes et adultes, convaincue que la musique est un puissant outil pour développer la créativité, la discipline, la confiance et l'épanouissement personnel. Sa vocation pour l'enseignement et son exigence d'excellence font d'elle une professionnelle qui allie savoir, sensibilité et passion dans chaque cours.",
           "Diplômée de l'Université des Arts (ISA) de Cuba avec une licence en Musique et une spécialisation en Direction du son musical, et formée comme violoniste au prestigieux Conservatoire Esteban Salas, Ilena a bâti une carrière remarquable comme professeure de musique, de théâtre musical et musicothérapeute. Parallèlement, elle a mené une brillante carrière d'ingénieure du son dans des studios d'enregistrement et des productions musicales reconnus, travaillant avec de grands artistes et des projets de haut niveau. Cette expérience lui permet d'offrir un **enseignement complet** qui associe interprétation, technique, créativité et une profonde compréhension du processus artistique.",
           "En tant que fondatrice d'Alondra Music Academy, Ilena a créé une académie où **l'excellence académique et l'attention personnalisée** sont au cœur de chaque programme. Sa méthode s'adapte aux forces, aux besoins et aux objectifs de chaque élève, favorisant un apprentissage dynamique, motivant et significatif. Plus que d'apprendre à jouer d'un instrument, son but est d'éveiller l'amour de la musique, de former des musiciens sûrs d'eux et créatifs, et de donner à chaque élève les outils nécessaires pour **atteindre son plein potentiel**, sur scène comme en dehors. À Alondra, elle enseigne personnellement le violon, le chant, le piano et l'art sonore.",
         ],
@@ -1458,7 +1472,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Fournissez-vous l'instrument ?", a: "Au début, oui : si vous avez besoin de quelques jours pour acheter le vôtre, nous apportons l'instrument au cours pour que votre enfant ne perde pas de temps. Mais c'est une solution temporaire, et nous recommandons d'en acheter un : **l'enfant a besoin d'un instrument à la maison pour travailler pendant la semaine**, et c'est ce travail entre les cours qui fait réellement progresser. Nous vous donnons un **guide d'achat et de configuration expert** pour choisir le bon, facilement et en toute sécurité." },
         { q: "Les frères et sœurs peuvent-ils partager un cours ?", a: "Oui, nous offrons des **remises fratrie** et des formats de cours partagé quand l'âge le permet." },
         { q: "Que faire si nous devons reprogrammer ?", a: "Si vous nous prévenez **plus de 24 heures à l'avance**, le cours est reprogrammé sans problème. Pour les annulations de dernière minute, la séance sera considérée comme donnée, sauf en cas d'urgences ou d'imprévus médicaux démontrables. De plus, en cas d'absences fréquentes au cours d'un même mois, 50 % des cours seront rattrapés pour préserver la continuité de votre enfant." },
-        { q: "Y a-t-il des récitals ?", a: "Oui. Les **récitals saisonniers** font partie du programme de l'académie : ils sont l'occasion pour chaque élève de partager ses progrès avec sa famille et sa communauté. Les dates sont annoncées à l'avance aux familles inscrites." },
+        { q: "Y a-t-il des récitals ?", a: "Rien n'est programmé pour le moment. Dès qu'une date de concert sera fixée, les familles inscrites seront les premières informées." },
         { q: "Comment s'inscrire ?", a: "C'est très simple ! Cliquez sur notre bouton Contactez-nous pour nous écrire sur WhatsApp, ou remplissez le formulaire du site. En moins de 48 heures, nous organiserons votre **appel téléphonique de découverte gratuit** pour connaître votre enfant et lui attribuer le professeur spécialiste idéal." },
       ],
     },
@@ -1476,8 +1490,9 @@ export const translations: Record<Lang, Dict> = {
     },
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",
-      body: "Réservez un **appel de découverte gratuit** et nous trouverons le professeur idéal pour votre enfant.",
-      button: "Réservez votre appel gratuit de 15 min",
+      body: "Demandez un **appel de découverte gratuit** et nous trouverons le professeur idéal pour votre enfant.",
+      button: "Demandez votre appel gratuit de 15 min",
+      note: "Dites-nous l'âge de votre enfant et nous vous appelons sous 48 heures.",
     },
     widget: {
       title: "Finalisez votre inscription",
