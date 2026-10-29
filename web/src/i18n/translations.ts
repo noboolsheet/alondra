@@ -46,6 +46,9 @@ export type Dict = {
     translatedNote: string;
     readMore: string;
     readLess: string;
+    /** WCAG 2.2.2: el carrusel se mueve solo y tiene que poder pararse. */
+    pause: string;
+    play: string;
   };
   pedagogy: {
     eyebrow: string;
@@ -115,6 +118,8 @@ export type Dict = {
     body: string;
     points: { title: string; body: string }[];
     note: string;
+    /** La nota manda al visitante «a su web» y no decia a cual. */
+    noteLinkLabel: string;
   };
   ctaBanner: {
     title: string;
@@ -310,6 +315,8 @@ export const translations: Record<Lang, Dict> = {
       translatedNote: "Translated from the original",
       readMore: "Read the full review",
       readLess: "Show less",
+      pause: "Pause the reviews",
+      play: "Play the reviews",
     },
     pedagogy: {
       eyebrow: "Our Method",
@@ -465,7 +472,8 @@ export const translations: Record<Lang, Dict> = {
         { title: "In English, Spanish or French", body: "The lessons, and anything you need to ask us, in the language you speak at home." },
         { title: "At home, like every lesson", body: "Using the scholarship changes nothing about how the class works." },
       ],
-      note: "We do not decide who qualifies and we do not process applications: both belong to Step Up, and their requirements change. Check the current ones on their site.",
+      note: "We do not decide who qualifies and we do not process applications: both belong to Step Up, and their requirements change. Check the current ones on their site:",
+      noteLinkLabel: "stepupforstudents.org",
     },
     ctaBanner: {
       title: "Ready to begin your musical journey?",
@@ -853,6 +861,8 @@ export const translations: Record<Lang, Dict> = {
       translatedNote: "Traducida del idioma original",
       readMore: "Leer la reseña completa",
       readLess: "Mostrar menos",
+      pause: "Pausar las reseñas",
+      play: "Reanudar las reseñas",
     },
     pedagogy: {
       eyebrow: "Nuestro Método",
@@ -1008,7 +1018,8 @@ export const translations: Record<Lang, Dict> = {
         { title: "En inglés, español o francés", body: "Las clases, y todo lo que necesites preguntarnos, en el idioma que hablas en casa." },
         { title: "A domicilio, como siempre", body: "Usar la beca no cambia nada de cómo funciona la clase." },
       ],
-      note: "No decidimos quién califica ni tramitamos solicitudes: las dos cosas son de Step Up, y sus requisitos cambian. Consulta los vigentes en su web.",
+      note: "No decidimos quién califica ni tramitamos solicitudes: las dos cosas son de Step Up, y sus requisitos cambian. Consulta los vigentes en su web:",
+      noteLinkLabel: "stepupforstudents.org",
     },
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
@@ -1331,6 +1342,8 @@ export const translations: Record<Lang, Dict> = {
       translatedNote: "Traduit de la langue d'origine",
       readMore: "Lire l'avis en entier",
       readLess: "Afficher moins",
+      pause: "Mettre les avis en pause",
+      play: "Relancer les avis",
     },
     pedagogy: {
       eyebrow: "Notre Méthode",
@@ -1486,7 +1499,8 @@ export const translations: Record<Lang, Dict> = {
         { title: "En anglais, espagnol ou français", body: "Les cours, et tout ce que vous avez à nous demander, dans la langue que vous parlez à la maison." },
         { title: "À domicile, comme toujours", body: "Utiliser la bourse ne change rien au déroulement du cours." },
       ],
-      note: "Nous ne décidons pas qui est éligible et nous ne traitons pas les demandes : les deux relèvent de Step Up, dont les critères évoluent. Consultez les critères en vigueur sur leur site.",
+      note: "Nous ne décidons pas qui est éligible et nous ne traitons pas les demandes : les deux relèvent de Step Up, dont les critères évoluent. Consultez les critères en vigueur sur leur site :",
+      noteLinkLabel: "stepupforstudents.org",
     },
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",

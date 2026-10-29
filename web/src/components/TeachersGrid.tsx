@@ -110,6 +110,16 @@ export const TeachersGrid = () => {
         >
           {rich(t.teachers.matchPromise)}
         </motion.p>
+
+        {/* El pico emocional de la portada esta aqui, debajo de las caras y de la
+            promesa de reasignacion, y hasta ahora no habia nada que pulsar: el
+            siguiente CTA estaba a unos siete mil pixeles. */}
+        <motion.div {...reveal(fadeUp)} className="mt-8 flex justify-center">
+          <PageLink to="contact" className="btn-cta">
+            {t.ctaBanner.button}
+            <ArrowRight className="w-4 h-4" />
+          </PageLink>
+        </motion.div>
       </div>
     </section>
   );

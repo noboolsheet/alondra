@@ -27,7 +27,18 @@ export interface GoogleReview {
   initial?: string; // optional avatar letter; defaults to author's first letter
 }
 
-export const googleProfileUrl = "https://www.google.com/search?client=mobilesearchapp&sca_esv=e1870cce4b49432d&channel=iss&cs=0&hl=es_419&rlz=1MDAPLA___US1103US1103&v=424.4.924152415&sxsrf=APpeQnuTEsNcBSzb3mvoWgPtK0TO8ReNpQ:1783101531406&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_xXwVMoXK98licszObE84D4hKgV87aJ0M_Ha46_zO0bEOaxojWfDFHcLszlN8UTfcN6nnHcQTpqAO0OgOsW3a_E7tPPDfLpW6ejaMTYZV3-k1S-_LFp9DOJDKvGKzqbKvcqbEtY%3D&q=Alondra+Music+Academy+-+In+Home+Music+Lessons+Opiniones&sa=X&ved=2ahUKEwiOx4LrireVAxUd_7sIHeQ5GoMQ0bkNegQIJhAF&biw=1536&bih=730&dpr=1.25";
+// URL estable del perfil, con la Maps URL API documentada.
+//
+// Aquí había pegada una URL de resultados de 389 caracteres copiada desde la app
+// móvil de Google: llevaba dentro parámetros de sesión (`sxsrf` con marca de
+// tiempo, `ved`, `si`, `rlz`, `client=mobilesearchapp`, `hl=es_419`) y, de
+// propina, el tamaño de la ventana de quien la copió (`biw=1536&bih=730&dpr=1.25`).
+// Eso caduca, y mientras no caduca sirve el perfil en el idioma de otra persona.
+//
+// Si algún día se tiene el Place ID del negocio, añadir `&query_place_id=<id>`
+// fija el destino exacto en vez de depender de que la búsqueda resuelva sola.
+export const googleProfileUrl =
+  "https://www.google.com/maps/search/?api=1&query=Alondra+Music+Academy+-+In+Home+Music+Lessons";
 
 export const googleRating = 5.0;
 export const googleReviewCount = 9;

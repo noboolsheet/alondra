@@ -108,6 +108,15 @@
 
     --brand-lavender: 280 45% 8%;
 
+    /* El degradado de marca se levanta en oscuro.
+       Los paneles `on-brand-dark` (cierre de CTA, BrandFrame, la tarjeta de
+       contacto) heredaban el degradado del tema claro: hsl(280 66% 13%) sobre
+       un cuerpo de hsl(280 45% 8%) son 1,21:1, así que el bloque de conversión
+       era la banda menos visible de la portada justo en el tema que arranca.
+       Estos dos topes dan 1,79:1 y 2,38:1 contra el cuerpo: sigue siendo
+       morado profundo, pero se lee como bloque. */
+    --gradient-hero: linear-gradient(135deg, hsl(280 45% 30%) 0%, hsl(281 42% 38%) 100%);
+
     --shadow-soft: 0 4px 24px -6px hsl(280 80% 3% / 0.5);
     --shadow-lift: 0 24px 48px -20px hsl(280 80% 3% / 0.7);
     --shadow-glow: 0 0 40px hsl(37 100% 60% / 0.35);

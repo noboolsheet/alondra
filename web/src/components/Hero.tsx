@@ -12,7 +12,7 @@ export const Hero = () => {
   const track = useTrack();
 
   return (
-    <section className="relative min-h-[92vh] flex items-center overflow-hidden">
+    <section className="relative min-h-[88vh] flex items-center overflow-hidden">
       {/* Full-screen horizontal hero image (optimized from imagen-sources/hero-img.png) */}
       <img
         src="/images/hero-img.webp"
@@ -20,7 +20,10 @@ export const Hero = () => {
         aria-hidden="true"
         width={1920}
         height={1075}
-        fetchPriority="high"
+        // React 18 no reconoce `fetchPriority` en camelCase: avisa por consola y
+        // lo quita del DOM, asi que la pista de prioridad del LCP no llegaba a
+        // viajar. En minusculas si pasa. (React 19 acepta las dos.)
+        {...{ fetchpriority: "high" }}
         className="absolute inset-0 h-full w-full object-cover"
       />
 
@@ -29,7 +32,7 @@ export const Hero = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-transparent to-transparent pointer-events-none" />
       <div className="absolute top-24 -left-20 w-96 h-96 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
 
-      <div className="relative w-full py-20 md:py-28 pl-10 sm:pl-20 lg:pl-40 pr-6">
+      <div className="relative w-full py-14 sm:py-20 md:py-28 pl-10 sm:pl-20 lg:pl-40 pr-6">
         <div className="max-w-2xl text-left">
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
@@ -58,10 +61,9 @@ export const Hero = () => {
             transition={{ duration: 0.5, delay: 0.35 }}
             className="mt-8 flex flex-col sm:flex-row gap-3"
           >
-            <PageLink to="programs" className="btn-outline">
-              {t.hero.ctaSecondary}
-              <ArrowUpRight className="w-4 h-4" />
-            </PageLink>
+            {/* El primario va primero. Estaba detras del secundario, asi que en
+                movil el primer boton que alcanzaba el pulgar era «ver las
+                clases», que sale del embudo. */}
             {/* Mobile: the discovery-call CTA opens WhatsApp directly (uses the
                 contact phone number). Desktop keeps the routed contact page.
                 Its label names WhatsApp: the same words on both would promise
@@ -82,6 +84,10 @@ export const Hero = () => {
             >
               {t.hero.ctaPrimary}
               <ArrowRight className="w-4 h-4" />
+            </PageLink>
+            <PageLink to="programs" className="btn-outline">
+              {t.hero.ctaSecondary}
+              <ArrowUpRight className="w-4 h-4" />
             </PageLink>
           </motion.div>
 

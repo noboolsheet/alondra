@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { useLang } from "@/i18n/LanguageContext";
 import { useTheme } from "@/theme/ThemeContext";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
@@ -52,7 +53,11 @@ export const Header = () => {
     >
       <nav className="container-full">
         <div className="flex items-center justify-between h-16 md:h-20">
-          <PageLink to="home" className="flex items-center gap-3 group" aria-label="Alondra Music Academy">
+          <PageLink
+            to="home"
+            className="flex items-center gap-3 group rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            aria-label="Alondra Music Academy"
+          >
             <img
               src="/images/logo-minimal.webp"
               alt="Alondra Music Academy logo"
@@ -112,6 +117,21 @@ export const Header = () => {
               {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
             <LanguageSwitcher />
+            {/* La accion de conversion tiene que estar en la cabecera tambien en
+                movil. Estaba sólo a partir de md, asi que en el telefono quedaba
+                dos toques dentro del menu mientras el interruptor de tema se
+                llevaba el sitio bueno para el pulgar. Aqui no cabe el numero
+                entero, asi que debajo de md va el glifo solo, con su etiqueta
+                accesible. */}
+            <a data-track-loc="header"
+              href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="md:hidden h-11 w-11 inline-flex items-center justify-center rounded-full bg-accent text-accent-foreground transition-shadow hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              aria-label={`WhatsApp ${t.contact.infoPhone}`}
+            >
+              <WhatsAppIcon className="w-5 h-5" />
+            </a>
             <a data-track-loc="header"
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"

@@ -31,11 +31,11 @@ export const CTABanner = ({ secondary }: { secondary?: Secondary }) => {
   const { t } = useLang();
   const track = useTrack();
   return (
-    <section className="py-16">
+    <section className="pt-16 pb-10">
       <div className="container-full">
         <motion.div
           {...reveal(scaleIn)}
-          className="on-brand-dark relative overflow-hidden rounded-[2rem] bg-gradient-hero p-10 md:p-16 text-center"
+          className="on-brand-dark relative overflow-hidden rounded-[2rem] bg-gradient-hero p-10 md:p-16 text-center dark:ring-1 dark:ring-accent/25"
         >
           <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-accent/20 blur-3xl" />
           <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-accent/10 blur-3xl" />

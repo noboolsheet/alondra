@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Star, ChevronLeft, ChevronRight, Quote, ExternalLink } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight, Quote, ExternalLink, Pause, Play } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
 import { fadeUp, reveal, EASE_OUT_EXPO } from "@/lib/motion";
@@ -46,10 +46,18 @@ export const GoogleReviews = () => {
   const [i, setI] = useState(0);
   const [dir, setDir] = useState(1);
   const [interacting, setInteracting] = useState(false); // hover / keyboard focus within
+  // Pausa pedida a mano. `interacting` cuelga del ratón y del foco, dos cosas que
+  // un móvil no emite: sin esto el carrusel avanzaba cada 15 s y en táctil no
+  // había manera de pararlo, que es un fallo de WCAG 2.2.2 en nivel A.
+  const [paused, setPaused] = useState(false);
+  // Se vuelve a plegar al cambiar de reseña, o la siguiente llegaría expandida.
+  const [expanded, setExpanded] = useState(false);
   const prefersReduced = useReducedMotion();
 
   const canAuto = items.length > 1 && !prefersReduced;
-  const isPlaying = canAuto && !interacting;
+  // Con una reseña abierta el reloj se para. Antes seguía corriendo, así que el
+  // cambio de slide le plegaba la reseña al visitante a media frase.
+  const isPlaying = canAuto && !interacting && !paused && !expanded;
 
   // Advance via a timeout keyed on the current slide, so the progress bar and the
   // auto-advance stay in sync and reset cleanly on manual navigation.
@@ -75,8 +83,6 @@ export const GoogleReviews = () => {
   const body = review.text[lang];
   const isLong = body.length > LONG_REVIEW_CHARS;
 
-  // Se vuelve a plegar al cambiar de reseña, o la siguiente llegaría expandida.
-  const [expanded, setExpanded] = useState(false);
   useEffect(() => setExpanded(false), [i, lang]);
 
   return (
@@ -105,7 +111,9 @@ export const GoogleReviews = () => {
           </a>
         </div>
 
-        {/* Carousel region — pauses on hover and on keyboard focus within */}
+        {/* Carousel region. Se pausa con el ratón encima, con el foco de teclado
+            dentro, con la reseña larga abierta y con el botón de pausa de la fila
+            de mandos, que es el único de los cuatro que existe en táctil. */}
         <div
           className="relative max-w-3xl mx-auto"
           role="group"
@@ -118,27 +126,11 @@ export const GoogleReviews = () => {
             if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setInteracting(false);
           }}
         >
-          <div className="relative overflow-hidden rounded-3xl bg-card border border-border shadow-soft py-10 md:py-12 px-12 md:px-16 min-h-[300px]">
+          <div className="relative overflow-hidden rounded-3xl bg-card border border-border shadow-soft py-10 md:py-12 px-6 sm:px-10 md:px-16 min-h-[300px]">
             <Quote className="absolute top-6 left-6 w-9 h-9 text-accent/30 pointer-events-none" strokeWidth={1.5} />
             <span className="absolute top-6 right-6 pointer-events-none">
               <GoogleG className="w-6 h-6" />
             </span>
-
-            {/* Prev / next, integrated into the card */}
-            <button
-              onClick={() => go(-1)}
-              aria-label="Previous review"
-              className="absolute left-2 md:left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full border border-primary/20 bg-card/80 backdrop-blur flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground focus-visible:ring-2 focus-visible:ring-accent transition-all"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => go(1)}
-              aria-label="Next review"
-              className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full border border-primary/20 bg-card/80 backdrop-blur flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground focus-visible:ring-2 focus-visible:ring-accent transition-all"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
 
             <AnimatePresence mode="wait" custom={dir}>
               <motion.div
@@ -194,36 +186,79 @@ export const GoogleReviews = () => {
             </AnimatePresence>
           </div>
 
-          {/* Position dots with a synced progress indicator */}
+          {/* Una sola fila de mandos debajo de la tarjeta.
+              Las flechas iban encimadas sobre la cita (`left-2` con 44 px de botón
+              dentro de 48 px de padding, o sea 4 px de solape en móvil) y los
+              puntos medían 6 x 6 px, cuatro veces por debajo del mínimo de
+              24 x 24. Fuera de la tarjeta caben los mandos a tamaño de dedo, la
+              cita recupera el ancho completo y todo cae donde llega el pulgar. */}
           {items.length > 1 && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-              {items.map((_, idx) => {
+            <div className="mt-6 flex items-center justify-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => go(-1)}
+                aria-label="Previous review"
+                className="h-11 w-11 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-1.5 px-1.5">
+                {items.map((_, idx) => {
                   const active = idx === i;
                   return (
                     <button
                       key={idx}
+                      type="button"
                       onClick={() => jump(idx)}
                       aria-label={`Go to review ${idx + 1} of ${items.length}`}
                       aria-current={active}
-                      className={`h-1.5 rounded-full transition-all duration-300 ${
-                        active ? "w-8 bg-primary/15 overflow-hidden" : "w-1.5 bg-primary/25 hover:bg-primary/45"
-                      }`}
+                      className="group h-6 min-w-6 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
-                      {active &&
-                        (isPlaying ? (
-                          <motion.span
-                            key={i}
-                            className="block h-full w-full bg-accent rounded-full origin-left"
-                            initial={{ scaleX: 0 }}
-                            animate={{ scaleX: 1 }}
-                            transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
-                          />
-                        ) : (
-                          <span className="block h-full w-full bg-accent rounded-full" />
-                        ))}
+                      <span
+                        className={`block h-1.5 rounded-full transition-all duration-300 ${
+                          active
+                            ? "w-8 bg-primary/15 overflow-hidden"
+                            : "w-1.5 bg-primary/25 group-hover:bg-primary/45"
+                        }`}
+                      >
+                        {active &&
+                          (isPlaying ? (
+                            <motion.span
+                              key={i}
+                              className="block h-full w-full bg-accent rounded-full origin-left"
+                              initial={{ scaleX: 0 }}
+                              animate={{ scaleX: 1 }}
+                              transition={{ duration: AUTOPLAY_MS / 1000, ease: "linear" }}
+                            />
+                          ) : (
+                            <span className="block h-full w-full bg-accent rounded-full" />
+                          ))}
+                      </span>
                     </button>
                   );
                 })}
+              </div>
+
+              <button
+                type="button"
+                onClick={() => go(1)}
+                aria-label="Next review"
+                className="h-11 w-11 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-all"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+
+              {canAuto && (
+                <button
+                  type="button"
+                  onClick={() => setPaused((v) => !v)}
+                  aria-label={paused ? t.testimonials.play : t.testimonials.pause}
+                  className="ml-1 h-11 w-11 rounded-full flex items-center justify-center text-primary/60 hover:text-primary hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent transition-colors"
+                >
+                  {paused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+                </button>
+              )}
             </div>
           )}
         </div>

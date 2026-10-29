@@ -66,8 +66,20 @@ export const StepUp = () => {
           })}
         </motion.ul>
 
+        {/* La nota mandaba al visitante «a su web» sin decir a cuál. Ahora lo dice.
+            El enlace a contacto se queda como enlace de texto a propósito: esta
+            sección se monta también en /pricing, que cierra con un único dorado
+            (ver la cabecera de CTABanner), y hay un test que lo guarda. */}
         <motion.p {...reveal(fadeUp)} className="mt-8 text-sm text-primary/60 max-w-2xl">
           {t.stepUp.note}{" "}
+          <a
+            href="https://www.stepupforstudents.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-accent-ink underline underline-offset-2"
+          >
+            {t.stepUp.noteLinkLabel}
+          </a>{" "}
           <PageLink to="contact" className="font-semibold text-accent-ink underline underline-offset-2">
             {t.ctaBanner.button}
           </PageLink>
