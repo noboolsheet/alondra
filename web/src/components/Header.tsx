@@ -26,15 +26,20 @@ export const Header = () => {
     setOpen(false);
   }, [location.pathname]);
 
-  // Seis entradas, todas de cara al padre que decide. "Trabaja con nosotros"
+  // Siete entradas, todas de cara al padre que decide. "Trabaja con nosotros"
   // habla a profesores que buscan empleo, no a quien compra, así que se alcanza
   // desde el pie y desde la página de profesores.
+  //
+  // Inscripción va pegada a Precios a propósito: es el paso siguiente y quien la
+  // busca ya sabe lo que quiere, así que tenerla escondida detrás de un botón al
+  // final de precios le costaba un scroll que no tiene por qué pagar.
   const links: { page: PageKey; label: string }[] = [
     { page: "home", label: t.nav.home },
     { page: "programs", label: t.nav.programs },
     { page: "teachers", label: t.nav.teachers },
     { page: "about", label: t.nav.about },
     { page: "registration", label: t.nav.registration },
+    { page: "enroll", label: t.nav.enroll },
     { page: "contact", label: t.nav.contact },
   ];
 
@@ -68,8 +73,12 @@ export const Header = () => {
           </PageLink>
 
           {/* Desktop nav — shown at xl so the longest language (es/fr labels like
-              "Profesores" plus "Inscripción") never overflows on narrow laptops. */}
-          <div className="hidden xl:flex items-center gap-1">
+              "Professeurs" plus "Inscription") never overflows on narrow laptops.
+              El contenedor tope en 1280px, así que el presupuesto de la fila no
+              crece con la pantalla: con siete entradas el aire lateral de cada
+              enlace baja a px-3 y el francés, que es el idioma más largo, entra
+              con holgura. */}
+          <div className="hidden xl:flex items-center gap-0.5">
             {links.map((l) => {
               const active = page === l.page;
               return (
@@ -77,7 +86,7 @@ export const Header = () => {
                   key={l.page}
                   to={l.page}
                   className={cn(
-                    "relative px-4 py-2 text-sm font-medium transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    "relative px-3 py-2 text-sm font-medium transition-colors rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     active ? "text-primary" : "text-primary/70 hover:text-primary",
                   )}
                 >

@@ -11,6 +11,7 @@ import Programs from "@/pages/Programs";
 import Registration from "@/pages/Registration";
 import Enroll from "@/pages/Enroll";
 import Careers from "@/pages/Careers";
+import { Header } from "@/components/Header";
 
 const at = (path: string, ui: React.ReactNode) =>
   render(
@@ -70,6 +71,32 @@ describe("arquitectura de información", () => {
     for (const m of translations.en.teachers.team) {
       expect(document.querySelector(`#${m.slug} [data-state="open"]`), m.slug).toBeNull();
     }
+  });
+
+  it("la foto crece al abrir la ficha y vuelve a miniatura al cerrarla", async () => {
+    at("/music-teachers", <Teachers />);
+    const photo = (name: string) => screen.getByAltText(name) as HTMLImageElement;
+
+    // Ilena llega abierta: su foto ocupa el ancho en móvil y es grande en escritorio.
+    await waitFor(() => expect(photo(translations.en.teachers.director.name)).toHaveClass("w-full"));
+    expect(photo(translations.en.teachers.director.name)).toHaveClass("md:w-44");
+
+    // Las demás, cerradas, se quedan en miniatura junto al nombre.
+    for (const m of translations.en.teachers.team) {
+      expect(photo(m.name), m.slug).toHaveClass("w-16");
+      expect(photo(m.name), m.slug).not.toHaveClass("w-full");
+    }
+  });
+
+  it("el menú principal lleva a inscripción, junto a precios", () => {
+    at("/", <Header />);
+    const hrefs = Array.from(document.querySelectorAll<HTMLAnchorElement>("nav a[href]")).map((a) =>
+      a.getAttribute("href"),
+    );
+    expect(hrefs).toContain("/enrollment");
+    // Pegada a precios, no al final de la fila.
+    const nav = hrefs.filter((h) => h && !h.startsWith("http"));
+    expect(nav.indexOf("/enrollment")).toBe(nav.indexOf("/pricing") + 1);
   });
 
   it("la página de empleo ya no lleva las biografías", () => {
