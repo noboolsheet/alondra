@@ -26,11 +26,11 @@ export const Footer = () => {
             <img src={logoUrl} alt="Alondra Music Academy" width={384} height={384} loading="lazy" className="w-32 h-32 md:w-36 md:h-36 rounded-full" />
             <p className="mt-5 text-sm text-primary-foreground/70 leading-relaxed">{rich(t.footer.tagline, "font-semibold text-primary-foreground")}</p>
             {/* Contact */}
-            <div className="mt-6 flex flex-col gap-2 text-sm text-primary-foreground/70">
-              <a data-track-loc="footer" href={`mailto:${t.contact.infoEmail}`} className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors">
+            <div className="mt-5 flex flex-col gap-1 text-sm text-primary-foreground/70">
+              <a data-track-loc="footer" href={`mailto:${t.contact.infoEmail}`} className="inline-flex items-center gap-2 py-2 hover:text-primary-foreground transition-colors">
                 <Mail className="w-4 h-4" /> {t.contact.infoEmail}
               </a>
-              <a data-track-loc="footer" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="inline-flex items-center gap-2 hover:text-primary-foreground transition-colors">
+              <a data-track-loc="footer" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="inline-flex items-center gap-2 py-2 hover:text-primary-foreground transition-colors">
                 <Phone className="w-4 h-4" /> {t.contact.infoPhone}
               </a>
             </div>
@@ -53,10 +53,10 @@ export const Footer = () => {
             {t.footer.columns.map((col) => (
               <div key={col.title}>
                 <h2 className="text-[11px] font-bold tracking-[0.25em] uppercase text-accent mb-4">{col.title}</h2>
-                <ul className="space-y-2.5">
+                <ul className="space-y-2">
                   {col.links.map((l) => (
                     <li key={l.label}>
-                      <PageLink to={l.page} className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                      <PageLink to={l.page} className="block py-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                         {l.label}
                       </PageLink>
                     </li>
@@ -66,10 +66,10 @@ export const Footer = () => {
             ))}
             <div>
               <h2 className="text-[11px] font-bold tracking-[0.25em] uppercase text-accent mb-4">{t.legal.footerHeading}</h2>
-              <ul className="space-y-2.5">
+              <ul className="space-y-2">
                 {legalLinks.map((l) => (
                   <li key={l.page}>
-                    <PageLink to={l.page} className="text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
+                    <PageLink to={l.page} className="block py-2 text-sm text-primary-foreground/70 hover:text-primary-foreground transition-colors">
                       {l.label}
                     </PageLink>
                   </li>

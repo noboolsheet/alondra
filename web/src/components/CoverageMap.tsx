@@ -8,7 +8,7 @@ export const CoverageMap = () => {
   const { status, onLoad, onError, containerRef } = useIframeStatus();
 
   return (
-    <section className="py-20 md:py-28 bg-secondary/40">
+    <section className="py-16 md:py-20 bg-secondary/40">
       <div className="container-full">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 items-stretch">
           {/* Details: activity zone, hours, contact */}
@@ -17,12 +17,12 @@ export const CoverageMap = () => {
             <h2 className="mt-4 font-serif text-4xl md:text-5xl text-primary text-balance">{t.coverage.title}</h2>
             <p className="mt-4 text-primary/70 leading-relaxed">{rich(t.coverage.subtitle)}</p>
 
-            <div className="mt-8 rounded-2xl bg-card border border-border p-6 space-y-6">
+            <div className="mt-6 rounded-2xl bg-card border border-border p-5 space-y-5">
               {/* Cities */}
               <div>
                 <div className="flex items-center gap-2 text-primary">
                   <MapPin className="w-4 h-4 text-accent" />
-                  <h3 className="font-sans font-bold text-xl">{t.coverage.citiesTitle}</h3>
+                  <h3 className="font-serif text-xl">{t.coverage.citiesTitle}</h3>
                 </div>
                 <ul className="mt-3 grid grid-cols-2 gap-2">
                   {t.coverage.cities.map((c) => (
@@ -36,10 +36,10 @@ export const CoverageMap = () => {
               </div>
 
               {/* Hours */}
-              <div className="pt-6 border-t border-border">
+              <div className="pt-5 border-t border-border">
                 <div className="flex items-center gap-2 text-primary">
                   <Clock className="w-4 h-4 text-accent" />
-                  <h3 className="font-sans font-bold text-xl">{t.coverage.schedule}</h3>
+                  <h3 className="font-serif text-xl">{t.coverage.schedule}</h3>
                 </div>
                 <p className="mt-2 text-sm text-primary/70">{rich(t.coverage.scheduleBody)}</p>
                 <div className="mt-4 grid gap-2 text-sm">
@@ -55,17 +55,17 @@ export const CoverageMap = () => {
               </div>
 
               {/* Contacts */}
-              <div className="pt-6 border-t border-border">
+              <div className="pt-5 border-t border-border">
                 <div className="flex items-center gap-2 text-primary">
                   <Phone className="w-4 h-4 text-accent" />
-                  <h3 className="font-sans font-bold text-xl">{t.coverage.contactsTitle}</h3>
+                  <h3 className="font-serif text-xl">{t.coverage.contactsTitle}</h3>
                 </div>
-                <div className="mt-3 grid gap-3 text-sm">
-                  <a data-track-loc="coverage" href={`tel:${t.contact.infoPhone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2.5 min-w-0 text-primary hover:text-accent transition-colors">
+                <div className="mt-3 grid gap-2 text-sm">
+                  <a data-track-loc="coverage" href={`tel:${t.contact.infoPhone.replace(/[^\d+]/g, "")}`} className="flex items-center gap-2.5 py-2 min-w-0 text-primary hover:text-accent transition-colors">
                     <Phone className="w-4 h-4 flex-shrink-0 text-accent" />
                     <span className="break-words min-w-0">{t.contact.infoPhone}</span>
                   </a>
-                  <a data-track-loc="coverage" href={`mailto:${t.contact.infoEmail}`} className="flex items-center gap-2.5 min-w-0 text-primary hover:text-accent transition-colors">
+                  <a data-track-loc="coverage" href={`mailto:${t.contact.infoEmail}`} className="flex items-center gap-2.5 py-2 min-w-0 text-primary hover:text-accent transition-colors">
                     <Mail className="w-4 h-4 flex-shrink-0 text-accent" />
                     <span className="break-all min-w-0">{t.contact.infoEmail}</span>
                   </a>

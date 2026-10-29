@@ -32,6 +32,8 @@ export type Dict = {
     /** Microcopy bajo el CTA: dice lo que de verdad pasa al pulsarlo. */
     ctaNote: string;
     ctaSecondary: string;
+    /** Insignia de confianza sobre la imagen del hero (DESIGN.md §5). */
+    badge: string;
     stat1: string;
     stat1Label: string;
     stat2: string;
@@ -120,6 +122,8 @@ export type Dict = {
     note: string;
     /** La nota manda al visitante «a su web» y no decia a cual. */
     noteLinkLabel: string;
+    /** CTA de la forma compacta de la portada: va a /pricing, no al sitio de Step Up. */
+    compactCta: string;
   };
   ctaBanner: {
     title: string;
@@ -304,6 +308,7 @@ export const translations: Record<Lang, Dict> = {
       ctaPrimaryWhatsApp: "Request your call on WhatsApp",
       ctaNote: "Tell us your child's age and we call you within 48 hours.",
       ctaSecondary: "Explore lessons",
+      badge: "Background-checked faculty",
       stat1: "12+", stat1Label: "Years of experience",
       stat2: "500+", stat2Label: "Students taught by Ilena",
       stat3: "100%", stat3Label: "Verified instructors",
@@ -431,7 +436,7 @@ export const translations: Record<Lang, Dict> = {
       eyebrow: "Service Area",
       title: "Serving Miami-Dade & Broward",
       subtitle: "We bring lessons **directly to your home** across South Florida.",
-      citiesTitle: "Cities",
+      citiesTitle: "Where we teach",
       citiesNote: "Don't see your city? We're open to other areas. Contact us to arrange **custom in-home lessons**.",
       schedule: "Hours",
       scheduleBody: "In-home lessons across the greater Miami area, on a **schedule that fits your life**.",
@@ -459,7 +464,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Can siblings share a lesson slot?", a: "Yes, we offer **sibling discounts** and split-lesson formats when age-appropriate." },
         { q: "What if we need to reschedule?", a: "If you let us know **more than 24 hours in advance**, the class is rescheduled with no problem. For last-minute cancellations, the session is considered delivered, except in cases of demonstrable emergencies or medical issues. In addition, if there are frequent absences within the same month, 50% of the classes will be made up to protect your child's continuity." },
         { q: "Are there recitals or performances?", a: "Nothing is scheduled right now. When we set a date for a performance, enrolled families are the first to know." },
-        { q: "How do I enroll?", a: "It's very simple! Just click our Contact Us button to message us on WhatsApp, or fill out the form on the site. Within 48 hours we'll set up your **free discovery phone call** to get to know your child and match them with the ideal specialist teacher." },
+        { q: "How do I enroll?", a: "It's very simple! Write to us on WhatsApp with the phone button in the header, or fill out the form on the contact page. Within 48 hours we'll set up your **free discovery phone call** to get to know your child and match them with the ideal specialist teacher." },
       ],
     },
     stepUp: {
@@ -474,6 +479,7 @@ export const translations: Record<Lang, Dict> = {
       ],
       note: "We do not decide who qualifies and we do not process applications: both belong to Step Up, and their requirements change. Check the current ones on their site:",
       noteLinkLabel: "stepupforstudents.org",
+      compactCta: "Prices and how Step Up works",
     },
     ctaBanner: {
       title: "Ready to begin your musical journey?",
@@ -558,7 +564,7 @@ export const translations: Record<Lang, Dict> = {
         },
         {
           key: "soundArt",
-          name: "The Art of Sound",
+          name: "Music Production",
           tagline: "Making music with a computer.",
           focus: "Recording, editing and the basics of mixing, plus the theory needed to arrange what you write.",
           method: "A creative, interactive lab. We fuse the fundamentals of music theory and basic acoustics with the use of **digital production software**. The student learns to structure their own musical ideas and understand how sound travels and transforms.",
@@ -850,6 +856,7 @@ export const translations: Record<Lang, Dict> = {
       ctaPrimaryWhatsApp: "Solicítala por WhatsApp",
       ctaNote: "Cuéntanos la edad de tu hijo y te llamamos en menos de 48 horas.",
       ctaSecondary: "Ver las clases",
+      badge: "Profesorado con antecedentes verificados",
       stat1: "12+", stat1Label: "Años de experiencia",
       stat2: "500+", stat2Label: "Estudiantes formados por Ilena",
       stat3: "100%", stat3Label: "Profesores verificados",
@@ -977,7 +984,7 @@ export const translations: Record<Lang, Dict> = {
       eyebrow: "Zonas de Cobertura",
       title: "Atendemos Miami-Dade y Broward",
       subtitle: "Llevamos las clases **directamente a tu hogar** en todo el sur de Florida.",
-      citiesTitle: "Ciudades",
+      citiesTitle: "Dónde damos clase",
       citiesNote: "¿No ves tu ciudad? Estamos abiertos a otras zonas. Contáctanos para coordinar **clases a domicilio personalizadas**.",
       schedule: "Horario",
       scheduleBody: "Clases a domicilio en toda el área de Miami, en un **horario que se adapta a tu vida**.",
@@ -1005,7 +1012,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "¿Pueden los hermanos compartir clase?", a: "Sí, ofrecemos **descuentos para hermanos** y formatos de clase compartida cuando la edad lo permite." },
         { q: "¿Qué pasa si necesitamos reprogramar?", a: "Si nos avisas con **más de 24 horas de anticipación**, la clase se reprograma sin problema. Para cancelaciones de última hora, la sesión se considerará impartida, salvo en casos de emergencias o imprevistos médicos demostrables. Además, si se presentan ausencias frecuentes en un mismo mes, se repondrá el 50% de las clases para cuidar la continuidad de tu hijo." },
         { q: "¿Hay recitales o presentaciones?", a: "Ahora mismo no hay ninguno programado. Cuando fijemos la fecha de una presentación, las familias inscritas serán las primeras en saberlo." },
-        { q: "¿Cómo me inscribo?", a: "¡Es muy sencillo! Solo haz clic en nuestro botón de Contáctanos para escribirnos por WhatsApp o completa el formulario del sitio. En menos de 48 horas coordinaremos tu **llamada telefónica de descubrimiento gratuita** para conocer a tu hijo y asignarle al profesor especialista ideal." },
+        { q: "¿Cómo me inscribo?", a: "¡Es muy sencillo! Escríbenos por WhatsApp con el botón del teléfono de la cabecera, o completa el formulario de la página de contacto. En menos de 48 horas coordinaremos tu **llamada telefónica de descubrimiento gratuita** para conocer a tu hijo y asignarle al profesor especialista ideal." },
       ],
     },
     stepUp: {
@@ -1020,6 +1027,7 @@ export const translations: Record<Lang, Dict> = {
       ],
       note: "No decidimos quién califica ni tramitamos solicitudes: las dos cosas son de Step Up, y sus requisitos cambian. Consulta los vigentes en su web:",
       noteLinkLabel: "stepupforstudents.org",
+      compactCta: "Precios y cómo funciona Step Up",
     },
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
@@ -1060,7 +1068,7 @@ export const translations: Record<Lang, Dict> = {
         { key: "guitar", name: "Guitarra", tagline: "Acordes, melodía y acompañamiento en las mismas seis cuerdas.", focus: "Lectura de partitura y de tablatura, cambios de acorde limpios, y patrones de mano derecha para acompañar.", method: "Un trayecto versátil que abarca desde la guitarra clásica hasta la acústica y contemporánea. El alumno aprende la lectura de **partituras y tablaturas** en paralelo, combinando melodías solistas con rítmica de acompañamiento.", progress: { short: "Fuerza y agilidad inicial en los dedos, transiciones limpias entre acordes básicos y ejecución de ritmos sencillos.", long: "Acompañar una canción de principio a fin, tocar una melodía con digitación propia y leer un cifrado nuevo." } },
         { key: "bass", name: "Bajo Eléctrico", tagline: "El instrumento que sostiene a una banda.", focus: "Digitación en ambas manos, tocar con metrónomo, y leer líneas de bajo y cifrado.", method: "Diseñado para explorar el bajo como un instrumento individual de gran carácter melódico, sin descuidar su rol como el **corazón rítmico de una agrupación**. Se enfoca en la teoría armónica aplicada, el tempo y el sentido del groove.", progress: { short: "Sincronización rítmica perfecta, técnica de digitación en ambas manos y ejecución de líneas de bajo fundamentales.", long: "Sostener el tempo sin metrónomo, construir una línea sobre un cifrado y encajar con una batería." } },
         { key: "voice", name: "Canto", tagline: "El instrumento que se lleva puesto.", focus: "Respiración diafragmática, emisión sana para la anatomía infantil, dicción y afinación.", method: "Un enfoque de entrenamiento vocal saludable diseñado específicamente para la anatomía infantil. Integramos ejercicios lúdicos de **respiración diafragmática**, dicción y resonancia, cuidando siempre su salud vocal.", progress: { short: "Afinación básica, **control de la respiración** consciente y superación del miedo escénico inicial.", long: "Un rango cómodo que usa sin forzar, dicción clara, y una canción preparada lo bastante bien como para cantarla ante gente." } },
-        { key: "soundArt", name: "El arte del sonido", tagline: "Hacer música con un ordenador.", focus: "Grabación, edición y nociones de mezcla, más la teoría necesaria para arreglar lo que se compone.", method: "Un laboratorio creativo e interactivo. Fusionamos los fundamentos de la teoría musical y la acústica básica con el uso de **programas digitales de producción**. El estudiante aprende a estructurar sus propias ideas musicales y a entender cómo viaja y se transforma el sonido.", progress: { short: "Comprensión del entorno digital, creación de sus primeras secuencias rítmicas y reconocimiento de frecuencias y texturas sonoras básicas.", long: "Una pieza terminada, grabada, arreglada y mezclada por el alumno de principio a fin." } },
+        { key: "soundArt", name: "Producción musical", tagline: "Hacer música con un ordenador.", focus: "Grabación, edición y nociones de mezcla, más la teoría necesaria para arreglar lo que se compone.", method: "Un laboratorio creativo e interactivo. Fusionamos los fundamentos de la teoría musical y la acústica básica con el uso de **programas digitales de producción**. El estudiante aprende a estructurar sus propias ideas musicales y a entender cómo viaja y se transforma el sonido.", progress: { short: "Comprensión del entorno digital, creación de sus primeras secuencias rítmicas y reconocimiento de frecuencias y texturas sonoras básicas.", long: "Una pieza terminada, grabada, arreglada y mezclada por el alumno de principio a fin." } },
       ],
       formats: [
         {
@@ -1331,6 +1339,7 @@ export const translations: Record<Lang, Dict> = {
       ctaPrimaryWhatsApp: "Demandez-le sur WhatsApp",
       ctaNote: "Dites-nous l'âge de votre enfant et nous vous appelons sous 48 heures.",
       ctaSecondary: "Voir les cours",
+      badge: "Professeurs aux antécédents vérifiés",
       stat1: "12+", stat1Label: "Années d'expérience",
       stat2: "500+", stat2Label: "Élèves formés par Ilena",
       stat3: "100%", stat3Label: "Professeurs vérifiés",
@@ -1458,7 +1467,7 @@ export const translations: Record<Lang, Dict> = {
       eyebrow: "Zone de service",
       title: "Miami-Dade & Broward",
       subtitle: "Nous apportons les cours **directement chez vous** dans tout le sud de la Floride.",
-      citiesTitle: "Villes",
+      citiesTitle: "Où nous enseignons",
       citiesNote: "Votre ville n'apparaît pas ? Nous sommes ouverts à d'autres zones. Contactez-nous pour des **cours à domicile personnalisés**.",
       schedule: "Horaires",
       scheduleBody: "Cours à domicile dans toute la région de Miami, selon un **horaire adapté à votre vie**.",
@@ -1486,7 +1495,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Les frères et sœurs peuvent-ils partager un cours ?", a: "Oui, nous offrons des **remises fratrie** et des formats de cours partagé quand l'âge le permet." },
         { q: "Que faire si nous devons reprogrammer ?", a: "Si vous nous prévenez **plus de 24 heures à l'avance**, le cours est reprogrammé sans problème. Pour les annulations de dernière minute, la séance sera considérée comme donnée, sauf en cas d'urgences ou d'imprévus médicaux démontrables. De plus, en cas d'absences fréquentes au cours d'un même mois, 50 % des cours seront rattrapés pour préserver la continuité de votre enfant." },
         { q: "Y a-t-il des récitals ?", a: "Rien n'est programmé pour le moment. Dès qu'une date de concert sera fixée, les familles inscrites seront les premières informées." },
-        { q: "Comment s'inscrire ?", a: "C'est très simple ! Cliquez sur notre bouton Contactez-nous pour nous écrire sur WhatsApp, ou remplissez le formulaire du site. En moins de 48 heures, nous organiserons votre **appel téléphonique de découverte gratuit** pour connaître votre enfant et lui attribuer le professeur spécialiste idéal." },
+        { q: "Comment s'inscrire ?", a: "C'est très simple ! Écrivez-nous sur WhatsApp avec le bouton du téléphone de l'en-tête, ou remplissez le formulaire de la page de contact. En moins de 48 heures, nous organiserons votre **appel téléphonique de découverte gratuit** pour connaître votre enfant et lui attribuer le professeur spécialiste idéal." },
       ],
     },
     stepUp: {
@@ -1501,6 +1510,7 @@ export const translations: Record<Lang, Dict> = {
       ],
       note: "Nous ne décidons pas qui est éligible et nous ne traitons pas les demandes : les deux relèvent de Step Up, dont les critères évoluent. Consultez les critères en vigueur sur leur site :",
       noteLinkLabel: "stepupforstudents.org",
+      compactCta: "Tarifs et fonctionnement de Step Up",
     },
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",
@@ -1541,7 +1551,7 @@ export const translations: Record<Lang, Dict> = {
         { key: "guitar", name: "Guitare", tagline: "Accords, mélodie et accompagnement sur les mêmes six cordes.", focus: "Lecture de la partition et de la tablature, changements d’accords nets, et motifs de main droite pour accompagner.", method: "Un parcours polyvalent allant de la guitare classique à l'acoustique et au contemporain. L'élève apprend à lire les **partitions et les tablatures** en parallèle, combinant mélodies solistes et rythmique d'accompagnement.", progress: { short: "Force et agilité initiales des doigts, transitions nettes entre accords de base et exécution de rythmes simples.", long: "Accompagner une chanson d’un bout à l’autre, jouer une mélodie avec son propre doigté et lire une grille nouvelle." } },
         { key: "bass", name: "Basse électrique", tagline: "L’instrument qui tient un groupe ensemble.", focus: "Doigté des deux mains, jouer au métronome, et lire des lignes de basse et le chiffrage.", method: "Conçu pour explorer la basse comme un instrument individuel de grand caractère mélodique, sans négliger son rôle de **cœur rythmique d'un ensemble**. Il met l'accent sur la théorie harmonique appliquée, le tempo et le sens du groove.", progress: { short: "Synchronisation rythmique parfaite, technique de doigté des deux mains et exécution de lignes de basse fondamentales.", long: "Tenir le tempo sans métronome, construire une ligne sur une grille et se caler avec une batterie." } },
         { key: "voice", name: "Chant", tagline: "L’instrument qu’on porte avec soi.", focus: "Respiration diaphragmatique, émission saine pour l’anatomie de l’enfant, diction et justesse.", method: "Une approche d'entraînement vocal sain conçue spécifiquement pour l'anatomie de l'enfant. Nous intégrons des exercices ludiques de **respiration diaphragmatique**, de diction et de résonance, en veillant toujours à sa santé vocale.", progress: { short: "Justesse de base, **contrôle de la respiration** consciente et dépassement du trac initial.", long: "Une tessiture confortable utilisée sans forcer, une diction claire, et une chanson prête à être chantée devant du monde." } },
-        { key: "soundArt", name: "L'art du son", tagline: "Faire de la musique avec un ordinateur.", focus: "Enregistrement, montage et bases du mixage, plus la théorie nécessaire pour arranger ce qu’on écrit.", method: "Un laboratoire créatif et interactif. Nous fusionnons les fondamentaux de la théorie musicale et de l'acoustique de base avec l'utilisation de **logiciels de production numérique**. L'élève apprend à structurer ses propres idées musicales et à comprendre comment le son voyage et se transforme.", progress: { short: "Compréhension de l'environnement numérique, création de ses premières séquences rythmiques et reconnaissance des fréquences et textures sonores de base.", long: "Un morceau terminé, enregistré, arrangé et mixé par l’élève du début à la fin." } },
+        { key: "soundArt", name: "Production musicale", tagline: "Faire de la musique avec un ordinateur.", focus: "Enregistrement, montage et bases du mixage, plus la théorie nécessaire pour arranger ce qu’on écrit.", method: "Un laboratoire créatif et interactif. Nous fusionnons les fondamentaux de la théorie musicale et de l'acoustique de base avec l'utilisation de **logiciels de production numérique**. L'élève apprend à structurer ses propres idées musicales et à comprendre comment le son voyage et se transforme.", progress: { short: "Compréhension de l'environnement numérique, création de ses premières séquences rythmiques et reconnaissance des fréquences et textures sonores de base.", long: "Un morceau terminé, enregistré, arrangé et mixé par l’élève du début à la fin." } },
       ],
       formats: [
         {

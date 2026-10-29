@@ -55,13 +55,21 @@ export const Stats = () => {
   return (
     <section className="py-12 md:py-16">
       <div className="container-wide">
-        <div className="grid grid-cols-3 gap-x-2 sm:gap-8 md:gap-12 items-start">
+        {/* Tres columnas a 390 px daban 116 px por cifra y la etiqueta se partía
+            en dos líneas a 12 px. En móvil va como lista: la cifra a la
+            izquierda en una columna de ancho fijo para que las tres se alineen,
+            la etiqueta al lado y ya legible a 14 px. A partir de `sm` vuelve a
+            ser la fila de tres centrada. */}
+        <div className="flex flex-col divide-y divide-border sm:grid sm:grid-cols-3 sm:gap-8 md:gap-12 sm:items-start sm:divide-y-0">
           {stats.map((s, i) => (
-            <div key={i} className="px-0.5 sm:px-2 text-center">
-              <div className="font-serif text-4xl sm:text-5xl md:text-6xl text-primary leading-none">
+            <div
+              key={i}
+              className="flex items-baseline gap-4 py-4 first:pt-0 last:pb-0 sm:block sm:px-2 sm:py-0 sm:text-center"
+            >
+              <div className="min-w-[4.5rem] font-serif text-4xl sm:min-w-0 sm:text-5xl md:text-6xl text-primary leading-none">
                 <CountUp raw={s.v} />
               </div>
-              <div className="mt-2 text-xs sm:text-sm text-primary/70 leading-snug text-balance">{s.l}</div>
+              <div className="text-sm text-primary/70 leading-snug sm:mt-2 sm:text-balance">{s.l}</div>
             </div>
           ))}
         </div>

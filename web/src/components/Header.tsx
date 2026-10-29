@@ -127,7 +127,7 @@ export const Header = () => {
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="md:hidden h-11 w-11 inline-flex items-center justify-center rounded-full bg-accent text-accent-foreground transition-shadow hover:shadow-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="md:hidden h-11 w-11 inline-flex items-center justify-center rounded-full border-2 border-primary/25 text-primary transition-colors hover:border-accent hover:text-accent-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               aria-label={`WhatsApp ${t.contact.infoPhone}`}
             >
               <WhatsAppIcon className="w-5 h-5" />
@@ -136,7 +136,7 @@ export const Header = () => {
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:inline-flex items-center gap-2 btn-cta py-2.5 px-5 text-xs"
+              className="hidden md:inline-flex items-center gap-2 btn-outline py-2.5 px-5 text-xs"
               aria-label={`WhatsApp ${t.contact.infoPhone}`}
             >
               <Phone className="w-4 h-4" />

@@ -20,21 +20,21 @@ export const FAQ = () => {
   const { t } = useLang();
   const track = useTrack();
   return (
-    <section id="faq" className="scroll-mt-20 md:scroll-mt-24 py-20 md:py-28 bg-secondary/30">
+    <section id="faq" className="scroll-mt-20 md:scroll-mt-24 py-16 md:py-20 bg-secondary/30">
       <div className="container-narrow">
-        <motion.div {...reveal(fadeUp)} className="text-center mb-12">
+        <motion.div {...reveal(fadeUp)} className="text-center mb-8">
           <h2 className="font-serif text-4xl md:text-5xl text-primary">{t.faq.title}</h2>
         </motion.div>
 
         <motion.div {...reveal(staggerParent(0.05))}>
-          <Accordion type="single" collapsible className="space-y-3">
+          <Accordion type="single" collapsible className="space-y-2">
             {t.faq.items.map((it, i) => (
               <motion.div key={i} variants={staggerUp}>
                 <AccordionItem
                   value={`item-${i}`}
                   className="border border-border rounded-2xl bg-card px-5 md:px-6 shadow-soft data-[state=open]:shadow-lift transition-shadow"
                 >
-                  <AccordionTrigger className="text-left font-sans font-semibold text-lg md:text-xl text-primary data-[state=open]:text-primary-soft dark:data-[state=open]:text-accent-ink transition-colors hover:no-underline py-5">
+                  <AccordionTrigger className="text-left font-sans font-semibold text-lg md:text-xl text-primary data-[state=open]:text-primary-soft dark:data-[state=open]:text-accent-ink transition-colors hover:no-underline py-4">
                     {it.q}
                   </AccordionTrigger>
                   <AccordionContent className="text-primary/70 leading-relaxed pb-5 text-base">
@@ -46,11 +46,12 @@ export const FAQ = () => {
           </Accordion>
         </motion.div>
 
-        <motion.p {...reveal(fadeUp)} className="mt-10 mx-auto max-w-[68ch] text-center text-primary/70 leading-relaxed">
+        <motion.p {...reveal(fadeUp)} className="mt-8 mx-auto max-w-[68ch] text-center text-primary/70 leading-relaxed">
           {rich(t.faq.more)}{" "}
           <PageLink
             to="contact"
-            className="inline-flex items-center gap-1.5 font-semibold text-accent-ink hover:gap-2.5 transition-all"
+            data-cta="call"
+            className="inline-flex items-center gap-1.5 py-2 font-semibold text-accent-ink hover:gap-2.5 transition-all"
             onClick={() => track("cta_click", { location: "faq", label: "discovery_call" })}
           >
             {t.ctaBanner.button}

@@ -1,5 +1,5 @@
 import { PageLink } from "@/components/PageLink";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { PageKey } from "@/i18n/routes";
 import { useLang } from "@/i18n/LanguageContext";
@@ -37,10 +37,8 @@ export const CTABanner = ({ secondary }: { secondary?: Secondary }) => {
           {...reveal(scaleIn)}
           className="on-brand-dark relative overflow-hidden rounded-[2rem] bg-gradient-hero p-10 md:p-16 text-center dark:ring-1 dark:ring-accent/25"
         >
-          <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-accent/20 blur-3xl" />
-          <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-accent/10 blur-3xl" />
+          <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_85%_0%,hsl(37_100%_60%/0.16),transparent_70%),radial-gradient(50%_50%_at_10%_100%,hsl(37_100%_60%/0.09),transparent_70%)]" />
           <div className="relative">
-            <Sparkles className="w-8 h-8 text-accent mx-auto mb-4" />
             <h2 className="font-serif text-3xl md:text-5xl text-primary-foreground text-balance max-w-2xl mx-auto leading-[1.1]">
               {t.ctaBanner.title}
             </h2>

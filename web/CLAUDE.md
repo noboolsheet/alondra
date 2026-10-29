@@ -78,9 +78,38 @@ Los `<Route>` se generan iterando el mapa de rutas: no se escriben a mano.
 **Las páginas componen secciones.** `src/pages/*` son finas: cada una envuelve
 `<Layout>` (Header + `<main>` animado + Footer) alrededor de componentes de
 sección de `src/components/`. `Index.tsx` cose la portada (Hero, Stats,
-GoogleReviews, Pedagogy, InstrumentsGrid, Formats, StepUp, TeachersGrid,
-CoverageMap, FAQ, CTABanner). Para cambiar el contenido de una página, edita el
+GoogleReviews, TeachersGrid, Pedagogy, InstrumentsGrid, CoverageMap, StepUp,
+FAQ, CTABanner). Para cambiar el contenido de una página, edita el
 componente de sección, no la página.
+
+**El orden de la portada no es arbitrario y está razonado en la cabecera de
+`Index.tsx`.** El profesorado estaba octavo, a unos 8.500 px del hero: el miedo
+real de un padre («quién entra en mi casa») quedaba detrás del método, las
+disciplinas, los formatos y la beca. Ahora va cuarto, justo después de las
+reseñas, y como `TeachersGrid` trae su propio dorado hay un punto de conversión
+al 35% de la página en vez de al 62%. `StepUp` baja al noveno puesto: es la
+respuesta a la objeción del precio y no debe interrumpir antes de que el
+visitante haya conocido a nadie. Si mueves una sección, actualiza las dos
+listas.
+
+**Las disciplinas y los formatos son una sola sección.** `InstrumentsGrid` lleva
+las dos: la tira de pastillas de las siete disciplinas y, debajo y en peso menor,
+los tres formatos con su nombre y a quién van dirigidos. Eran dos secciones
+seguidas con la misma construcción de tarjeta y sumaban 2,3 pantallas de móvil;
+con `StepUp` eran tres rejillas idénticas, que es lo que DESIGN.md §6 pide no
+hacer. El cuerpo de cada formato vive sólo en `/music-lessons`. `Formats.tsx` se
+borró: su contenido está aquí y el historial lo conserva.
+
+**`StepUp` tiene dos formas.** `<StepUp compact />` en la portada (titular, frase
+y enlace a `/pricing`) y `<StepUp />` entero en `/pricing`. La objeción del precio
+no debe costar 1,8 pantallas en una página donde el visitante todavía no sabe lo
+que vale una clase.
+
+**El ritmo vertical tiene tres niveles, a propósito.** Las nueve secciones usaban
+`py-20 md:py-28` idéntico, y el efecto era que ninguna parecía más importante que
+otra. Ahora: `py-24 md:py-32` en lo que convierte y es corto (reseñas),
+`py-16 md:py-20` en lo que apoya (método, cobertura, FAQ) y `py-12 md:py-16` en
+lo compacto (catálogo, Step Up). Si añades una sección, decide en qué nivel va.
 
 **Cada contenido tiene una página y sólo una.** El reparto de octubre de 2026
 deshizo tres mezclas que habían salido a producción, y conviene no rehacerlas:
@@ -276,6 +305,14 @@ embed ya cargado.
 contacto). La academia **no ofrece clases de prueba ni gratuitas**: fue una
 decisión consciente, y «la primera clase gratis» de la competencia no es un modelo
 a copiar aquí. No escribas copy, CTA ni diseño que insinúe una clase gratis.
+
+**`StickyCallBar` da la llamada al pulgar en móvil.** La portada mide unas
+dieciséis pantallas a 390 px y la única acción permanente era la píldora de
+WhatsApp de la cabecera, arriba y fuera del arco del pulgar. La barra sale sólo
+por debajo de `sm`, aparece cuando el hero ya se ha ido y **se retira al llegar
+al cierre**, que lleva su propio dorado: dos llamadas idénticas a la vez obligan
+a elegir entre lo mismo, y por eso tampoco hace falta compensar con relleno
+abajo. Emite `cta_click` con `location: "sticky_mobile"`, etiqueta nueva en GA4.
 
 **Capa de UI.** `src/components/ui/*` es el set estándar de shadcn-ui (primitivas
 de Radix); en general no los edites, compónlos. `src/components/*` (los que no

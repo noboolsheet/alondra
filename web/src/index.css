@@ -29,9 +29,16 @@
     /* El mismo oro para texto grande. La Regla del Suelo de Contraste se estaba
        aplicando por igual a 11 px y a 72 px, y a 72 px el mínimo es 3:1, no 4,5:1:
        el adorno del hero y los kickers salían marrón oliva en claro, o sea que el
-       color de marca dejaba de ser el color de marca. 38% da 3,2:1 sobre el campo
-       lavanda y se parece al dorado de verdad. Sólo para >=24 px. */
-    --accent-ink-display: 37 100% 38%;
+       color de marca dejaba de ser el color de marca. Sólo para >=24 px.
+
+       Estaba en 38%, calculado sobre el **campo lavanda liso**: 3,39:1, un 13%
+       por encima del suelo de 3:1. Pero su uso real es el acento del hero, que va
+       sobre la foto con un velo parcial, y ahí cualquier luz que se cuela se come
+       ese margen: medido en claro, el acento bajaba de 3:1 en el 93% de su caja a
+       390 px y en el 53% a 1440. 34% da 3,89:1 sobre el campo liso y aguanta
+       3,3:1 con la imagen asomando, que es la condición que de verdad tiene que
+       cumplir. Sigue leyéndose como oro, no como oliva. */
+    --accent-ink-display: 37 100% 34%;
 
     --secondary: 280 34% 91%;            /* deepened so bg-secondary section banding reads on the new lavender field */
     --secondary-foreground: 280 66% 13%;
@@ -167,6 +174,27 @@
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Un solo anillo de foco para todo el sitio.
+     Había tres reglas `focus-visible` y las tres estaban en las clases de botón,
+     así que 33 de las 74 paradas de tabulación de la portada caían al anillo azul
+     por defecto de Chromium: los cuatro enlaces de texto con flecha, los once
+     disparadores del FAQ, los once del pie y los dos de contacto. Parchearlos de
+     uno en uno es exactamente cómo se llegó hasta aquí.
+
+     Va con `outline` y no con `ring`, que es `box-shadow`: el enlace de salto
+     declaraba `focus:ring-2` junto a `focus:shadow-lift` y la sombra ganaba, así
+     que el anillo no se pintaba nunca. `outline` no colisiona con ninguna
+     utilidad de sombra y sigue el `border-radius` solo.
+
+     `:where()` deja la especificidad en 0, así que cualquier componente que ya
+     declare su propio `focus-visible` (los botones) sigue mandando.
+     `--accent-ink` es el oro que cambia por tema: brillante sobre el campo
+     morado, ámbar oscuro sobre el lavanda. */
+  :where(a, button, [role="button"], input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid hsl(var(--accent-ink));
+    outline-offset: 2px;
   }
 
   body {

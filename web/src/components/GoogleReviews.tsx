@@ -86,7 +86,7 @@ export const GoogleReviews = () => {
   useEffect(() => setExpanded(false), [i, lang]);
 
   return (
-    <section className="py-20 md:py-28">
+    <section className="py-20 md:py-32">
       <div className="container-wide">
         <div className="text-center mb-10">
           <motion.h2 {...reveal(fadeUp)} className="font-serif text-4xl md:text-5xl text-primary text-balance max-w-2xl mx-auto">
@@ -99,7 +99,7 @@ export const GoogleReviews = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`${googleRating.toFixed(1)} out of 5 · ${googleReviewCount} ${t.testimonials.reviewsSuffix} · ${t.testimonials.seeAll}`}
-            className="mt-6 inline-flex items-center gap-3 rounded-full border border-border bg-card shadow-soft px-5 py-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift hover:border-primary/30"
+            className="mt-6 inline-flex items-center gap-3 rounded-full border border-border bg-card shadow-soft px-5 py-2.5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift hover:border-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             <GoogleG className="w-5 h-5" />
             <span className="font-sans font-bold text-lg text-primary leading-none">{googleRating.toFixed(1)}</span>
@@ -171,7 +171,7 @@ export const GoogleReviews = () => {
                   </blockquote>
                 )}
                 {review.originalLang !== lang && (
-                  <div className="mt-3 text-xs text-primary/50">{t.testimonials.translatedNote}</div>
+                  <div className="mt-3 text-xs text-primary/70">{t.testimonials.translatedNote}</div>
                 )}
                 <div className="mt-6 flex items-center justify-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center font-semibold text-primary">
@@ -213,7 +213,7 @@ export const GoogleReviews = () => {
                       onClick={() => jump(idx)}
                       aria-label={`Go to review ${idx + 1} of ${items.length}`}
                       aria-current={active}
-                      className="group h-6 min-w-6 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      className="group h-11 min-w-8 flex items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                     >
                       <span
                         className={`block h-1.5 rounded-full transition-all duration-300 ${
