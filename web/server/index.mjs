@@ -99,6 +99,53 @@ const app = express();
 //     como GET y pierda el cuerpo: los formularios dejarían de funcionar.
 const CANONICAL_HOST = process.env.CANONICAL_HOST || "alondrama.com";
 
+/**
+ * Cabeceras de seguridad.
+ *
+ * El sitio no mandaba ninguna, así que cualquiera podía incrustar alondrama.com
+ * en su propia página, superponerle capas y conseguir que un visitante pulsara
+ * donde no creía estar pulsando. Eso importa sobre todo en /enrollment, que es
+ * donde una familia escribe el nombre y la edad de su hijo.
+ *
+ * `frame-ancestors 'self'` es lo que lo cierra. Se permite 'self' y no 'none'
+ * porque el widget de My Music Staff vive en un iframe del propio dominio
+ * (public/mms-widget.html): con 'none' se bloquearía a sí mismo.
+ *
+ * Esta CSP lleva **sólo** esa directiva a propósito. Una completa tendría que
+ * autorizar gtag, el script de My Music Staff, los estilos en línea que inyecta
+ * framer-motion y los scripts en línea de index.html, y equivocarse ahí rompe el
+ * sitio en silencio para una parte de los visitantes. Es un trabajo aparte, y
+ * uno que hay que verificar en un navegador de verdad, no a ciegas.
+ */
+app.use((req, res, next) => {
+  res.set({
+    "Content-Security-Policy": "frame-ancestors 'self'",
+    // El equivalente antiguo, para navegadores que no leen frame-ancestors.
+    "X-Frame-Options": "SAMEORIGIN",
+    // Que el navegador no adivine el tipo de un fichero y lo ejecute como script.
+    "X-Content-Type-Options": "nosniff",
+    // Al salir del sitio se manda el origen, nunca la ruta completa.
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    // El sitio no usa ninguna de las tres. `payment` se deja fuera a propósito:
+    // el widget de terceros podría necesitarlo y romperlo no se vería hasta que
+    // una familia intentara pagar.
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+  });
+
+  // HSTS sólo en el dominio público y sobre https. Es la única cabecera difícil
+  // de deshacer (el navegador la recuerda), así que no se manda en localhost, ni
+  // en la LAN, ni en el preview de Tailscale, donde dejaría el sitio inaccesible
+  // por http. Medio año, sin preload ni subdominios: para retirarla, poner
+  // max-age=0 y esperar a que caduque en los navegadores que ya la vieron.
+  const proto = req.headers["x-forwarded-proto"] || "https";
+  const host = (req.headers.host || "").toLowerCase().split(":")[0];
+  if (proto === "https" && (host === CANONICAL_HOST || host === `www.${CANONICAL_HOST}`)) {
+    res.set("Strict-Transport-Security", "max-age=15552000");
+  }
+
+  next();
+});
+
 app.use((req, res, next) => {
   if (req.method !== "GET" && req.method !== "HEAD") return next();
 

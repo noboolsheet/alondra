@@ -197,6 +197,16 @@ soft 404, y es además la lista de la que el prerenderizado saca qué ficheros
 escribir. Si falta `routes.json`, el server cae a responder 200 en todo: una lista
 de rutas obsoleta nunca debe tumbar el sitio.
 
+**Cabeceras de seguridad.** `server/index.mjs` manda `frame-ancestors 'self'`
+(más `X-Frame-Options` para los navegadores antiguos), `nosniff`,
+`Referrer-Policy` y `Permissions-Policy` en todas las respuestas, y HSTS **sólo**
+en el dominio público sobre https. Dos cosas que conviene no tocar sin leer: la
+CSP lleva a propósito **una sola directiva**, porque una completa tendría que
+autorizar gtag, el script de My Music Staff, los estilos en línea de
+framer-motion y los scripts en línea de `index.html`, y equivocarse ahí rompe el
+sitio en silencio; y `frame-ancestors` es `'self'` y no `'none'` porque el widget
+vive en un iframe del propio dominio y con `'none'` se bloquearía a sí mismo.
+
 **Terceros y consentimiento: el sitio NO pide consentimiento de cookies, y es
 deliberado.** No hay banner ni CMP, y la política de cookies no afirma que lo
 haya: remite a los ajustes del navegador y a la exclusión de Google Analytics,
