@@ -18,6 +18,9 @@ describe("metadatos por página", () => {
     ["/pricing", "en", "registration"],
     ["/es/precios", "es", "registration"],
     ["/fr/cours-de-musique", "fr", "programs"],
+    ["/music-teachers", "en", "teachers"],
+    ["/es/profesores", "es", "teachers"],
+    ["/fr/inscription", "fr", "enroll"],
   ])("%s → título e idioma correctos", async (path, lang, key) => {
     at(path);
     const expected = translations[lang as "en"].meta[key as "home"];

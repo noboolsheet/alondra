@@ -93,11 +93,19 @@ describe("datos estructurados", () => {
     }
   });
 
-  it("/about emite al equipo como personas de la academia", async () => {
-    const nodes = await graph("/about");
+  it("/music-teachers emite al equipo como personas de la academia", async () => {
+    const nodes = await graph("/music-teachers");
     const people = typed(nodes, "Person").filter((p) => p["@id"]);
-    expect(people.length).toBe(translations.en.about.team.members.length + 1); // + la directora
+    expect(people.length).toBe(translations.en.teachers.team.length + 1); // + la directora
     expect(people.every((p) => p.worksFor)).toBe(true);
+  });
+
+  // Las fichas del equipo se mudaron de /about a su propia página. Si alguien
+  // las devuelve a /about, las Person saldrían en las dos y el grafo mentiría
+  // sobre cuál es la página del equipo.
+  it("/about ya no emite a las personas del equipo", async () => {
+    const nodes = await graph("/about");
+    expect(typed(nodes, "Person").filter((p) => p["@id"])).toHaveLength(0);
   });
 
   it("un 404 no deja grafo: la URL no debe declararse como página", async () => {

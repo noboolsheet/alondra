@@ -17,8 +17,10 @@ import type { Lang } from "./translations";
 export type PageKey =
   | "home"
   | "programs"
+  | "teachers"
   | "about"
   | "registration"
+  | "enroll"
   | "careers"
   | "contact"
   | "privacy"
@@ -29,8 +31,10 @@ export type PageKey =
 const SLUGS: Record<PageKey, Record<Lang, string>> = {
   home:         { en: "",                   es: "",                          fr: "" },
   programs:     { en: "music-lessons",      es: "clases-de-musica",          fr: "cours-de-musique" },
+  teachers:     { en: "music-teachers",     es: "profesores",                fr: "professeurs" },
   about:        { en: "about",              es: "academia",                  fr: "academie" },
   registration: { en: "pricing",            es: "precios",                   fr: "tarifs" },
+  enroll:       { en: "enrollment",         es: "inscripcion",               fr: "inscription" },
   careers:      { en: "music-teacher-jobs", es: "empleo-profesores-musica",  fr: "emplois-professeurs-musique" },
   contact:      { en: "contact",            es: "contacto",                  fr: "contact" },
   privacy:      { en: "privacy",            es: "privacidad",                fr: "confidentialite" },

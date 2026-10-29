@@ -173,7 +173,7 @@ export const ContactForm = () => {
               {field("zip", t.contact.fields.zip)}
               {field("email", t.contact.fields.email, "email")}
               {field("phone", t.contact.fields.phone, "tel")}
-              {select("instrument", t.contact.fields.instrument, t.instruments.items.map((i) => i.name))}
+              {select("instrument", t.contact.fields.instrument, t.programs.disciplines.map((d) => d.name))}
               {select("channel", t.contact.fields.channel, t.contact.channelOptions)}
               {select("source", t.contact.fields.source, t.contact.sourceOptions)}
               {field("availability", t.contact.fields.availability)}

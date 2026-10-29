@@ -78,9 +78,35 @@ Los `<Route>` se generan iterando el mapa de rutas: no se escriben a mano.
 **Las páginas componen secciones.** `src/pages/*` son finas: cada una envuelve
 `<Layout>` (Header + `<main>` animado + Footer) alrededor de componentes de
 sección de `src/components/`. `Index.tsx` cose la portada (Hero, Stats,
-GoogleReviews, Pedagogy, InstrumentsGrid, Formats, TeachersGrid, CoverageMap, FAQ,
-CTABanner). Para cambiar el contenido de una página, edita el componente de
-sección, no la página.
+GoogleReviews, Pedagogy, InstrumentsGrid, Formats, StepUp, TeachersGrid,
+CoverageMap, FAQ, CTABanner). Para cambiar el contenido de una página, edita el
+componente de sección, no la página.
+
+**Cada contenido tiene una página y sólo una.** El reparto de octubre de 2026
+deshizo tres mezclas que habían salido a producción, y conviene no rehacerlas:
+
+- **`/music-teachers`** (`es: /profesores`, `fr: /professeurs`) es la página del
+  profesorado: el retrato de la directora, las fichas del equipo y las
+  **biografías completas**. Antes el acordeón de biografías se montaba al final
+  de `/music-teacher-jobs`, la página de empleo, y ahí apuntaban todos los «ver
+  más» de la portada y de la academia: un padre acababa en un anuncio de trabajo.
+  `/about` enlaza aquí con una tarjeta y **no** vuelve a pintar el equipo.
+- **`/pricing`** es sólo precio: tarifas, duración de clase, descuentos y Step Up.
+  **`/enrollment`** (`es: /inscripcion`, `fr: /inscription`) es el cierre: pasos,
+  contrato y el widget de My Music Staff. Compartían página, con los pasos
+  **antes** del precio y el iframe de un tercero cargando para quien sólo venía a
+  comparar. Ése es además el sitio donde tendrá que ir la puerta del
+  consentimiento de cookies, y por eso no debe volver a `/pricing`.
+- **Las siete disciplinas tienen una sola fuente: `t.programs.disciplines`.**
+  Había dos juegos con el mismo `tagline` y el mismo `focus` (`t.instruments.items`
+  era el otro) y sólo uno viajaba al JSON-LD. La portada muestra una tira de
+  chips que enlaza a `#instrument-<key>` en `/music-lessons`, donde cada ficha es
+  un **desplegable en la página** y no un modal: el texto más específico del
+  sitio estaba detrás de un clic que un rastreador no da. `t.instruments` sólo
+  conserva el titular de esa tira.
+- Los iconos de disciplina y de formato viven en `src/lib/icons.ts`, indexados
+  **por clave**. Estaban duplicados en tres componentes y uno indexaba por
+  posición, así que reordenar el diccionario cambiaba los iconos en silencio.
 
 **La internacionalización es la preocupación transversal central.** El sitio es
 trilingüe (en/es/fr). Toda la copy vive en `src/i18n/translations.ts` como un
@@ -113,7 +139,9 @@ con `areaServed` (lo que declara que Alondra es un negocio de **área de servici
 que se desplaza al domicilio y no tiene local), `WebSite`, la `WebPage` de la ruta,
 migas en las internas, `FAQPage` en la portada, un `Course` por disciplina en
 `/music-lessons`, el `Service` con los dos precios reales en `/pricing` y las
-`Person` del equipo en `/about`.
+`Person` del equipo en `/music-teachers` (donde se renderizan de verdad: estaban
+declaradas en `/about`, que ya no las muestra, y hay un test que lo impide
+reintroducir).
 
 **Los tipos se comprueban, no se deducen.** El grafo salió a producción con
 `@type: "MusicSchool"`, que parece existir —por analogía con `MusicVenue` o
@@ -237,7 +265,8 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
   de arranque y es parte de la marca**: no pases el sitio a claro por defecto.
 - **Tests** con Vitest + Testing Library en entorno jsdom; los globals están
   activados y `src/test/setup.ts` corre primero (matchers de jest-dom más
-  polyfills de `matchMedia` e `IntersectionObserver`). Los ficheros de test
+  polyfills de `matchMedia`, `IntersectionObserver` y `ResizeObserver`, este
+  último porque Embla lo pide al montar el carrusel de `/about`). Los ficheros de test
   encajan con `src/**/*.{test,spec}.{ts,tsx}`. El stub de `IntersectionObserver`
   reporta los elementos como visibles de forma **asíncrona**, igual que el real,
   así que comprueba un reveal con `whileInView` usando `waitFor`/`findBy*`, no un

@@ -68,3 +68,22 @@ Object.defineProperty(window, "matchMedia", {
     dispatchEvent: () => {},
   }),
 });
+
+/**
+ * jsdom ships no ResizeObserver either, and Embla (the photo carousel on the
+ * academy page) calls it on mount. Rendering that page in a test throws without
+ * this stub. It never reports a resize, which is what we want: the carousel
+ * settles on its first slide instead of animating under the assertions.
+ */
+class TestResizeObserver implements ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+Object.defineProperty(window, "ResizeObserver", {
+  writable: true,
+  configurable: true,
+  value: TestResizeObserver,
+});
+globalThis.ResizeObserver = TestResizeObserver;

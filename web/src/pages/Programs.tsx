@@ -1,57 +1,15 @@
-import { useState } from "react";
+import { Check, type LucideIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Check,
-  User,
-  Users,
-  Baby,
-  Piano,
-  Guitar,
-  Mic,
-  Music2,
-  Music3,
-  Music4,
-  AudioLines,
-  X,
-  type LucideIcon,
-} from "lucide-react";
 import { Layout } from "@/components/Layout";
+import { PageLink } from "@/components/PageLink";
 import { CTABanner } from "@/components/CTABanner";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useLang } from "@/i18n/LanguageContext";
-import { reveal, fadeUp, staggerParent, staggerPop } from "@/lib/motion";
+import { disciplineIcon, formatIcon } from "@/lib/icons";
+import { reveal, fadeUp, staggerParent, staggerPop, staggerUp } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
-
-const DISCIPLINE_ICON: Record<string, LucideIcon> = {
-  piano: Piano,
-  violin: Music2,
-  flute: Music4,
-  guitar: Guitar,
-  bass: Music3,
-  voice: Mic,
-  soundArt: AudioLines,
-};
-
-const FORMAT_ICON: Record<string, LucideIcon> = {
-  individual: User,
-  pianoLab: Users,
-  littleMozart: Baby,
-};
 
 // Which disciplines each format covers. Structural (identical across languages),
 // so it lives in the component rather than the translations.
@@ -61,16 +19,33 @@ const FORMAT_DISCIPLINES: Record<string, string[]> = {
   littleMozart: ["piano", "violin", "guitar"],
 };
 
+/**
+ * Formatos e instrumentos.
+ *
+ * La ficha de cada disciplina vivía en un modal: el texto más específico del
+ * sitio quedaba detrás de un clic que un rastreador no da, y comparar dos
+ * instrumentos obligaba a cerrar y abrir. Ahora son desplegables en la propia
+ * página, con el mismo patrón que la FAQ y las biografías, y cada uno tiene su
+ * `id` para que los chips de la portada puedan apuntar directamente a él.
+ */
 const Programs = () => {
   const { t } = useLang();
   const { offer, disciplines, formats } = t.programs;
-  const isMobile = useIsMobile();
+  const { hash } = useLocation();
 
-  const discByKey = Object.fromEntries(disciplines.map((d) => [d.key, d]));
-  type Discipline = (typeof disciplines)[number];
-  const [selected, setSelected] = useState<Discipline | null>(null);
+  // El desplegable apuntado por el hash (#instrument-piano) se abre solo al
+  // llegar desde la tira de la portada o desde una tarjeta de formato.
+  const [open, setOpen] = useState("");
+  useEffect(() => {
+    const id = hash.replace(/^#/, "");
+    if (id.startsWith("instrument-")) setOpen(id.slice("instrument-".length));
+  }, [hash]);
 
-  // Shared detail body used by both the desktop dialog and the mobile drawer.
+  const DisciplineIcon = ({ k, className }: { k: string; className: string }) => {
+    const Icon: LucideIcon = disciplineIcon(k);
+    return <Icon className={className} strokeWidth={1.8} />;
+  };
+
   const ProgressItem = ({ label, text }: { label: string; text: string }) => (
     <li className="flex items-start gap-3">
       <span className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-accent/25">
@@ -81,38 +56,6 @@ const Programs = () => {
       </span>
     </li>
   );
-
-  const DetailBody = ({ d }: { d: Discipline }) => (
-    <>
-      <div className="mt-5">
-        <h3 className="text-xs font-bold uppercase tracking-wide text-primary/70">{offer.methodLabel}</h3>
-        <p className="mt-1.5 text-primary/70 leading-relaxed">{rich(d.method)}</p>
-      </div>
-
-      <div className="mt-5">
-        <h3 className="text-xs font-bold uppercase tracking-wide text-primary/70">{offer.progressLabel}</h3>
-        <ul className="mt-2 space-y-3">
-          <ProgressItem label={offer.shortTermLabel} text={d.progress.short} />
-          <ProgressItem label={offer.longTermLabel} text={d.progress.long} />
-        </ul>
-      </div>
-
-      {d.key === "voice" && (
-        <p className="mt-5 rounded-2xl border border-accent/30 bg-accent/10 px-4 py-3 text-sm text-primary/80">
-          {rich(offer.voiceException)}
-        </p>
-      )}
-    </>
-  );
-
-  const DetailIcon = ({ d }: { d: Discipline }) => {
-    const Icon = DISCIPLINE_ICON[d.key] ?? Music3;
-    return (
-      <span className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-2xl bg-accent/15">
-        <Icon className="h-6 w-6 text-primary" strokeWidth={1.8} />
-      </span>
-    );
-  };
 
   return (
     <Layout>
@@ -128,14 +71,14 @@ const Programs = () => {
       </section>
 
       {/* ===== Formats — three cards, each surfacing its disciplines ===== */}
-      <section className="pt-8 pb-20 md:pb-28">
+      <section className="pt-8 pb-16 md:pb-20">
         <div className="container-full">
           <motion.div {...reveal(fadeUp)} className="grid gap-6 md:gap-8 md:grid-cols-3 items-stretch">
             {formats.map((f) => {
-              const Icon = FORMAT_ICON[f.key] ?? User;
+              const Icon = formatIcon(f.key);
               const included = (FORMAT_DISCIPLINES[f.key] ?? [])
-                .map((k) => discByKey[k])
-                .filter(Boolean) as Discipline[];
+                .map((k) => disciplines.find((d) => d.key === k))
+                .filter(Boolean) as typeof disciplines;
               return (
                 <div
                   key={f.key}
@@ -167,73 +110,88 @@ const Programs = () => {
                   <div className="mt-auto pt-6">
                     <p className="text-xs font-bold uppercase tracking-wide text-primary/70">{offer.includesLabel}</p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {included.map((d) => {
-                        const ChipIcon = DISCIPLINE_ICON[d.key] ?? Music3;
-                        return (
-                          <button
-                            key={d.key}
-                            type="button"
-                            onClick={() => setSelected(d)}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/60 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:border-accent/40 hover:bg-accent/20"
-                          >
-                            <ChipIcon className="h-3.5 w-3.5 text-accent-ink" strokeWidth={1.8} />
-                            {d.name}
-                          </button>
-                        );
-                      })}
+                      {included.map((d) => (
+                        <PageLink
+                          key={d.key}
+                          to="programs"
+                          hash={`instrument-${d.key}`}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary/60 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:border-accent/40 hover:bg-accent/20"
+                        >
+                          <DisciplineIcon k={d.key} className="h-3.5 w-3.5 text-accent-ink" />
+                          {d.name}
+                        </PageLink>
+                      ))}
                     </div>
                   </div>
                 </div>
               );
             })}
           </motion.div>
+
+          {/* La teoría musical incluida. Llevaba escrito en el diccionario sin
+              renderizarse en ningún sitio, y es un argumento de venta. */}
+          <motion.p
+            {...reveal(fadeUp)}
+            className="mt-10 mx-auto max-w-2xl text-center text-sm text-primary/70 leading-relaxed"
+          >
+            {rich(offer.theoryFree)} {rich(offer.voiceException)}
+          </motion.p>
         </div>
       </section>
 
-      {/* Discipline detail — dialog on desktop, bottom drawer on mobile */}
-      {isMobile ? (
-        <Drawer open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-          <DrawerContent className="px-4 pb-8">
-            <DrawerClose className="absolute right-4 top-4 z-10 rounded-full p-1.5 text-primary/60 transition-colors hover:bg-secondary hover:text-primary">
-              <X className="h-5 w-5" />
-              <span className="sr-only">Cerrar</span>
-            </DrawerClose>
-            {selected && (
-              <>
-                <DrawerHeader className="px-0">
-                  <div className="flex items-center gap-3 text-left">
-                    <DetailIcon d={selected} />
-                    <div>
-                      <DrawerTitle className="font-serif text-2xl text-primary">{selected.name}</DrawerTitle>
-                      <DrawerDescription className="font-medium text-accent-ink">{selected.tagline}</DrawerDescription>
-                    </div>
-                  </div>
-                </DrawerHeader>
-                <DetailBody d={selected} />
-              </>
-            )}
-          </DrawerContent>
-        </Drawer>
-      ) : (
-        <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-          <DialogContent className="max-w-lg">
-            {selected && (
-              <>
-                <DialogHeader>
-                  <div className="flex items-center gap-3 text-left">
-                    <DetailIcon d={selected} />
-                    <div>
-                      <DialogTitle className="font-serif text-2xl text-primary">{selected.name}</DialogTitle>
-                      <DialogDescription className="font-medium text-accent-ink">{selected.tagline}</DialogDescription>
-                    </div>
-                  </div>
-                </DialogHeader>
-                <DetailBody d={selected} />
-              </>
-            )}
-          </DialogContent>
-        </Dialog>
-      )}
+      {/* ===== Las siete disciplinas, abiertas en la página ===== */}
+      <section id="disciplines" className="pb-20 md:pb-28 scroll-mt-24">
+        <div className="container-narrow">
+          <motion.div {...reveal(fadeUp)} className="text-center mb-10 max-w-2xl mx-auto">
+            <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.instruments.title}</h2>
+            <p className="mt-4 text-primary/70">{rich(t.instruments.subtitle)}</p>
+          </motion.div>
+
+          <motion.div {...reveal(staggerParent(0.05))}>
+            <Accordion type="single" collapsible value={open} onValueChange={setOpen} className="space-y-3">
+              {disciplines.map((d) => (
+                <motion.div
+                  key={d.key}
+                  variants={staggerUp}
+                  id={`instrument-${d.key}`}
+                  className="scroll-mt-24"
+                >
+                  <AccordionItem
+                    value={d.key}
+                    className="border border-border rounded-2xl bg-card px-5 md:px-6 shadow-soft data-[state=open]:shadow-lift transition-shadow"
+                  >
+                    <AccordionTrigger className="text-left hover:no-underline py-5">
+                      <span className="flex items-center gap-3">
+                        <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-accent/15">
+                          <DisciplineIcon k={d.key} className="h-5 w-5 text-primary" />
+                        </span>
+                        <span className="flex flex-col">
+                          <span className="font-sans font-semibold text-lg md:text-xl text-primary">{d.name}</span>
+                          <span className="mt-0.5 text-sm font-normal text-accent-ink">{d.tagline}</span>
+                        </span>
+                      </span>
+                    </AccordionTrigger>
+                    <AccordionContent className="pb-6">
+                      <div>
+                        <h3 className="text-xs font-bold uppercase tracking-wide text-primary/70">{offer.methodLabel}</h3>
+                        <p className="mt-1.5 text-primary/70 leading-relaxed">{rich(d.method)}</p>
+                      </div>
+
+                      <div className="mt-5">
+                        <h3 className="text-xs font-bold uppercase tracking-wide text-primary/70">{offer.progressLabel}</h3>
+                        <ul className="mt-2 space-y-3">
+                          <ProgressItem label={offer.shortTermLabel} text={d.progress.short} />
+                          <ProgressItem label={offer.longTermLabel} text={d.progress.long} />
+                        </ul>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                </motion.div>
+              ))}
+            </Accordion>
+          </motion.div>
+        </div>
+      </section>
 
       {/* Journey through our academy timeline */}
       <section className="py-20 md:py-28 bg-secondary/40">

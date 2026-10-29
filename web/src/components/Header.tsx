@@ -26,12 +26,15 @@ export const Header = () => {
     setOpen(false);
   }, [location.pathname]);
 
+  // Seis entradas, todas de cara al padre que decide. "Trabaja con nosotros"
+  // habla a profesores que buscan empleo, no a quien compra, así que se alcanza
+  // desde el pie y desde la página de profesores.
   const links: { page: PageKey; label: string }[] = [
     { page: "home", label: t.nav.home },
     { page: "programs", label: t.nav.programs },
+    { page: "teachers", label: t.nav.teachers },
     { page: "about", label: t.nav.about },
     { page: "registration", label: t.nav.registration },
-    { page: "careers", label: t.nav.careers },
     { page: "contact", label: t.nav.contact },
   ];
 
@@ -65,7 +68,7 @@ export const Header = () => {
           </PageLink>
 
           {/* Desktop nav — shown at xl so the longest language (es/fr labels like
-              "Trabaja con nosotros") never overflows the row on narrower laptops. */}
+              "Profesores" plus "Inscripción") never overflows on narrow laptops. */}
           <div className="hidden xl:flex items-center gap-1">
             {links.map((l) => {
               const active = page === l.page;

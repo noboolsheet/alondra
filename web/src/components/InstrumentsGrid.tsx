@@ -1,41 +1,59 @@
 import { motion } from "framer-motion";
-import { Piano, Mic, Guitar, Music, Music2, Music3, Music4, AudioLines } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { PageLink } from "@/components/PageLink";
 import { useLang } from "@/i18n/LanguageContext";
+import { disciplineIcon } from "@/lib/icons";
 import { reveal, fadeUp, staggerParent, staggerPop } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
 
-// Positional — must match the order of t.instruments.items:
-// Piano, Violin, Voice, Guitar, Flute, Electric Bass, The Art of Sound.
-const ICONS = [Piano, Music2, Mic, Guitar, Music4, Music3, AudioLines];
-
+/**
+ * Las siete disciplinas, en corto.
+ *
+ * Esto era una rejilla de siete fichas con el texto completo, y el mismo texto
+ * vivía otra vez en `programs.disciplines` con su método y su progreso. Ahora la
+ * portada sólo abre el apetito y cada chip lleva al desplegable de su
+ * instrumento en la página de formatos, que es la fuente única.
+ */
 export const InstrumentsGrid = () => {
   const { t } = useLang();
 
   return (
     <section className="py-20 md:py-28 bg-secondary/40">
       <div className="container-full">
-        <motion.div {...reveal(fadeUp)} className="text-center mb-14 max-w-2xl mx-auto">
+        <motion.div {...reveal(fadeUp)} className="text-center mb-10 max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.instruments.title}</h2>
           <p className="mt-4 text-primary/70">{rich(t.instruments.subtitle)}</p>
         </motion.div>
 
-        <motion.div className="flex flex-wrap justify-center gap-4" {...reveal(staggerParent(0.07))}>
-          {t.instruments.items.map((it, i) => {
-            const Icon = ICONS[i] ?? Music;
+        <motion.ul
+          className="flex flex-wrap justify-center gap-3 list-none p-0 max-w-3xl mx-auto"
+          {...reveal(staggerParent(0.06))}
+        >
+          {t.programs.disciplines.map((d) => {
+            const Icon = disciplineIcon(d.key);
             return (
-              <motion.div
-                key={i}
-                variants={staggerPop}
-                className="group relative flex flex-col rounded-3xl bg-card border border-border p-6 hover:shadow-lift hover:-translate-y-1 transition-all duration-500 basis-full sm:basis-[calc(50%-0.6rem)] lg:basis-[calc(25%-1rem)]"
-              >
-                <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center mb-4 group-hover:bg-accent group-hover:rotate-6 transition-all">
-                  <Icon className="w-6 h-6 text-primary" strokeWidth={1.8} />
-                </div>
-                <h3 className="font-serif text-2xl text-primary">{it.name}</h3>
-                <p className="mt-2 text-sm text-primary/70 leading-relaxed">{rich(it.body)} {rich(it.focus)}</p>
-              </motion.div>
+              <motion.li key={d.key} variants={staggerPop}>
+                <PageLink
+                  to="programs"
+                  hash={`instrument-${d.key}`}
+                  className="group inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2.5 text-primary transition-all hover:border-accent/40 hover:bg-accent/15 hover:-translate-y-0.5"
+                >
+                  <Icon className="h-4 w-4 text-accent-ink" strokeWidth={1.8} />
+                  <span className="font-medium">{d.name}</span>
+                </PageLink>
+              </motion.li>
             );
           })}
+        </motion.ul>
+
+        <motion.div {...reveal(fadeUp)} className="mt-10 text-center">
+          <PageLink
+            to="programs"
+            className="inline-flex items-center gap-1.5 text-accent-ink font-semibold hover:gap-2.5 transition-all"
+          >
+            {t.instruments.cta}
+            <ArrowRight className="w-4 h-4" />
+          </PageLink>
         </motion.div>
       </div>
     </section>

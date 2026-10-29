@@ -3,7 +3,6 @@ import { ShieldCheck, FileCheck, BrainCircuit, GraduationCap, Fingerprint, Landm
 import { PageLink } from "@/components/PageLink";
 import { Layout } from "@/components/Layout";
 import { PhilosophyCarousel } from "@/components/PhilosophyCarousel";
-import { TeachersGrid } from "@/components/TeachersGrid";
 import { CTABanner } from "@/components/CTABanner";
 import { useLang } from "@/i18n/LanguageContext";
 import { reveal, fadeUp } from "@/lib/motion";
@@ -43,48 +42,19 @@ const About = () => {
         </div>
       </section>
 
-      {/* Meet your teacher */}
-      <TeachersGrid />
-
-      {/* Our teachers */}
-      <section className="py-16 md:py-24 bg-secondary/40">
-        <div className="container-full">
-          <div className="text-center mb-14 max-w-2xl mx-auto">
-            <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.about.team.title}</h2>
-            <p className="mt-4 text-primary/70">{rich(t.about.team.subtitle)}</p>
-          </div>
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {t.about.team.members.map((m, i) => (
-              <motion.div
-                key={m.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="flex flex-col rounded-3xl bg-card border border-border p-6 hover:shadow-lift transition-shadow"
-              >
-                <img
-                  src={m.photo}
-                  alt={m.name}
-                  loading="lazy"
-                  width={1254}
-                  height={1254}
-                  className="aspect-square w-full object-cover object-center rounded-2xl"
-                />
-                <h3 className="mt-5 font-serif text-2xl text-primary">{m.name}</h3>
-                <p className="text-sm text-accent-ink font-semibold mt-1">{m.role}</p>
-                <p className="mt-3 text-sm text-primary/70 leading-relaxed">{rich(m.summary)}</p>
-                <PageLink
-                  to="careers"
-                  hash={m.slug}
-                  className="mt-auto self-end pt-4 inline-flex items-center gap-1.5 text-sm text-accent-ink font-semibold hover:gap-2.5 transition-all"
-                >
-                  {t.about.team.moreLink.replace("{name}", m.name.split(" ")[0])}
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </PageLink>
-              </motion.div>
-            ))}
-          </div>
+      {/* El equipo vive en /teachers: aquí sólo la puerta. Antes esta página
+          pintaba TeachersGrid y, justo debajo, una segunda rejilla con los mismos
+          profesores y el mismo titular. */}
+      <section className="pb-16 md:pb-24">
+        <div className="container-wide max-w-3xl">
+          <motion.div {...reveal(fadeUp)} className="rounded-3xl border border-border bg-secondary/40 p-8 md:p-12 text-center">
+            <h2 className="font-serif text-3xl md:text-4xl text-primary text-balance">{t.about.teamLink.title}</h2>
+            <p className="mt-4 text-primary/70 leading-relaxed max-w-[60ch] mx-auto">{rich(t.about.teamLink.body)}</p>
+            <PageLink to="teachers" className="btn-outline mt-8 inline-flex">
+              {t.about.teamLink.cta}
+              <ArrowRight className="w-4 h-4" />
+            </PageLink>
+          </motion.div>
         </div>
       </section>
 

@@ -20,7 +20,7 @@ import { rich } from "@/lib/richtext";
 export const TeachersGrid = () => {
   const { t } = useLang();
   const director = t.teachers.director;
-  const team = t.about.team.members;
+  const team = t.teachers.team;
 
   return (
     <section className="py-20 md:py-28">
@@ -53,7 +53,7 @@ export const TeachersGrid = () => {
             <p className="mt-2 text-accent-ink font-semibold">{director.role}</p>
             <p className="mt-5 text-primary/70 leading-relaxed">{rich(director.summary)}</p>
             <PageLink
-              to="careers"
+              to="teachers"
               hash={director.slug}
               className="mt-6 inline-flex items-center gap-1.5 text-accent-ink font-semibold hover:gap-2.5 transition-all"
             >
@@ -82,7 +82,7 @@ export const TeachersGrid = () => {
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="flex flex-col text-center"
             >
-              <PageLink to="careers" hash={m.slug} className="group focus-visible:outline-none">
+              <PageLink to="teachers" hash={m.slug} className="group focus-visible:outline-none">
                 <img
                   src={m.photo}
                   alt={m.name}

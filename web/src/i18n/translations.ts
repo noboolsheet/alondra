@@ -20,7 +20,7 @@ export interface Teacher {
 export type Dict = {
   /** <title> y <meta description> por página. Lo consume usePageMeta(). */
   meta: Record<PageKey, { title: string; description: string }>;
-  nav: { home: string; programs: string; about: string; registration: string; careers: string; contact: string };
+  nav: { home: string; programs: string; teachers: string; about: string; registration: string; enroll: string; careers: string; contact: string };
   hero: {
     eyebrow: string;
     title1: string;
@@ -47,12 +47,15 @@ export type Dict = {
     body: string;
     pillars: { title: string; body: string }[];
   };
+  /**
+   * Sólo el titular de la tira de disciplinas de la portada. Las fichas viven en
+   * `programs.disciplines`, que es la fuente única: antes había dos juegos con el
+   * mismo texto y sólo uno viajaba al JSON-LD.
+   */
   instruments: {
-    eyebrow: string;
     title: string;
     subtitle: string;
-    modalities: { title: string; body: string }[];
-    items: { name: string; body: string; focus: string }[];
+    cta: string;
   };
   formats: {
     eyebrow: string;
@@ -60,16 +63,20 @@ export type Dict = {
     subtitle: string;
     photoLabel: string;
   };
+  /** Todo el profesorado vive aquí: la página /teachers y el teaser de la portada. */
   teachers: {
-    eyebrow: string;
+    hero: { eyebrow: string; title: string; subtitle: string };
     title: string;
     subtitle: string;
     verified: string;
-    photoLabel: string;
     moreLink: string;
     teamTitle: string;
     matchPromise: string;
+    bios: { title: string; subtitle: string };
+    vetting: { title: string; body: string; cta: string };
+    hiring: { title: string; body: string; cta: string };
     director: Teacher;
+    team: Teacher[];
   };
   coverage: {
     eyebrow: string;
@@ -153,12 +160,7 @@ export type Dict = {
   about: {
     hero: { eyebrow: string; title: string; subtitle: string };
     mission: { title: string; blocks: { heading: string; body: string }[] };
-    team: {
-      title: string;
-      subtitle: string;
-      moreLink: string;
-      members: Teacher[];
-    };
+    teamLink: { title: string; body: string; cta: string };
     verification: {
       eyebrow: string;
       title: string;
@@ -169,25 +171,28 @@ export type Dict = {
         items: { label: string; body: string }[];
       };
     };
-    staff: {
-      title: string;
-      subtitle: string;
-    };
   };
+  /** Sólo precio: material de evaluación. El cierre vive en `enroll`. */
   registration: {
     hero: { eyebrow: string; title: string; subtitle: string };
     enrollCta: string;
-    stepsTitle: string;
-    stepsSubtitle: string;
-    steps: { title: string; body: string }[];
-    contract: { title: string; body: string; points: { label: string; body: string }[] };
     pricingTitle: string;
     pricingSubtitle: string;
     priceFrom: string;
     priceLabel: string;
     formats: { name: string; description: string; price: string; points: string[] }[];
+    lessonLengthTitle: string;
+    lessonLength: string;
     benefits: { title: string; subtitle: string; items: { title: string; body: string }[] };
     note: string;
+  };
+  /** Material de cierre: los pasos, el contrato y el widget de My Music Staff. */
+  enroll: {
+    hero: { eyebrow: string; title: string; subtitle: string };
+    stepsTitle: string;
+    stepsSubtitle: string;
+    steps: { title: string; body: string }[];
+    contract: { title: string; body: string; points: { label: string; body: string }[] };
   };
   contact: {
     hero: { eyebrow: string; title: string; subtitle: string };
@@ -253,8 +258,6 @@ export type Dict = {
     successTitle: string;
     successBody: string;
     successAgain: string;
-    teamTitle: string;
-    teamSubtitle: string;
   };
 };
 
@@ -263,15 +266,17 @@ export const translations: Record<Lang, Dict> = {
     meta: {
       home: { title: "In-Home Music Lessons in Miami-Dade & Broward | Alondra", description: "In-home music lessons across Miami-Dade and Broward. We match your child with a carefully selected teacher so they enjoy learning and progress." },
       programs: { title: "Music Lessons in Miami: Piano, Violin, Voice & Guitar", description: "Piano, violin, voice, guitar, flute and bass taught at home in Miami. Every lesson integrates technique, rhythm, music reading and interpretation." },
-      about: { title: "About Alondra Music Academy | Our Teachers in Miami", description: "Meet Ilena Peña and the Alondra teaching team. How we select, verify and assign the teacher who best fits your child's age, level and personality." },
-      registration: { title: "Music Lesson Prices & Enrollment in Miami | Alondra", description: "In-home music lessons in Miami-Dade and Broward from $50 per private lesson and $35 shared. Enrollment steps, household discounts and rescheduling policy." },
+      teachers: { title: "Meet Our Music Teachers in Miami | Alondra", description: "Ilena Peña and the Alondra teaching team: where each teacher trained, which instruments they teach and how we match them to your child." },
+      about: { title: "About Alondra Music Academy | In-Home Lessons Miami", description: "How Alondra teaches: our philosophy, the four dimensions in every lesson, and the vetting, insurance and licensing behind each instructor." },
+      registration: { title: "Music Lesson Prices in Miami | Alondra Music Academy", description: "In-home music lessons in Miami-Dade and Broward from $50 per private lesson and $35 shared, with household and frequency discounts." },
+      enroll: { title: "Enroll in Music Lessons in Miami | Alondra", description: "How enrollment works at Alondra: the three steps, the monthly agreement, the 24 hour notice rule and the form that reserves your weekly slot." },
       careers: { title: "Music Teacher Jobs in Miami-Dade & Broward | Alondra", description: "Teach piano, voice, guitar or violin with Alondra Music Academy. We look for teachers who combine musical training with a genuine calling to teach." },
       contact: { title: "Contact Alondra Music Academy | Music Lessons in Miami", description: "Ask about availability for your ZIP code and instrument, or book a free 15-minute call. We teach at home across Miami-Dade and Broward, Monday to Saturday." },
       privacy: { title: "Privacy Policy | Alondra Music Academy", description: "How Alondra Music Academy collects, uses and protects your personal information." },
       cookies: { title: "Cookie Policy | Alondra Music Academy", description: "How Alondra Music Academy uses cookies, local storage and analytics on this website." },
       legal: { title: "Legal Notice | Alondra Music Academy", description: "Terms governing the use of the Alondra Music Academy website." },
     },
-    nav: { home: "Home", programs: "Programs", about: "Academy", registration: "Registration", careers: "Work with us", contact: "Contact" },
+    nav: { home: "Home", programs: "Formats", teachers: "Teachers", about: "Academy", registration: "Prices", enroll: "Enrollment", careers: "Work with us", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
       title1: "Give your child the superpower of music.",
@@ -302,23 +307,9 @@ export const translations: Record<Lang, Dict> = {
       ],
     },
     instruments: {
-      eyebrow: "Programs",
       title: "Disciplines",
       subtitle: "Technique from the conservatory tradition, and the songs your child actually wants to play.",
-      modalities: [
-        { title: "Private 1-on-1", body: "Fully personalized progression, at your pace." },
-        { title: "Small Group", body: "Social learning that inspires and motivates." },
-        { title: "In-Home Lessons", body: "We come to you: safe, comfortable, convenient." },
-      ],
-      items: [
-        { name: "Piano", body: "Two hands, two clefs, and the whole harmony under the fingers.", focus: "Independence of each hand, reading treble and bass clef at once, and an even touch across the keyboard." },
-        { name: "Violin", body: "Intonation built by ear and by arm.", focus: "Bow hold and left-hand position, tuning with no frets to guide you, and bow control for a steady sound." },
-        { name: "Voice", body: "The instrument you carry with you.", focus: "Diaphragmatic breathing, healthy emission for a child’s anatomy, diction and tuning." },
-        { name: "Guitar", body: "Chords, melody and accompaniment on the same six strings.", focus: "Reading both score and tablature, clean chord changes, and right-hand patterns for accompanying." },
-        { name: "Flute", body: "Air turned into sound.", focus: "Embouchure, breath support, clean articulation and phrasing a line without running out of air." },
-        { name: "Electric Bass", body: "The instrument that holds a band together.", focus: "Fingering in both hands, playing to a metronome, and reading bass lines and chord symbols." },
-        { name: "The Art of Sound", body: "Making music with a computer.", focus: "Recording, editing and the basics of mixing, plus the theory needed to arrange what you write." },
-      ],
+      cta: "See all seven disciplines",
     },
     formats: {
       eyebrow: "Ways to Learn",
@@ -327,14 +318,16 @@ export const translations: Record<Lang, Dict> = {
       photoLabel: "Formats photo",
     },
     teachers: {
-      eyebrow: "Our Faculty",
+      hero: { eyebrow: "Our Faculty", title: "Meet the teachers", subtitle: "Who will be in your home each week, where they trained, and how Ilena decides which of them fits your child." },
       title: "The teacher who fits your child",
       subtitle: "**Ilena personally selects** the teacher who best connects with each student, from a team of rigorously vetted, **background-checked professionals**.",
       verified: "Verified Instructor",
-      photoLabel: "Director photo",
       moreLink: "Learn about {name}",
       teamTitle: "The team who teaches",
       matchPromise: "If your child does not click with their teacher, tell us and we will look at it and find a better match. Lessons already taught are paid for and there is no refund, but reassigning does not cost a new registration fee.",
+      bios: { title: "Meet our team", subtitle: "Every Alondra teacher combines conservatory training with a genuine calling to teach. Get to know their backgrounds." },
+      vetting: { title: "Every teacher is vetted before they knock on your door", body: "Background check, psychological evaluation, technical audit and quarterly training. The full process, with the insurance and the licensing behind it, is on the academy page.", cta: "See how we vet" },
+      hiring: { title: "Are you a music teacher?", body: "We are always reading applications from teachers who combine conservatory training with a real calling to teach.", cta: "Work with us" },
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -347,6 +340,68 @@ export const translations: Record<Lang, Dict> = {
           "As the founder of Alondra Music Academy, Ilena has created an academy where **academic excellence and personalized attention** are the foundation of every program. Her methodology adapts to the strengths, needs and goals of each student, fostering dynamic, motivating and meaningful learning. More than teaching an instrument, her purpose is to awaken a love of music, to shape confident and creative musicians, and to give each student the tools they need to **reach their full potential** both on and off the stage. At Alondra she personally teaches violin, voice, piano and sound art.",
         ],
       },
+      team: [
+        {
+          slug: "profe-olivia",
+          name: "Olivia García Rey",
+          role: "Piano teacher",
+          photo: "/images/profe-olivia.webp",
+          summary: "A pianist and educator with **more than three decades of experience**, known for her warm, personalized approach to piano pedagogy, who also practised as a music therapist earlier in her career.",
+          bio: [
+            "Meet Olivia García Rey, a distinguished pianist and educator who earlier in her career also practised as a music therapist, with **more than three decades of experience** training musicians and nurturing the talent of children, young people and adults. Her solid training at prestigious Cuban music institutions, together with an extensive career as a teacher in conservatories and art schools, make her an exceptional master, recognized for her deep knowledge of piano pedagogy, performance and the all-around development of the musician.",
+            "Throughout her career, Olivia has guided hundreds of students, helping them develop not only excellent pianistic technique but also **discipline, artistic sensitivity and self-confidence**. Her experience as a music therapist has given her insight into the impact of music on cognitive, emotional and social development, enriching her methodology with a human, close and fully personalized approach, tailored to the strengths, needs and goals of each student.",
+            "At Alondra Music Academy, Olivia shares her passion for music with a commitment to inspiring every student to **reach their full potential**. Her lessons offer far more than learning to play the piano: they provide a **high-quality artistic education** that fosters creativity, musical expression, all-around growth and a love of music that lasts a lifetime.",
+          ],
+        },
+        {
+          slug: "profe-rafael",
+          name: "Rafael Paseiro",
+          role: "Guitar & electric bass teacher",
+          photo: "/images/profe-rafael.webp",
+          summary: "A bassist, composer and arranger with **more than three decades of international experience**; at Alondra he teaches guitar and electric bass.",
+          bio: [
+            "Rafael Paseiro is a renowned bassist, composer, arranger and guitar teacher with **more than three decades of experience** in music. A **graduate with honors** of the National Art School of Cuba under the tutelage of the prestigious bassist Carlos del Puerto, he has developed an outstanding career that combines performance, composition, musical arrangement and a deep dedication to teaching.",
+            "As a performer, composer and arranger, Rafael has contributed to numerous recording productions and shared the stage with prominent artists such as Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz and The Temptations, among many others. His talent has taken him to some of the world's most important jazz festivals and on tours across the Americas, Europe, Asia and the Caribbean, establishing him as a musician of **recognized international prestige**.",
+            "At Alondra Music Academy, Rafael shares his broad experience to train the new generation of musicians through personalized guitar and electric bass lessons. His methodology combines **solid technical training** with the development of creativity, musical expression and confidence in every student, inspiring children, young people and adults to discover and reach their full artistic potential.",
+          ],
+        },
+        {
+          slug: "profe-claudia-nuevo",
+          name: "Claudia Nuevo",
+          role: "Piano & flute teacher",
+          photo: "/images/profe-claudia-nuevo.webp",
+          summary: "A pianist and flautist trained at the Esteban Salas Conservatory and ISA; she offers **dynamic, personalized lessons** focused on each student.",
+          bio: [
+            "Meet Claudia Nuevo, a talented pianist, flautist and educator passionate about inspiring her students through music. A graduate of the prestigious Esteban Salas Conservatory and with studies in Music Production and Recording at the University of the Arts (ISA) of Cuba, she combines **solid academic training** with a distinguished career as a performer and teacher.",
+            "Throughout her career she has taught piano and flute at renowned music institutions, as well as performing as an accompanying pianist and a member of orchestras, choirs, bands and professional ensembles. Her international experience and her calling for teaching allow her to offer **dynamic, personalized lessons** focused on the **all-around growth of each student**.",
+            "At Alondra Music Academy, Claudia creates an environment where technique, creativity and musical expression develop naturally. Her goal is for every student not only to learn to play an instrument, but to **gain confidence**, enjoy learning and discover a passion for music that stays with them for life.",
+          ],
+        },
+        {
+          slug: "profe-claudia-rodriguez",
+          name: "Claudia D. Rodríguez",
+          role: "Euphonium, voice & piano teacher",
+          photo: "/images/profe-claudia-rodriguez.webp",
+          summary: "A euphonium player, singer and music educator specialized in **euphonium, tuba and chamber music**, with an international performing career.",
+          bio: [
+            "Meet Claudia D. Rodríguez, a talented euphonium player, singer and music educator passionate about training students with **excellence, creativity and a love of music**. Her solid academic background and broad experience as a teacher and performer allow her to offer dynamic, personalized teaching, inspiring **students of all ages** to develop their full potential.",
+            "A graduate of the University of the Arts (ISA) of Cuba with a degree in Music and a **specialization in Euphonium**, and trained at the prestigious Esteban Salas Conservatory, Claudia has taught euphonium, tuba, piano and chamber music at renowned music institutions. She has also built a distinguished career as an instrumentalist and singer, performing in concert bands, professional choirs and international ensembles on stages both in and outside Cuba.",
+            "At Alondra Music Academy, Claudia creates a motivating learning environment where **technique, artistic expression and confidence** grow hand in hand. Her commitment is that every student enjoys the process of learning music, strengthens their skills and discovers a passion that will stay with them throughout their life.",
+          ],
+        },
+        {
+          slug: "profe-mayda",
+          name: "Mayda Placeres",
+          role: "Piano teacher",
+          photo: "/images/profe-mayda.webp",
+          summary: "A pianist and teacher with **more than three decades of experience** in the conservatories of Cuba and Mexico, who now teaches piano to children in Miami.",
+          bio: [
+            "Mayda Placeres trained at the National School of Music in Havana, where she earned her degree in Music with a **specialization in piano**, and later completed a postgraduate programme in Musical Heritage and Historiography at the Universidad San Gerónimo de La Habana. Her teaching career began at that same school, where she taught piano for **two decades**.",
+            "She went on to teach at the National Conservatory of Music of Mexico, in Mexico City, before settling in South Florida, where she has been teaching piano to children since 2022. Across thirty years and three countries, her work has combined an **advanced command of classical piano** with a deep knowledge of music theory and a steady focus on what actually works in a lesson: clear technique, effective teaching methods and a close relationship with each student.",
+            "At Alondra Music Academy, Mayda teaches piano to children and young people. Her lessons build **solid technical foundations** without losing the motivation that keeps a child coming back to the instrument. That balance is what she refined over a career spent in conservatories and, above all, in front of students.",
+          ],
+        },
+      ],
     },
     coverage: {
       eyebrow: "Service Area",
@@ -412,7 +467,7 @@ export const translations: Record<Lang, Dict> = {
     skipToContent: "Skip to content",
     programs: {
       hero: {
-        eyebrow: "Programs & Methods",
+        eyebrow: "Formats and instruments",
         title: "A path for every musician",
         subtitle: "Seven disciplines, taught in three formats, each path shaped around your child. Click a discipline to see the method and how progress shows up.",
       },
@@ -547,72 +602,10 @@ export const translations: Record<Lang, Dict> = {
           { heading: "Pedagogical excellence guided by our founder", body: "Alondra Music Academy is led personally by its **founding director**. Every session is delivered exclusively by professionals of the classical high school, rigorously trained and with **fully verified backgrounds** for your **complete peace of mind**." },
         ],
       },
-      team: {
-        title: "Our teachers",
-        subtitle: "Meet the artists shaping our academy.",
-        moreLink: "Learn about {name}",
-        members: [
-          {
-            slug: "profe-olivia",
-            name: "Olivia García Rey",
-            role: "Piano teacher",
-            photo: "/images/profe-olivia.webp",
-            summary: "A pianist and educator with **more than three decades of experience**, known for her warm, personalized approach to piano pedagogy, who also practised as a music therapist earlier in her career.",
-            bio: [
-              "Meet Olivia García Rey, a distinguished pianist and educator who earlier in her career also practised as a music therapist, with **more than three decades of experience** training musicians and nurturing the talent of children, young people and adults. Her solid training at prestigious Cuban music institutions, together with an extensive career as a teacher in conservatories and art schools, make her an exceptional master, recognized for her deep knowledge of piano pedagogy, performance and the all-around development of the musician.",
-              "Throughout her career, Olivia has guided hundreds of students, helping them develop not only excellent pianistic technique but also **discipline, artistic sensitivity and self-confidence**. Her experience as a music therapist has given her insight into the impact of music on cognitive, emotional and social development, enriching her methodology with a human, close and fully personalized approach, tailored to the strengths, needs and goals of each student.",
-              "At Alondra Music Academy, Olivia shares her passion for music with a commitment to inspiring every student to **reach their full potential**. Her lessons offer far more than learning to play the piano: they provide a **high-quality artistic education** that fosters creativity, musical expression, all-around growth and a love of music that lasts a lifetime.",
-            ],
-          },
-          {
-            slug: "profe-rafael",
-            name: "Rafael Paseiro",
-            role: "Guitar & electric bass teacher",
-            photo: "/images/profe-rafael.webp",
-            summary: "A bassist, composer and arranger with **more than three decades of international experience**; at Alondra he teaches guitar and electric bass.",
-            bio: [
-              "Rafael Paseiro is a renowned bassist, composer, arranger and guitar teacher with **more than three decades of experience** in music. A **graduate with honors** of the National Art School of Cuba under the tutelage of the prestigious bassist Carlos del Puerto, he has developed an outstanding career that combines performance, composition, musical arrangement and a deep dedication to teaching.",
-              "As a performer, composer and arranger, Rafael has contributed to numerous recording productions and shared the stage with prominent artists such as Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz and The Temptations, among many others. His talent has taken him to some of the world's most important jazz festivals and on tours across the Americas, Europe, Asia and the Caribbean, establishing him as a musician of **recognized international prestige**.",
-              "At Alondra Music Academy, Rafael shares his broad experience to train the new generation of musicians through personalized guitar and electric bass lessons. His methodology combines **solid technical training** with the development of creativity, musical expression and confidence in every student, inspiring children, young people and adults to discover and reach their full artistic potential.",
-            ],
-          },
-          {
-            slug: "profe-claudia-nuevo",
-            name: "Claudia Nuevo",
-            role: "Piano & flute teacher",
-            photo: "/images/profe-claudia-nuevo.webp",
-            summary: "A pianist and flautist trained at the Esteban Salas Conservatory and ISA; she offers **dynamic, personalized lessons** focused on each student.",
-            bio: [
-              "Meet Claudia Nuevo, a talented pianist, flautist and educator passionate about inspiring her students through music. A graduate of the prestigious Esteban Salas Conservatory and with studies in Music Production and Recording at the University of the Arts (ISA) of Cuba, she combines **solid academic training** with a distinguished career as a performer and teacher.",
-              "Throughout her career she has taught piano and flute at renowned music institutions, as well as performing as an accompanying pianist and a member of orchestras, choirs, bands and professional ensembles. Her international experience and her calling for teaching allow her to offer **dynamic, personalized lessons** focused on the **all-around growth of each student**.",
-              "At Alondra Music Academy, Claudia creates an environment where technique, creativity and musical expression develop naturally. Her goal is for every student not only to learn to play an instrument, but to **gain confidence**, enjoy learning and discover a passion for music that stays with them for life.",
-            ],
-          },
-          {
-            slug: "profe-claudia-rodriguez",
-            name: "Claudia D. Rodríguez",
-            role: "Euphonium, voice & piano teacher",
-            photo: "/images/profe-claudia-rodriguez.webp",
-            summary: "A euphonium player, singer and music educator specialized in **euphonium, tuba and chamber music**, with an international performing career.",
-            bio: [
-              "Meet Claudia D. Rodríguez, a talented euphonium player, singer and music educator passionate about training students with **excellence, creativity and a love of music**. Her solid academic background and broad experience as a teacher and performer allow her to offer dynamic, personalized teaching, inspiring **students of all ages** to develop their full potential.",
-              "A graduate of the University of the Arts (ISA) of Cuba with a degree in Music and a **specialization in Euphonium**, and trained at the prestigious Esteban Salas Conservatory, Claudia has taught euphonium, tuba, piano and chamber music at renowned music institutions. She has also built a distinguished career as an instrumentalist and singer, performing in concert bands, professional choirs and international ensembles on stages both in and outside Cuba.",
-              "At Alondra Music Academy, Claudia creates a motivating learning environment where **technique, artistic expression and confidence** grow hand in hand. Her commitment is that every student enjoys the process of learning music, strengthens their skills and discovers a passion that will stay with them throughout their life.",
-            ],
-          },
-          {
-            slug: "profe-mayda",
-            name: "Mayda Placeres",
-            role: "Piano teacher",
-            photo: "/images/profe-mayda.webp",
-            summary: "A pianist and teacher with **more than three decades of experience** in the conservatories of Cuba and Mexico, who now teaches piano to children in Miami.",
-            bio: [
-              "Mayda Placeres trained at the National School of Music in Havana, where she earned her degree in Music with a **specialization in piano**, and later completed a postgraduate programme in Musical Heritage and Historiography at the Universidad San Gerónimo de La Habana. Her teaching career began at that same school, where she taught piano for **two decades**.",
-              "She went on to teach at the National Conservatory of Music of Mexico, in Mexico City, before settling in South Florida, where she has been teaching piano to children since 2022. Across thirty years and three countries, her work has combined an **advanced command of classical piano** with a deep knowledge of music theory and a steady focus on what actually works in a lesson: clear technique, effective teaching methods and a close relationship with each student.",
-              "At Alondra Music Academy, Mayda teaches piano to children and young people. Her lessons build **solid technical foundations** without losing the motivation that keeps a child coming back to the instrument. That balance is what she refined over a career spent in conservatories and, above all, in front of students.",
-            ],
-          },
-        ],
+      teamLink: {
+        title: "Meet the teachers",
+        body: "Ilena personally selects the teacher who best connects with each student. Their training, their instruments and their full biographies have a page of their own.",
+        cta: "Meet our teachers",
       },
       verification: {
         eyebrow: "Safety First",
@@ -633,14 +626,32 @@ export const translations: Record<Lang, Dict> = {
           ],
         },
       },
-      staff: {
-        title: "Our teachers",
-        subtitle: "Meet a few of the artists shaping our academy.",
-      },
     },
     registration: {
-      hero: { eyebrow: "Enroll", title: "Registration & enrollment", subtitle: "Everything you need to join Alondra: how enrollment works, our simple agreement, and **clear pricing** per lesson type." },
+      hero: { eyebrow: "Pricing", title: "What a lesson costs", subtitle: "Two formats, both taught at your home across Miami-Dade and Broward. Household and frequency discounts apply from the second member." },
       enrollCta: "Register now",
+      pricingTitle: "Transparent rates, no surprises",
+      pricingSubtitle: "**No forced contracts or hidden fees**. Choose the format that fits your child's goals and learning pace.",
+      priceFrom: "from",
+      priceLabel: "/ lesson",
+      formats: [
+        { name: "Private lesson", description: "Individualized, **fully personalized focus** based on the student's specific goals.", price: "$50", points: ["A 100% dedicated instructor", "Curriculum at your own pace"] },
+        { name: "Shared lesson", description: "High-caliber format taught in **small groups of 3 to 6 students**.", price: "$35", points: ["Socializing and mutual motivation", "Individualized technical instruction"] },
+      ],
+      lessonLengthTitle: "How long is a lesson",
+      lessonLength: "45 minutes is the standard for most instruments and for the **early stimulation program**, and 60 minutes for advanced levels. 30 minute sessions only when more than two students enroll in the same household.",
+      benefits: {
+        title: "More music, greater savings",
+        subtitle: "We reward your household's consistency with **competitive advantages** applied automatically to your monthly Stripe billing:",
+        items: [
+          { title: "Multi-family discount", body: "Get a special **10% discount** on your monthly membership from the second household member enrolled." },
+          { title: "Frequency discount", body: "Receive a **preferential per-lesson rate** when you schedule two or more weekly classes per student." },
+        ],
+      },
+      note: "Final pricing is confirmed when you get in touch, based on **lesson length and frequency**.",
+    },
+    enroll: {
+      hero: { eyebrow: "Enroll", title: "Registration & enrollment", subtitle: "Everything you need to join Alondra: the three steps, our simple agreement and the form that **reserves your weekly slot**." },
       stepsTitle: "The simplest path to get started",
       stepsSubtitle: "We designed an **agile, transparent process** so your family can begin their musical journey with no hassle and **complete peace of mind**.",
       steps: [
@@ -658,23 +669,6 @@ export const translations: Record<Lang, Dict> = {
           { label: "Safe home environment", body: "We require **an adult to be physically present** at home throughout the lesson." },
         ],
       },
-      pricingTitle: "Transparent rates, no surprises",
-      pricingSubtitle: "**No forced contracts or hidden fees**. Choose the format that fits your child's goals and learning pace.",
-      priceFrom: "from",
-      priceLabel: "/ lesson",
-      formats: [
-        { name: "Private lesson", description: "Individualized, **fully personalized focus** based on the student's specific goals.", price: "$50", points: ["A 100% dedicated instructor", "Curriculum at your own pace"] },
-        { name: "Shared lesson", description: "High-caliber format taught in **small groups of 3 to 6 students**.", price: "$35", points: ["Socializing and mutual motivation", "Individualized technical instruction"] },
-      ],
-      benefits: {
-        title: "More music, greater savings",
-        subtitle: "We reward your household's consistency with **competitive advantages** applied automatically to your monthly Stripe billing:",
-        items: [
-          { title: "Multi-family discount", body: "Get a special **10% discount** on your monthly membership from the second household member enrolled." },
-          { title: "Frequency discount", body: "Receive a **preferential per-lesson rate** when you schedule two or more weekly classes per student." },
-        ],
-      },
-      note: "Final pricing is confirmed when you get in touch, based on **lesson length and frequency**.",
     },
     contact: {
       hero: { eyebrow: "Contact & Coverage", title: "We come to your home", subtitle: "Serving students across Miami-Dade and Broward with **warmth and precision**." },
@@ -710,8 +704,8 @@ export const translations: Record<Lang, Dict> = {
     footer: {
       tagline: "**Connection that inspires. Progress you can hear.** In-home music lessons across Miami-Dade and Broward.",
       columns: [
-        { title: "Academy", links: [{ label: "Home", page: "home" }, { label: "Programs", page: "programs" }, { label: "Academy", page: "about" }, { label: "Work with us", page: "careers" }] },
-        { title: "Enroll", links: [{ label: "Registration", page: "registration" }, { label: "Contact", page: "contact" }] },
+        { title: "Academy", links: [{ label: "Home", page: "home" }, { label: "Formats", page: "programs" }, { label: "Teachers", page: "teachers" }, { label: "Academy", page: "about" }] },
+        { title: "Enroll", links: [{ label: "Prices", page: "registration" }, { label: "Enrollment", page: "enroll" }, { label: "Contact", page: "contact" }, { label: "Work with us", page: "careers" }] },
       ],
       contact: "Contact",
       rights: "All rights reserved.",
@@ -801,23 +795,23 @@ export const translations: Record<Lang, Dict> = {
       successTitle: "Application received!",
       successBody: "Thank you for your interest in Alondra. We'll be in touch if a matching role opens up.",
       successAgain: "Send another application",
-      teamTitle: "Meet our team",
-      teamSubtitle: "Every Alondra teacher combines conservatory training with a genuine calling to teach. Get to know their backgrounds.",
     },
   },
   es: {
     meta: {
       home: { title: "Clases de Música a Domicilio en Miami | Alondra", description: "Clases de música a domicilio en Miami-Dade y Broward. Elegimos al profesor adecuado para que tu hijo disfrute aprendiendo y progrese." },
       programs: { title: "Clases de Música en Miami: Piano, Violín, Canto y Guitarra", description: "Piano, violín, canto, guitarra, flauta y bajo a domicilio en Miami. Cada clase integra técnica, ritmo, lectura e interpretación." },
-      about: { title: "Sobre Alondra Music Academy | Profesores de Música en Miami", description: "Conoce a Ilena Peña y al equipo de profesores de Alondra. Cómo seleccionamos, verificamos y asignamos al profesor que mejor encaja con tu hijo." },
-      registration: { title: "Precios e Inscripción de Clases de Música en Miami | Alondra", description: "Clases de música a domicilio en Miami-Dade y Broward desde $50 la clase privada y $35 la compartida. Inscripción, descuentos y política de reprogramación." },
+      teachers: { title: "Conoce a Nuestros Profesores de Música en Miami", description: "Ilena Peña y el equipo de Alondra: dónde se formó cada profesor, qué instrumentos enseña y cómo lo elegimos para cada alumno." },
+      about: { title: "Sobre Alondra Music Academy | Clases a Domicilio Miami", description: "Cómo enseña Alondra: nuestra filosofía, las cuatro dimensiones de cada clase y la verificación, el seguro y el registro detrás de cada profesor." },
+      registration: { title: "Precios de Clases de Música en Miami | Alondra", description: "Clases de música a domicilio en Miami-Dade y Broward desde $50 la clase privada y $35 la compartida, con descuentos por hogar y frecuencia." },
+      enroll: { title: "Inscripción en Clases de Música en Miami | Alondra", description: "Cómo es la inscripción en Alondra: los tres pasos, el acuerdo mensual, el aviso de 24 horas y el formulario que reserva tu horario semanal." },
       careers: { title: "Empleo para Profesores de Música en Miami | Alondra", description: "Enseña piano, canto, guitarra o violín con Alondra Music Academy. Buscamos profesores que combinen formación musical con paciencia y vocación por enseñar." },
       contact: { title: "Contacta con Alondra Music Academy | Clases en Miami", description: "Consulta disponibilidad para tu código postal e instrumento o agenda una llamada gratuita de 15 minutos. A domicilio en Miami-Dade y Broward." },
       privacy: { title: "Política de Privacidad | Alondra Music Academy", description: "Cómo Alondra Music Academy recopila, usa y protege tu información personal." },
       cookies: { title: "Política de Cookies | Alondra Music Academy", description: "Cómo Alondra Music Academy usa cookies, almacenamiento local y analítica en este sitio web." },
       legal: { title: "Notas Legales | Alondra Music Academy", description: "Términos que rigen el uso del sitio web de Alondra Music Academy." },
     },
-    nav: { home: "Inicio", programs: "Programas", about: "Academia", registration: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto" },
+    nav: { home: "Inicio", programs: "Formatos", teachers: "Profesores", about: "Academia", registration: "Precios", enroll: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
       title1: "Dale a tu hijo el superpoder de la música.",
@@ -848,23 +842,9 @@ export const translations: Record<Lang, Dict> = {
       ],
     },
     instruments: {
-      eyebrow: "Programas",
       title: "Disciplinas",
       subtitle: "La técnica de la tradición del conservatorio y las canciones que tu hijo de verdad quiere tocar.",
-      modalities: [
-        { title: "Individual 1 a 1", body: "Progresión totalmente personalizada, a tu ritmo." },
-        { title: "Grupo Reducido", body: "Aprendizaje social que inspira y motiva." },
-        { title: "A Domicilio", body: "Vamos a ti: seguro, cómodo, conveniente." },
-      ],
-      items: [
-        { name: "Piano", body: "Dos manos, dos claves y toda la armonía bajo los dedos.", focus: "Independencia de cada mano, lectura simultánea en clave de Sol y de Fa, y un toque parejo en todo el teclado." },
-        { name: "Violín", body: "La afinación se construye con el oído y con el brazo.", focus: "Sujeción del arco y posición de la mano izquierda, afinar sin trastes que guíen, y control del arco para un sonido estable." },
-        { name: "Canto", body: "El instrumento que se lleva puesto.", focus: "Respiración diafragmática, emisión sana para la anatomía infantil, dicción y afinación." },
-        { name: "Guitarra", body: "Acordes, melodía y acompañamiento en las mismas seis cuerdas.", focus: "Lectura de partitura y de tablatura, cambios de acorde limpios, y patrones de mano derecha para acompañar." },
-        { name: "Flauta", body: "Aire convertido en sonido.", focus: "Embocadura, apoyo de la respiración, articulación limpia y frasear una línea sin quedarse sin aire." },
-        { name: "Bajo Eléctrico", body: "El instrumento que sostiene a una banda.", focus: "Digitación en ambas manos, tocar con metrónomo, y leer líneas de bajo y cifrado." },
-        { name: "El arte del sonido", body: "Hacer música con un ordenador.", focus: "Grabación, edición y nociones de mezcla, más la teoría necesaria para arreglar lo que se compone." },
-      ],
+      cta: "Ver las siete disciplinas",
     },
     formats: {
       eyebrow: "Formas de aprender",
@@ -873,14 +853,16 @@ export const translations: Record<Lang, Dict> = {
       photoLabel: "Foto de formatos",
     },
     teachers: {
-      eyebrow: "Nuestro Staff",
+      hero: { eyebrow: "Nuestros profesores", title: "Conoce a quien enseñará a tu hijo", subtitle: "Quién entra en tu casa cada semana, dónde se formó y cómo elige Ilena al que mejor encaja con tu hijo." },
       title: "El profesor que encaja con tu hijo",
       subtitle: "**Ilena elige personalmente** al profesor que mejor conecta con cada estudiante, de un equipo de profesionales con **antecedentes comprobados**.",
       verified: "Instructor Verificado",
-      photoLabel: "Foto de la directora",
       moreLink: "Conoce a {name}",
       teamTitle: "El equipo que enseña",
       matchPromise: "Si tu hijo no conecta con su profesor, dínoslo: revisamos la situación y buscamos una mejor combinación. Las clases ya impartidas se pagan y no hay devolución, pero la reasignación no cobra matrícula nueva.",
+      bios: { title: "Conoce a nuestro equipo", subtitle: "Cada profesor de Alondra combina una formación de conservatorio con una vocación genuina por enseñar. Conoce sus trayectorias." },
+      vetting: { title: "Cada profesor pasa el filtro antes de llamar a tu puerta", body: "Verificación de antecedentes, evaluación psicológica, auditoría técnica y formación trimestral. El proceso completo, con el seguro y el registro que lo respaldan, está en la página de la academia.", cta: "Ver cómo verificamos" },
+      hiring: { title: "¿Eres profesor de música?", body: "Leemos siempre las candidaturas de profesores que combinan formación de conservatorio con una vocación real por enseñar.", cta: "Trabaja con nosotros" },
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -893,6 +875,68 @@ export const translations: Record<Lang, Dict> = {
           "Como fundadora de Alondra Music Academy, Ilena ha creado una academia donde **la excelencia académica y la atención personalizada** son la base de cada programa. Su metodología se adapta a las fortalezas, necesidades y objetivos de cada estudiante, promoviendo un aprendizaje dinámico, motivador y significativo. Más que enseñar a tocar un instrumento, su propósito es despertar el amor por la música, formar músicos seguros y creativos, y brindar a cada alumno las herramientas necesarias para **alcanzar su máximo potencial** tanto dentro como fuera del escenario. En Alondra imparte personalmente clases de violín, canto, piano y arte del sonido.",
         ],
       },
+      team: [
+        {
+          slug: "profe-olivia",
+          name: "Olivia García Rey",
+          role: "Profesora de piano",
+          photo: "/images/profe-olivia.webp",
+          summary: "Pianista y educadora con **más de tres décadas de experiencia**, reconocida por su enfoque humano y personalizado en la pedagogía del piano, que además ejerció como musicoterapeuta en una etapa anterior de su carrera.",
+          bio: [
+            "Conoce a Olivia García Rey, una distinguida pianista y educadora que, en una etapa anterior de su carrera, ejerció como musicoterapeuta, con **más de tres décadas de experiencia** formando músicos y cultivando el talento de niños, jóvenes y adultos. Su sólida preparación en prestigiosas instituciones musicales de Cuba, junto con una extensa trayectoria como profesora en conservatorios y escuelas de arte, la convierten en una maestra de excepcional nivel, reconocida por su profundo conocimiento de la pedagogía del piano, la interpretación y la formación integral del músico.",
+            "A lo largo de su carrera, Olivia ha guiado a cientos de estudiantes, ayudándolos a desarrollar no solo una excelente técnica pianística, sino también **disciplina, sensibilidad artística y confianza en sí mismos**. Su experiencia como musicoterapeuta le ha permitido comprender el impacto de la música en el desarrollo cognitivo, emocional y social, enriqueciendo su metodología con un enfoque humano, cercano y completamente personalizado, adaptado a las fortalezas, necesidades y objetivos de cada alumno.",
+            "En Alondra Music Academy, Olivia comparte su pasión por la música con el compromiso de inspirar a cada estudiante a **alcanzar su máximo potencial**. Sus clases ofrecen mucho más que aprender a tocar el piano: brindan una **formación artística de alta calidad** que fomenta la creatividad, la expresión musical, el desarrollo integral y un amor por la música que perdura toda la vida.",
+          ],
+        },
+        {
+          slug: "profe-rafael",
+          name: "Rafael Paseiro",
+          role: "Profesor de guitarra y bajo eléctrico",
+          photo: "/images/profe-rafael.webp",
+          summary: "Bajista, compositor y arreglista con **más de tres décadas de trayectoria internacional**; en Alondra enseña guitarra y bajo eléctrico.",
+          bio: [
+            "Rafael Paseiro es un reconocido bajista, compositor, arreglista y profesor de guitarra con **más de tres décadas de experiencia** en la música. **Graduado con honores** de la Escuela Nacional de Arte de Cuba bajo la tutela del prestigioso bajista Carlos del Puerto, ha desarrollado una sobresaliente carrera que combina la interpretación, la composición, los arreglos musicales y una profunda vocación por la enseñanza.",
+            "Como intérprete, compositor y arreglista, Rafael ha colaborado en numerosas producciones discográficas y ha compartido escenario con destacados artistas como Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz y The Temptations, entre muchos otros. Su talento lo ha llevado a presentarse en algunos de los festivales de jazz más importantes del mundo y a realizar giras por América, Europa, Asia y el Caribe, consolidándose como un músico de **reconocido prestigio internacional**.",
+            "En Alondra Music Academy, Rafael comparte su amplia experiencia para formar a la nueva generación de músicos a través de una enseñanza personalizada de guitarra y bajo eléctrico. Su metodología combina una **sólida formación técnica** con el desarrollo de la creatividad, la expresión musical y la confianza en cada estudiante, inspirando a niños, jóvenes y adultos a descubrir y **alcanzar su máximo potencial** artístico.",
+          ],
+        },
+        {
+          slug: "profe-claudia-nuevo",
+          name: "Claudia Nuevo",
+          role: "Profesora de piano y flauta",
+          photo: "/images/profe-claudia-nuevo.webp",
+          summary: "Pianista y flautista formada en el Conservatorio Esteban Salas y el ISA; ofrece **clases dinámicas y personalizadas** centradas en cada estudiante.",
+          bio: [
+            "Conoce a Claudia Nuevo, una talentosa pianista, flautista y educadora apasionada por inspirar a sus estudiantes a través de la música. Graduada del prestigioso Conservatorio Esteban Salas y con estudios en Producción y Grabación Musical en la Universidad de las Artes (ISA) de Cuba, combina una **sólida formación académica** con una destacada trayectoria como intérprete y docente.",
+            "A lo largo de su carrera ha enseñado piano y flauta en reconocidas instituciones musicales, además de participar como pianista acompañante e integrante de orquestas, coros, bandas y agrupaciones profesionales. Su experiencia internacional y su vocación por la enseñanza le permiten ofrecer clases dinámicas, personalizadas y enfocadas en el **crecimiento integral de cada estudiante**.",
+            "En Alondra Music Academy, Claudia crea un ambiente donde la técnica, la creatividad y la expresión musical se desarrollan de manera natural. Su objetivo es que cada alumno no solo aprenda a tocar un instrumento, sino que **gane confianza**, disfrute del aprendizaje y descubra una pasión por la música que lo acompañe toda la vida.",
+          ],
+        },
+        {
+          slug: "profe-claudia-rodriguez",
+          name: "Claudia D. Rodríguez",
+          role: "Profesora de eufonio, canto y piano",
+          photo: "/images/profe-claudia-rodriguez.webp",
+          summary: "Eufonista, cantante y educadora; especialista en **eufonio, tuba y música de cámara**, con trayectoria internacional dentro y fuera de Cuba.",
+          bio: [
+            "Conoce a Claudia D. Rodríguez, una talentosa eufonista, cantante y educadora musical apasionada por formar estudiantes con **excelencia, creatividad y amor por la música**. Su sólida preparación académica y su amplia experiencia como docente e intérprete le permiten ofrecer una enseñanza dinámica y personalizada, inspirando a alumnos de todas las edades a desarrollar su máximo potencial.",
+            "Graduada de la Universidad de las Artes (ISA) de Cuba como Licenciada en Música, con **especialización en Eufonio**, y formada en el prestigioso Conservatorio Esteban Salas, Claudia ha impartido clases de eufonio, tuba, piano y música de cámara en reconocidas instituciones musicales. Además, ha desarrollado una destacada trayectoria como instrumentista y cantante, participando en bandas de concierto, coros profesionales y agrupaciones internacionales, presentándose en escenarios dentro y fuera de Cuba.",
+            "En Alondra Music Academy, Claudia crea un ambiente de aprendizaje motivador donde **la técnica, la expresión artística y la confianza** crecen de la mano. Su compromiso es que cada estudiante disfrute del proceso de aprender música, fortalezca sus habilidades y descubra una pasión que lo acompañe durante toda la vida.",
+          ],
+        },
+        {
+          slug: "profe-mayda",
+          name: "Mayda Placeres",
+          role: "Profesora de piano",
+          photo: "/images/profe-mayda.webp",
+          summary: "Pianista y profesora con **más de tres décadas de experiencia** en los conservatorios de Cuba y México, que hoy enseña piano a niños en Miami.",
+          bio: [
+            "Mayda Placeres se formó en la Escuela Nacional de Música de La Habana, donde obtuvo su título en Música con **especialización en piano**, y más tarde cursó un postgrado en Patrimonio Musical e Historiografía de la Música en la Universidad San Gerónimo de La Habana. Su carrera docente empezó en esa misma escuela, donde impartió clases de piano durante **dos décadas**.",
+            "Después enseñó en el Conservatorio Nacional de Música de México, en Ciudad de México, antes de instalarse en el sur de Florida, donde da clases de piano a niños desde 2022. A lo largo de treinta años y tres países, su trabajo ha combinado un **dominio avanzado del piano clásico** con un profundo conocimiento de la teoría musical y una atención constante a lo que de verdad funciona en una clase: técnica clara, métodos de enseñanza eficaces y una relación cercana con cada estudiante.",
+            "En Alondra Music Academy, Mayda enseña piano a niños y jóvenes. Sus clases construyen **bases técnicas sólidas** sin perder la motivación que hace que un niño quiera volver al instrumento: el equilibrio que ha ido afinando en una carrera hecha en conservatorios y, sobre todo, delante de los alumnos.",
+          ],
+        },
+      ],
     },
     coverage: {
       eyebrow: "Zonas de Cobertura",
@@ -958,7 +1002,7 @@ export const translations: Record<Lang, Dict> = {
     skipToContent: "Saltar al contenido",
     programs: {
       hero: {
-        eyebrow: "Programas y Métodos",
+        eyebrow: "Formatos e instrumentos",
         title: "Un camino para cada músico",
         subtitle: "Siete disciplinas, impartidas en tres formatos, cada camino pensado para tu hijo. Haz clic en cada disciplina para ver el método y cómo se nota el progreso.",
       },
@@ -1028,72 +1072,10 @@ export const translations: Record<Lang, Dict> = {
           { heading: "Excelencia pedagógica guiada por nuestra fundadora", body: "Alondra Music Academy está dirigida personalmente por su **directora fundadora**. Cada sesión es impartida de forma exclusiva por profesionales de la alta escuela clásica, rigurosamente formados y con **antecedentes totalmente verificados** para tu absoluta tranquilidad." },
         ],
       },
-      team: {
-        title: "Nuestros profesores",
-        subtitle: "Conoce a los artistas que forman nuestra academia.",
-        moreLink: "Conoce a {name}",
-        members: [
-          {
-            slug: "profe-olivia",
-            name: "Olivia García Rey",
-            role: "Profesora de piano",
-            photo: "/images/profe-olivia.webp",
-            summary: "Pianista y educadora con **más de tres décadas de experiencia**, reconocida por su enfoque humano y personalizado en la pedagogía del piano, que además ejerció como musicoterapeuta en una etapa anterior de su carrera.",
-            bio: [
-              "Conoce a Olivia García Rey, una distinguida pianista y educadora que, en una etapa anterior de su carrera, ejerció como musicoterapeuta, con **más de tres décadas de experiencia** formando músicos y cultivando el talento de niños, jóvenes y adultos. Su sólida preparación en prestigiosas instituciones musicales de Cuba, junto con una extensa trayectoria como profesora en conservatorios y escuelas de arte, la convierten en una maestra de excepcional nivel, reconocida por su profundo conocimiento de la pedagogía del piano, la interpretación y la formación integral del músico.",
-              "A lo largo de su carrera, Olivia ha guiado a cientos de estudiantes, ayudándolos a desarrollar no solo una excelente técnica pianística, sino también **disciplina, sensibilidad artística y confianza en sí mismos**. Su experiencia como musicoterapeuta le ha permitido comprender el impacto de la música en el desarrollo cognitivo, emocional y social, enriqueciendo su metodología con un enfoque humano, cercano y completamente personalizado, adaptado a las fortalezas, necesidades y objetivos de cada alumno.",
-              "En Alondra Music Academy, Olivia comparte su pasión por la música con el compromiso de inspirar a cada estudiante a **alcanzar su máximo potencial**. Sus clases ofrecen mucho más que aprender a tocar el piano: brindan una **formación artística de alta calidad** que fomenta la creatividad, la expresión musical, el desarrollo integral y un amor por la música que perdura toda la vida.",
-            ],
-          },
-          {
-            slug: "profe-rafael",
-            name: "Rafael Paseiro",
-            role: "Profesor de guitarra y bajo eléctrico",
-            photo: "/images/profe-rafael.webp",
-            summary: "Bajista, compositor y arreglista con **más de tres décadas de trayectoria internacional**; en Alondra enseña guitarra y bajo eléctrico.",
-            bio: [
-              "Rafael Paseiro es un reconocido bajista, compositor, arreglista y profesor de guitarra con **más de tres décadas de experiencia** en la música. **Graduado con honores** de la Escuela Nacional de Arte de Cuba bajo la tutela del prestigioso bajista Carlos del Puerto, ha desarrollado una sobresaliente carrera que combina la interpretación, la composición, los arreglos musicales y una profunda vocación por la enseñanza.",
-              "Como intérprete, compositor y arreglista, Rafael ha colaborado en numerosas producciones discográficas y ha compartido escenario con destacados artistas como Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz y The Temptations, entre muchos otros. Su talento lo ha llevado a presentarse en algunos de los festivales de jazz más importantes del mundo y a realizar giras por América, Europa, Asia y el Caribe, consolidándose como un músico de **reconocido prestigio internacional**.",
-              "En Alondra Music Academy, Rafael comparte su amplia experiencia para formar a la nueva generación de músicos a través de una enseñanza personalizada de guitarra y bajo eléctrico. Su metodología combina una **sólida formación técnica** con el desarrollo de la creatividad, la expresión musical y la confianza en cada estudiante, inspirando a niños, jóvenes y adultos a descubrir y **alcanzar su máximo potencial** artístico.",
-            ],
-          },
-          {
-            slug: "profe-claudia-nuevo",
-            name: "Claudia Nuevo",
-            role: "Profesora de piano y flauta",
-            photo: "/images/profe-claudia-nuevo.webp",
-            summary: "Pianista y flautista formada en el Conservatorio Esteban Salas y el ISA; ofrece **clases dinámicas y personalizadas** centradas en cada estudiante.",
-            bio: [
-              "Conoce a Claudia Nuevo, una talentosa pianista, flautista y educadora apasionada por inspirar a sus estudiantes a través de la música. Graduada del prestigioso Conservatorio Esteban Salas y con estudios en Producción y Grabación Musical en la Universidad de las Artes (ISA) de Cuba, combina una **sólida formación académica** con una destacada trayectoria como intérprete y docente.",
-              "A lo largo de su carrera ha enseñado piano y flauta en reconocidas instituciones musicales, además de participar como pianista acompañante e integrante de orquestas, coros, bandas y agrupaciones profesionales. Su experiencia internacional y su vocación por la enseñanza le permiten ofrecer clases dinámicas, personalizadas y enfocadas en el **crecimiento integral de cada estudiante**.",
-              "En Alondra Music Academy, Claudia crea un ambiente donde la técnica, la creatividad y la expresión musical se desarrollan de manera natural. Su objetivo es que cada alumno no solo aprenda a tocar un instrumento, sino que **gane confianza**, disfrute del aprendizaje y descubra una pasión por la música que lo acompañe toda la vida.",
-            ],
-          },
-          {
-            slug: "profe-claudia-rodriguez",
-            name: "Claudia D. Rodríguez",
-            role: "Profesora de eufonio, canto y piano",
-            photo: "/images/profe-claudia-rodriguez.webp",
-            summary: "Eufonista, cantante y educadora; especialista en **eufonio, tuba y música de cámara**, con trayectoria internacional dentro y fuera de Cuba.",
-            bio: [
-              "Conoce a Claudia D. Rodríguez, una talentosa eufonista, cantante y educadora musical apasionada por formar estudiantes con **excelencia, creatividad y amor por la música**. Su sólida preparación académica y su amplia experiencia como docente e intérprete le permiten ofrecer una enseñanza dinámica y personalizada, inspirando a alumnos de todas las edades a desarrollar su máximo potencial.",
-              "Graduada de la Universidad de las Artes (ISA) de Cuba como Licenciada en Música, con **especialización en Eufonio**, y formada en el prestigioso Conservatorio Esteban Salas, Claudia ha impartido clases de eufonio, tuba, piano y música de cámara en reconocidas instituciones musicales. Además, ha desarrollado una destacada trayectoria como instrumentista y cantante, participando en bandas de concierto, coros profesionales y agrupaciones internacionales, presentándose en escenarios dentro y fuera de Cuba.",
-              "En Alondra Music Academy, Claudia crea un ambiente de aprendizaje motivador donde **la técnica, la expresión artística y la confianza** crecen de la mano. Su compromiso es que cada estudiante disfrute del proceso de aprender música, fortalezca sus habilidades y descubra una pasión que lo acompañe durante toda la vida.",
-            ],
-          },
-          {
-            slug: "profe-mayda",
-            name: "Mayda Placeres",
-            role: "Profesora de piano",
-            photo: "/images/profe-mayda.webp",
-            summary: "Pianista y profesora con **más de tres décadas de experiencia** en los conservatorios de Cuba y México, que hoy enseña piano a niños en Miami.",
-            bio: [
-              "Mayda Placeres se formó en la Escuela Nacional de Música de La Habana, donde obtuvo su título en Música con **especialización en piano**, y más tarde cursó un postgrado en Patrimonio Musical e Historiografía de la Música en la Universidad San Gerónimo de La Habana. Su carrera docente empezó en esa misma escuela, donde impartió clases de piano durante **dos décadas**.",
-              "Después enseñó en el Conservatorio Nacional de Música de México, en Ciudad de México, antes de instalarse en el sur de Florida, donde da clases de piano a niños desde 2022. A lo largo de treinta años y tres países, su trabajo ha combinado un **dominio avanzado del piano clásico** con un profundo conocimiento de la teoría musical y una atención constante a lo que de verdad funciona en una clase: técnica clara, métodos de enseñanza eficaces y una relación cercana con cada estudiante.",
-              "En Alondra Music Academy, Mayda enseña piano a niños y jóvenes. Sus clases construyen **bases técnicas sólidas** sin perder la motivación que hace que un niño quiera volver al instrumento: el equilibrio que ha ido afinando en una carrera hecha en conservatorios y, sobre todo, delante de los alumnos.",
-            ],
-          },
-        ],
+      teamLink: {
+        title: "Conoce a los profesores",
+        body: "Ilena elige personalmente el profesor que mejor conecta con cada alumno. Su formación, sus instrumentos y sus biografías completas están en su propia página.",
+        cta: "Ver los profesores",
       },
       verification: {
         eyebrow: "Seguridad Primero",
@@ -1114,11 +1096,32 @@ export const translations: Record<Lang, Dict> = {
           ],
         },
       },
-      staff: { title: "Nuestros profesores", subtitle: "Conoce a algunos de los artistas que forman nuestra academia." },
     },
     registration: {
-      hero: { eyebrow: "Inscripción", title: "Inscripción y matrícula", subtitle: "Todo lo que necesitas para unirte a Alondra: cómo funciona la inscripción, nuestro acuerdo simple y **precios claros** por tipo de lección." },
+      hero: { eyebrow: "Precios", title: "Lo que cuesta una clase", subtitle: "Dos formatos, los dos a domicilio en Miami-Dade y Broward. Hay descuento por hogar y por frecuencia desde el segundo miembro." },
       enrollCta: "Inscribirme ahora",
+      pricingTitle: "Tarifas transparentes y sin sorpresas",
+      pricingSubtitle: "**Sin contratos forzosos ni cargos ocultos**. Elige el formato ideal para los objetivos y el ritmo de aprendizaje de tu hijo.",
+      priceFrom: "desde",
+      priceLabel: "/ clase",
+      formats: [
+        { name: "Lección Privada", description: "Enfoque individualizado y **totalmente personalizado** según las metas específicas del alumno.", price: "$50", points: ["Instructor dedicado al 100%", "Plan de estudio a tu propio ritmo"] },
+        { name: "Lección Compartida", description: "Formato de alta escuela impartido en **grupos pequeños de 3 a 6 estudiantes**.", price: "$35", points: ["Socialización y motivación mutua", "Instrucción técnica individualizada"] },
+      ],
+      lessonLengthTitle: "Cuánto dura una clase",
+      lessonLength: "45 minutos es el estándar para la mayoría de los instrumentos y para el **programa de estimulación temprana**, y 60 minutos para niveles avanzados. Las sesiones de 30 minutos sólo cuando se inscriben más de dos estudiantes en el mismo hogar.",
+      benefits: {
+        title: "Más música, mayores ahorros",
+        subtitle: "Acompañamos la constancia de tu hogar con **ventajas competitivas** aplicadas automáticamente en tu facturación mensual de Stripe:",
+        items: [
+          { title: "Descuento Multi-Familiar", body: "Obtén un **descuento especial del 10%** en tu membresía mensual a partir del segundo miembro de la casa inscrito." },
+          { title: "Descuento por Frecuencia", body: "Recibe una **tarifa preferencial por lección** al programar dos o más clases semanales por alumno." },
+        ],
+      },
+      note: "El precio final se confirma al contactarnos, según **la duración y la frecuencia**.",
+    },
+    enroll: {
+      hero: { eyebrow: "Inscripción", title: "Inscripción y matrícula", subtitle: "Todo lo que necesitas para unirte a Alondra: los tres pasos, nuestro acuerdo simple y el formulario que **reserva tu horario semanal**." },
       stepsTitle: "El camino más simple para iniciar",
       stepsSubtitle: "Diseñamos un **proceso ágil y transparente** para que tu familia comience su viaje musical sin complicaciones y con **total seguridad**.",
       steps: [
@@ -1136,23 +1139,6 @@ export const translations: Record<Lang, Dict> = {
           { label: "Entorno Seguro en Casa", body: "Exigimos la **presencia física de un adulto** en el hogar durante toda la lección." },
         ],
       },
-      pricingTitle: "Tarifas transparentes y sin sorpresas",
-      pricingSubtitle: "**Sin contratos forzosos ni cargos ocultos**. Elige el formato ideal para los objetivos y el ritmo de aprendizaje de tu hijo.",
-      priceFrom: "desde",
-      priceLabel: "/ clase",
-      formats: [
-        { name: "Lección Privada", description: "Enfoque individualizado y **totalmente personalizado** según las metas específicas del alumno.", price: "$50", points: ["Instructor dedicado al 100%", "Plan de estudio a tu propio ritmo"] },
-        { name: "Lección Compartida", description: "Formato de alta escuela impartido en **grupos pequeños de 3 a 6 estudiantes**.", price: "$35", points: ["Socialización y motivación mutua", "Instrucción técnica individualizada"] },
-      ],
-      benefits: {
-        title: "Más música, mayores ahorros",
-        subtitle: "Acompañamos la constancia de tu hogar con **ventajas competitivas** aplicadas automáticamente en tu facturación mensual de Stripe:",
-        items: [
-          { title: "Descuento Multi-Familiar", body: "Obtén un **descuento especial del 10%** en tu membresía mensual a partir del segundo miembro de la casa inscrito." },
-          { title: "Descuento por Frecuencia", body: "Recibe una **tarifa preferencial por lección** al programar dos o más clases semanales por alumno." },
-        ],
-      },
-      note: "El precio final se confirma al contactarnos, según **la duración y la frecuencia**.",
     },
     contact: {
       hero: { eyebrow: "Contacto y Cobertura", title: "Vamos a tu casa", subtitle: "Atendemos estudiantes en Miami-Dade y Broward con **calidez y precisión**." },
@@ -1188,8 +1174,8 @@ export const translations: Record<Lang, Dict> = {
     footer: {
       tagline: "**Conexión que inspira. Progreso que se escucha.** Clases de música a domicilio en Miami-Dade y Broward.",
       columns: [
-        { title: "Academia", links: [{ label: "Inicio", page: "home" }, { label: "Programas", page: "programs" }, { label: "Academia", page: "about" }, { label: "Trabaja con nosotros", page: "careers" }] },
-        { title: "Inscripción", links: [{ label: "Inscripción", page: "registration" }, { label: "Contacto", page: "contact" }] },
+        { title: "Academia", links: [{ label: "Inicio", page: "home" }, { label: "Formatos", page: "programs" }, { label: "Profesores", page: "teachers" }, { label: "Academia", page: "about" }] },
+        { title: "Inscripción", links: [{ label: "Precios", page: "registration" }, { label: "Inscripción", page: "enroll" }, { label: "Contacto", page: "contact" }, { label: "Trabaja con nosotros", page: "careers" }] },
       ],
       contact: "Contacto",
       rights: "Todos los derechos reservados.",
@@ -1279,23 +1265,23 @@ export const translations: Record<Lang, Dict> = {
       successTitle: "¡Candidatura recibida!",
       successBody: "Gracias por tu interés en Alondra. Te contactaremos si se abre un puesto que encaje.",
       successAgain: "Enviar otra candidatura",
-      teamTitle: "Conoce a nuestro equipo",
-      teamSubtitle: "Cada profesor de Alondra combina una formación de conservatorio con una vocación genuina por enseñar. Conoce sus trayectorias.",
     },
   },
   fr: {
     meta: {
       home: { title: "Cours de Musique à Domicile à Miami | Alondra", description: "Cours de musique à domicile à Miami-Dade et Broward. Nous choisissons le professeur qui convient à votre enfant pour qu'il progresse avec plaisir." },
       programs: { title: "Cours de Musique à Miami : Piano, Violon, Chant et Guitare", description: "Piano, violon, chant, guitare, flûte et basse à domicile à Miami. Chaque cours intègre technique, rythme, lecture et interprétation." },
-      about: { title: "À propos d'Alondra Music Academy | Nos Professeurs à Miami", description: "Rencontrez Ilena Peña et l'équipe d'Alondra. Comment nous sélectionnons et attribuons le professeur qui convient à votre enfant." },
-      registration: { title: "Tarifs et Inscription aux Cours de Musique à Miami | Alondra", description: "Cours de musique à domicile à Miami-Dade et Broward à partir de 50 $ le cours privé et 35 $ partagé. Inscription, réductions et règles de reprogrammation." },
+      teachers: { title: "Nos Professeurs de Musique à Miami | Alondra", description: "Ilena Peña et l'équipe d'Alondra : où chaque professeur s'est formé, quels instruments il enseigne et comment nous le choisissons." },
+      about: { title: "À propos d'Alondra Music Academy | Cours à Domicile", description: "Comment Alondra enseigne : notre philosophie, les quatre dimensions de chaque cours et les vérifications, l'assurance et l'immatriculation." },
+      registration: { title: "Tarifs des Cours de Musique à Miami | Alondra", description: "Cours de musique à domicile à Miami-Dade et Broward à partir de 50 $ le cours privé et 35 $ partagé, avec réductions par foyer et fréquence." },
+      enroll: { title: "Inscription aux Cours de Musique à Miami | Alondra", description: "Comment se passe l'inscription chez Alondra : les trois étapes, l'accord mensuel, le préavis de 24 heures et le formulaire de réservation." },
       careers: { title: "Emplois de Professeur de Musique à Miami | Alondra", description: "Enseignez le piano, le chant, la guitare ou le violon avec Alondra. Nous cherchons des professeurs alliant formation musicale et vocation." },
       contact: { title: "Contacter Alondra Music Academy | Cours à Miami", description: "Vérifiez les disponibilités pour votre code postal et votre instrument ou réservez un appel gratuit de 15 minutes. À domicile à Miami-Dade et Broward." },
       privacy: { title: "Politique de confidentialité | Alondra Music Academy", description: "Comment Alondra Music Academy collecte, utilise et protège vos données personnelles." },
       cookies: { title: "Politique de cookies | Alondra Music Academy", description: "Comment Alondra Music Academy utilise les cookies, le stockage local et la mesure d'audience sur ce site." },
       legal: { title: "Mentions légales | Alondra Music Academy", description: "Conditions régissant l'utilisation du site web d'Alondra Music Academy." },
     },
-    nav: { home: "Accueil", programs: "Programmes", about: "Académie", registration: "Inscription", careers: "Travaillez avec nous", contact: "Contact" },
+    nav: { home: "Accueil", programs: "Formats", teachers: "Professeurs", about: "Académie", registration: "Tarifs", enroll: "Inscription", careers: "Travaillez avec nous", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
       title1: "Offrez à votre enfant le superpouvoir de la musique.",
@@ -1326,23 +1312,9 @@ export const translations: Record<Lang, Dict> = {
       ],
     },
     instruments: {
-      eyebrow: "Programmes",
       title: "Disciplines",
       subtitle: "La technique de la tradition du conservatoire, et les morceaux que votre enfant a vraiment envie de jouer.",
-      modalities: [
-        { title: "Privé 1 à 1", body: "Progression **entièrement personnalisée**, à votre rythme." },
-        { title: "Petit groupe", body: "Apprentissage social qui inspire et motive." },
-        { title: "À domicile", body: "Nous venons chez vous : sûr, confortable, pratique." },
-      ],
-      items: [
-        { name: "Piano", body: "Deux mains, deux clés et toute l’harmonie sous les doigts.", focus: "Indépendance de chaque main, lecture simultanée en clé de sol et de fa, et un toucher régulier sur tout le clavier." },
-        { name: "Violon", body: "La justesse se construit par l’oreille et par le bras.", focus: "Tenue de l’archet et position de la main gauche, justesse sans repères, et contrôle de l’archet pour un son stable." },
-        { name: "Chant", body: "L’instrument qu’on porte avec soi.", focus: "Respiration diaphragmatique, émission saine pour l’anatomie de l’enfant, diction et justesse." },
-        { name: "Guitare", body: "Accords, mélodie et accompagnement sur les mêmes six cordes.", focus: "Lecture de la partition et de la tablature, changements d’accords nets, et motifs de main droite pour accompagner." },
-        { name: "Flûte", body: "De l’air transformé en son.", focus: "Embouchure, soutien du souffle, articulation nette et phraser une ligne sans manquer d’air." },
-        { name: "Basse électrique", body: "L’instrument qui tient un groupe ensemble.", focus: "Doigté des deux mains, jouer au métronome, et lire des lignes de basse et le chiffrage." },
-        { name: "L'art du son", body: "Faire de la musique avec un ordinateur.", focus: "Enregistrement, montage et bases du mixage, plus la théorie nécessaire pour arranger ce qu’on écrit." },
-      ],
+      cta: "Voir les sept disciplines",
     },
     formats: {
       eyebrow: "Façons d'apprendre",
@@ -1351,14 +1323,16 @@ export const translations: Record<Lang, Dict> = {
       photoLabel: "Photo des formats",
     },
     teachers: {
-      eyebrow: "Notre Équipe",
+      hero: { eyebrow: "Nos professeurs", title: "Rencontrez ceux qui enseigneront à votre enfant", subtitle: "Qui entre chez vous chaque semaine, où il s'est formé et comment Ilena choisit celui qui convient à votre enfant." },
       title: "Le professeur qui convient à votre enfant",
       subtitle: "**Ilena choisit personnellement** le professeur qui s’accorde le mieux avec chaque élève, au sein d’une équipe de professionnels **rigoureusement vérifiés**.",
       verified: "Professeur Vérifié",
-      photoLabel: "Photo de la directrice",
       moreLink: "Découvrir {name}",
       teamTitle: "L’équipe qui enseigne",
       matchPromise: "Si votre enfant n’accroche pas avec son professeur, dites-le-nous : nous examinons la situation et cherchons une meilleure combinaison. Les cours déjà donnés sont dus et ne sont pas remboursés, mais la réaffectation n’entraîne pas de nouveaux frais d’inscription.",
+      bios: { title: "Rencontrez notre équipe", subtitle: "Chaque professeur d'Alondra allie une formation de conservatoire à une véritable vocation d'enseignant. Découvrez leurs parcours." },
+      vetting: { title: "Chaque professeur passe le filtre avant de frapper à votre porte", body: "Vérification d'antécédents, évaluation psychologique, audit technique et formation trimestrielle. Le processus complet, avec l'assurance et l'immatriculation qui le soutiennent, se trouve sur la page de l'académie.", cta: "Voir nos vérifications" },
+      hiring: { title: "Vous êtes professeur de musique ?", body: "Nous lisons toujours les candidatures de professeurs qui allient une formation de conservatoire à une véritable vocation d'enseignant.", cta: "Travaillez avec nous" },
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -1371,6 +1345,68 @@ export const translations: Record<Lang, Dict> = {
           "En tant que fondatrice d'Alondra Music Academy, Ilena a créé une académie où **l'excellence académique et l'attention personnalisée** sont au cœur de chaque programme. Sa méthode s'adapte aux forces, aux besoins et aux objectifs de chaque élève, favorisant un apprentissage dynamique, motivant et significatif. Plus que d'apprendre à jouer d'un instrument, son but est d'éveiller l'amour de la musique, de former des musiciens sûrs d'eux et créatifs, et de donner à chaque élève les outils nécessaires pour **atteindre son plein potentiel**, sur scène comme en dehors. À Alondra, elle enseigne personnellement le violon, le chant, le piano et l'art sonore.",
         ],
       },
+      team: [
+        {
+          slug: "profe-olivia",
+          name: "Olivia García Rey",
+          role: "Professeure de piano",
+          photo: "/images/profe-olivia.webp",
+          summary: "Pianiste et éducatrice forte de **plus de trois décennies d'expérience**, reconnue pour son approche humaine et personnalisée de la pédagogie du piano, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière.",
+          bio: [
+            "Rencontrez Olivia García Rey, pianiste et éducatrice de renom qui, à une étape antérieure de sa carrière, a exercé comme musicothérapeute, forte de **plus de trois décennies d'expérience** à former des musiciens et à cultiver le talent d'enfants, de jeunes et d'adultes. Sa solide formation dans de prestigieuses institutions musicales de Cuba, ainsi qu'une longue carrière de professeure en conservatoires et écoles d'art, font d'elle une maître d'un niveau exceptionnel, reconnue pour sa profonde maîtrise de la pédagogie du piano, de l'interprétation et de la formation complète du musicien.",
+            "Tout au long de sa carrière, Olivia a guidé des centaines d'élèves, les aidant à développer non seulement une excellente technique pianistique, mais aussi **la discipline, la sensibilité artistique et la confiance en soi**. Son expérience de musicothérapeute lui a permis de comprendre l'impact de la musique sur le développement cognitif, émotionnel et social, enrichissant sa méthode d'une approche humaine, proche et **entièrement personnalisée**, adaptée aux forces, aux besoins et aux objectifs de chaque élève.",
+            "À Alondra Music Academy, Olivia partage sa passion pour la musique avec l'engagement d'inspirer chaque élève à **atteindre son plein potentiel**. Ses cours offrent bien plus que l'apprentissage du piano : ils proposent une **formation artistique de grande qualité** qui favorise la créativité, l'expression musicale, l'épanouissement complet et un amour de la musique qui dure toute la vie.",
+          ],
+        },
+        {
+          slug: "profe-rafael",
+          name: "Rafael Paseiro",
+          role: "Professeur de guitare et de basse électrique",
+          photo: "/images/profe-rafael.webp",
+          summary: "Bassiste, compositeur et arrangeur fort de **plus de trois décennies de carrière internationale** ; à Alondra, il enseigne la guitare et la basse électrique.",
+          bio: [
+            "Rafael Paseiro est un bassiste, compositeur, arrangeur et professeur de guitare reconnu, fort de **plus de trois décennies d'expérience** musicale. **Diplômé avec mention** de l'École nationale d'art de Cuba sous la tutelle du prestigieux bassiste Carlos del Puerto, il a mené une carrière remarquable alliant interprétation, composition, arrangements musicaux et une profonde vocation d'enseignant.",
+            "Comme interprète, compositeur et arrangeur, Rafael a collaboré à de nombreuses productions discographiques et partagé la scène avec des artistes de renom tels qu'Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz et The Temptations, parmi bien d'autres. Son talent l'a conduit à se produire dans certains des plus grands festivals de jazz du monde et à effectuer des tournées à travers les Amériques, l'Europe, l'Asie et les Caraïbes, s'imposant comme un musicien au **prestige international reconnu**.",
+            "À Alondra Music Academy, Rafael met sa vaste expérience au service de la formation de la nouvelle génération de musiciens grâce à un enseignement personnalisé de la guitare et de la basse électrique. Sa méthode allie une **solide formation technique** au développement de la créativité, de l'expression musicale et de la confiance de chaque élève, inspirant enfants, jeunes et adultes à découvrir et atteindre leur plein potentiel artistique.",
+          ],
+        },
+        {
+          slug: "profe-claudia-nuevo",
+          name: "Claudia Nuevo",
+          role: "Professeure de piano et de flûte",
+          photo: "/images/profe-claudia-nuevo.webp",
+          summary: "Pianiste et flûtiste formée au Conservatoire Esteban Salas et à l'ISA ; elle propose des **cours dynamiques et personnalisés** centrés sur chaque élève.",
+          bio: [
+            "Rencontrez Claudia Nuevo, pianiste, flûtiste et éducatrice de talent, passionnée par l'idée d'inspirer ses élèves à travers la musique. Diplômée du prestigieux Conservatoire Esteban Salas et titulaire d'études en Production et Enregistrement musical à l'Université des Arts (ISA) de Cuba, elle allie une **solide formation académique** à une belle carrière d'interprète et de professeure.",
+            "Tout au long de sa carrière, elle a enseigné le piano et la flûte dans des institutions musicales reconnues, tout en se produisant comme pianiste accompagnatrice et membre d'orchestres, de chœurs, d'ensembles et de formations professionnelles. Son expérience internationale et sa vocation d'enseignante lui permettent d'offrir des cours dynamiques, personnalisés et axés sur l'**épanouissement complet de chaque élève**.",
+            "À Alondra Music Academy, Claudia crée un environnement où la technique, la créativité et l'expression musicale se développent naturellement. Son objectif est que chaque élève apprenne non seulement à jouer d'un instrument, mais **gagne en confiance**, prenne plaisir à apprendre et découvre une passion pour la musique qui l'accompagnera toute sa vie.",
+          ],
+        },
+        {
+          slug: "profe-claudia-rodriguez",
+          name: "Claudia D. Rodríguez",
+          role: "Professeure d'euphonium, de chant et de piano",
+          photo: "/images/profe-claudia-rodriguez.webp",
+          summary: "Euphoniumiste, chanteuse et éducatrice musicale spécialisée en **euphonium, tuba et musique de chambre**, avec une carrière internationale.",
+          bio: [
+            "Rencontrez Claudia D. Rodríguez, euphoniumiste, chanteuse et éducatrice musicale de talent, passionnée par la formation d'élèves alliant **excellence, créativité et amour de la musique**. Sa solide préparation académique et sa vaste expérience d'enseignante et d'interprète lui permettent d'offrir un enseignement dynamique et personnalisé, inspirant des **élèves de tous âges** à développer leur plein potentiel.",
+            "Diplômée de l'Université des Arts (ISA) de Cuba avec une licence en Musique et une **spécialisation en Euphonium**, et formée au prestigieux Conservatoire Esteban Salas, Claudia a enseigné l'euphonium, le tuba, le piano et la musique de chambre dans des institutions musicales reconnues. Elle a également mené une belle carrière d'instrumentiste et de chanteuse, se produisant dans des orchestres d'harmonie, des chœurs professionnels et des ensembles internationaux, sur des scènes à Cuba comme à l'étranger.",
+            "À Alondra Music Academy, Claudia crée un environnement d'apprentissage motivant où **la technique, l'expression artistique et la confiance** grandissent de pair. Son engagement : que chaque élève prenne plaisir à apprendre la musique, renforce ses compétences et découvre une passion qui l'accompagnera toute sa vie.",
+          ],
+        },
+        {
+          slug: "profe-mayda",
+          name: "Mayda Placeres",
+          role: "Professeure de piano",
+          photo: "/images/profe-mayda.webp",
+          summary: "Pianiste et professeure forte de **plus de trois décennies d’expérience** dans les conservatoires de Cuba et du Mexique, elle enseigne aujourd’hui le piano aux enfants à Miami.",
+          bio: [
+            "Mayda Placeres s’est formée à l’École nationale de musique de La Havane, où elle a obtenu son diplôme de musique avec une **spécialisation en piano**, puis a suivi un troisième cycle en patrimoine musical et historiographie de la musique à l’Universidad San Gerónimo de La Habana. Sa carrière d’enseignante a commencé dans cette même école, où elle a donné des cours de piano pendant **deux décennies**.",
+            "Elle a ensuite enseigné au Conservatoire national de musique du Mexique, à Mexico, avant de s’installer dans le sud de la Floride, où elle enseigne le piano aux enfants depuis 2022. En trente ans et trois pays, son travail a associé une **maîtrise avancée du piano classique** à une connaissance approfondie de la théorie musicale et à une attention constante à ce qui fonctionne vraiment en cours : une technique claire, des méthodes d’enseignement efficaces et une relation proche avec chaque élève.",
+            "À Alondra Music Academy, Mayda enseigne le piano aux enfants et aux adolescents. Ses cours posent des **bases techniques solides** sans perdre la motivation qui donne envie à un enfant de revenir à son instrument : l’équilibre qu’elle a affiné au fil d’une carrière menée dans les conservatoires et, surtout, face aux élèves.",
+          ],
+        },
+      ],
     },
     coverage: {
       eyebrow: "Zone de service",
@@ -1436,7 +1472,7 @@ export const translations: Record<Lang, Dict> = {
     skipToContent: "Aller au contenu",
     programs: {
       hero: {
-        eyebrow: "Programmes & Méthodes",
+        eyebrow: "Formats et instruments",
         title: "Un chemin pour chaque musicien",
         subtitle: "Sept disciplines, enseignées en trois formats, chaque parcours pensé pour votre enfant. Cliquez sur une discipline pour découvrir la méthode et comment les progrès se manifestent.",
       },
@@ -1506,72 +1542,10 @@ export const translations: Record<Lang, Dict> = {
           { heading: "Excellence pédagogique guidée par notre fondatrice", body: "Alondra Music Academy est dirigée personnellement par sa **directrice fondatrice**. Chaque séance est assurée exclusivement par des professionnels de la haute école classique, rigoureusement formés et aux **antécédents entièrement vérifiés** pour votre absolue tranquillité." },
         ],
       },
-      team: {
-        title: "Nos professeurs",
-        subtitle: "Rencontrez les artistes qui façonnent notre académie.",
-        moreLink: "Découvrir {name}",
-        members: [
-          {
-            slug: "profe-olivia",
-            name: "Olivia García Rey",
-            role: "Professeure de piano",
-            photo: "/images/profe-olivia.webp",
-            summary: "Pianiste et éducatrice forte de **plus de trois décennies d'expérience**, reconnue pour son approche humaine et personnalisée de la pédagogie du piano, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière.",
-            bio: [
-              "Rencontrez Olivia García Rey, pianiste et éducatrice de renom qui, à une étape antérieure de sa carrière, a exercé comme musicothérapeute, forte de **plus de trois décennies d'expérience** à former des musiciens et à cultiver le talent d'enfants, de jeunes et d'adultes. Sa solide formation dans de prestigieuses institutions musicales de Cuba, ainsi qu'une longue carrière de professeure en conservatoires et écoles d'art, font d'elle une maître d'un niveau exceptionnel, reconnue pour sa profonde maîtrise de la pédagogie du piano, de l'interprétation et de la formation complète du musicien.",
-              "Tout au long de sa carrière, Olivia a guidé des centaines d'élèves, les aidant à développer non seulement une excellente technique pianistique, mais aussi **la discipline, la sensibilité artistique et la confiance en soi**. Son expérience de musicothérapeute lui a permis de comprendre l'impact de la musique sur le développement cognitif, émotionnel et social, enrichissant sa méthode d'une approche humaine, proche et **entièrement personnalisée**, adaptée aux forces, aux besoins et aux objectifs de chaque élève.",
-              "À Alondra Music Academy, Olivia partage sa passion pour la musique avec l'engagement d'inspirer chaque élève à **atteindre son plein potentiel**. Ses cours offrent bien plus que l'apprentissage du piano : ils proposent une **formation artistique de grande qualité** qui favorise la créativité, l'expression musicale, l'épanouissement complet et un amour de la musique qui dure toute la vie.",
-            ],
-          },
-          {
-            slug: "profe-rafael",
-            name: "Rafael Paseiro",
-            role: "Professeur de guitare et de basse électrique",
-            photo: "/images/profe-rafael.webp",
-            summary: "Bassiste, compositeur et arrangeur fort de **plus de trois décennies de carrière internationale** ; à Alondra, il enseigne la guitare et la basse électrique.",
-            bio: [
-              "Rafael Paseiro est un bassiste, compositeur, arrangeur et professeur de guitare reconnu, fort de **plus de trois décennies d'expérience** musicale. **Diplômé avec mention** de l'École nationale d'art de Cuba sous la tutelle du prestigieux bassiste Carlos del Puerto, il a mené une carrière remarquable alliant interprétation, composition, arrangements musicaux et une profonde vocation d'enseignant.",
-              "Comme interprète, compositeur et arrangeur, Rafael a collaboré à de nombreuses productions discographiques et partagé la scène avec des artistes de renom tels qu'Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz et The Temptations, parmi bien d'autres. Son talent l'a conduit à se produire dans certains des plus grands festivals de jazz du monde et à effectuer des tournées à travers les Amériques, l'Europe, l'Asie et les Caraïbes, s'imposant comme un musicien au **prestige international reconnu**.",
-              "À Alondra Music Academy, Rafael met sa vaste expérience au service de la formation de la nouvelle génération de musiciens grâce à un enseignement personnalisé de la guitare et de la basse électrique. Sa méthode allie une **solide formation technique** au développement de la créativité, de l'expression musicale et de la confiance de chaque élève, inspirant enfants, jeunes et adultes à découvrir et atteindre leur plein potentiel artistique.",
-            ],
-          },
-          {
-            slug: "profe-claudia-nuevo",
-            name: "Claudia Nuevo",
-            role: "Professeure de piano et de flûte",
-            photo: "/images/profe-claudia-nuevo.webp",
-            summary: "Pianiste et flûtiste formée au Conservatoire Esteban Salas et à l'ISA ; elle propose des **cours dynamiques et personnalisés** centrés sur chaque élève.",
-            bio: [
-              "Rencontrez Claudia Nuevo, pianiste, flûtiste et éducatrice de talent, passionnée par l'idée d'inspirer ses élèves à travers la musique. Diplômée du prestigieux Conservatoire Esteban Salas et titulaire d'études en Production et Enregistrement musical à l'Université des Arts (ISA) de Cuba, elle allie une **solide formation académique** à une belle carrière d'interprète et de professeure.",
-              "Tout au long de sa carrière, elle a enseigné le piano et la flûte dans des institutions musicales reconnues, tout en se produisant comme pianiste accompagnatrice et membre d'orchestres, de chœurs, d'ensembles et de formations professionnelles. Son expérience internationale et sa vocation d'enseignante lui permettent d'offrir des cours dynamiques, personnalisés et axés sur l'**épanouissement complet de chaque élève**.",
-              "À Alondra Music Academy, Claudia crée un environnement où la technique, la créativité et l'expression musicale se développent naturellement. Son objectif est que chaque élève apprenne non seulement à jouer d'un instrument, mais **gagne en confiance**, prenne plaisir à apprendre et découvre une passion pour la musique qui l'accompagnera toute sa vie.",
-            ],
-          },
-          {
-            slug: "profe-claudia-rodriguez",
-            name: "Claudia D. Rodríguez",
-            role: "Professeure d'euphonium, de chant et de piano",
-            photo: "/images/profe-claudia-rodriguez.webp",
-            summary: "Euphoniumiste, chanteuse et éducatrice musicale spécialisée en **euphonium, tuba et musique de chambre**, avec une carrière internationale.",
-            bio: [
-              "Rencontrez Claudia D. Rodríguez, euphoniumiste, chanteuse et éducatrice musicale de talent, passionnée par la formation d'élèves alliant **excellence, créativité et amour de la musique**. Sa solide préparation académique et sa vaste expérience d'enseignante et d'interprète lui permettent d'offrir un enseignement dynamique et personnalisé, inspirant des **élèves de tous âges** à développer leur plein potentiel.",
-              "Diplômée de l'Université des Arts (ISA) de Cuba avec une licence en Musique et une **spécialisation en Euphonium**, et formée au prestigieux Conservatoire Esteban Salas, Claudia a enseigné l'euphonium, le tuba, le piano et la musique de chambre dans des institutions musicales reconnues. Elle a également mené une belle carrière d'instrumentiste et de chanteuse, se produisant dans des orchestres d'harmonie, des chœurs professionnels et des ensembles internationaux, sur des scènes à Cuba comme à l'étranger.",
-              "À Alondra Music Academy, Claudia crée un environnement d'apprentissage motivant où **la technique, l'expression artistique et la confiance** grandissent de pair. Son engagement : que chaque élève prenne plaisir à apprendre la musique, renforce ses compétences et découvre une passion qui l'accompagnera toute sa vie.",
-            ],
-          },
-          {
-            slug: "profe-mayda",
-            name: "Mayda Placeres",
-            role: "Professeure de piano",
-            photo: "/images/profe-mayda.webp",
-            summary: "Pianiste et professeure forte de **plus de trois décennies d’expérience** dans les conservatoires de Cuba et du Mexique, elle enseigne aujourd’hui le piano aux enfants à Miami.",
-            bio: [
-              "Mayda Placeres s’est formée à l’École nationale de musique de La Havane, où elle a obtenu son diplôme de musique avec une **spécialisation en piano**, puis a suivi un troisième cycle en patrimoine musical et historiographie de la musique à l’Universidad San Gerónimo de La Habana. Sa carrière d’enseignante a commencé dans cette même école, où elle a donné des cours de piano pendant **deux décennies**.",
-              "Elle a ensuite enseigné au Conservatoire national de musique du Mexique, à Mexico, avant de s’installer dans le sud de la Floride, où elle enseigne le piano aux enfants depuis 2022. En trente ans et trois pays, son travail a associé une **maîtrise avancée du piano classique** à une connaissance approfondie de la théorie musicale et à une attention constante à ce qui fonctionne vraiment en cours : une technique claire, des méthodes d’enseignement efficaces et une relation proche avec chaque élève.",
-              "À Alondra Music Academy, Mayda enseigne le piano aux enfants et aux adolescents. Ses cours posent des **bases techniques solides** sans perdre la motivation qui donne envie à un enfant de revenir à son instrument : l’équilibre qu’elle a affiné au fil d’une carrière menée dans les conservatoires et, surtout, face aux élèves.",
-            ],
-          },
-        ],
+      teamLink: {
+        title: "Rencontrez les professeurs",
+        body: "Ilena choisit personnellement le professeur qui convient le mieux à chaque élève. Leur formation, leurs instruments et leurs biographies complètes ont leur propre page.",
+        cta: "Voir les professeurs",
       },
       verification: {
         eyebrow: "Sécurité avant tout",
@@ -1592,11 +1566,32 @@ export const translations: Record<Lang, Dict> = {
           ],
         },
       },
-      staff: { title: "Nos professeurs", subtitle: "Rencontrez quelques-uns des artistes qui façonnent notre académie." },
     },
     registration: {
-      hero: { eyebrow: "Inscription", title: "Inscription et enregistrement", subtitle: "Tout ce qu'il faut pour rejoindre Alondra : comment fonctionne l'inscription, notre accord simple et des **tarifs clairs** par type de cours." },
+      hero: { eyebrow: "Tarifs", title: "Ce que coûte un cours", subtitle: "Deux formats, tous les deux à domicile dans Miami-Dade et Broward. Réductions par foyer et par fréquence dès le deuxième membre." },
       enrollCta: "S'inscrire maintenant",
+      pricingTitle: "Des tarifs transparents, sans surprises",
+      pricingSubtitle: "**Sans contrats forcés ni frais cachés**. Choisissez le format idéal pour les objectifs et le rythme d'apprentissage de votre enfant.",
+      priceFrom: "à partir de",
+      priceLabel: "/ cours",
+      formats: [
+        { name: "Cours privé", description: "Approche individualisée et **entièrement personnalisée** selon les objectifs spécifiques de l'élève.", price: "$50", points: ["Un professeur dédié à 100 %", "Programme d'étude à votre propre rythme"] },
+        { name: "Cours partagé", description: "Format de haut niveau dispensé en **petits groupes de 3 à 6 élèves**.", price: "$35", points: ["Socialisation et motivation mutuelle", "Instruction technique individualisée"] },
+      ],
+      lessonLengthTitle: "Combien de temps dure un cours",
+      lessonLength: "45 minutes est le format standard pour la plupart des instruments et pour le **programme de stimulation précoce**, et 60 minutes pour les niveaux avancés. Les séances de 30 minutes uniquement lorsque plus de deux élèves s'inscrivent dans le même foyer.",
+      benefits: {
+        title: "Plus de musique, plus d'économies",
+        subtitle: "Nous récompensons la régularité de votre foyer par des **avantages compétitifs** appliqués automatiquement à votre facturation mensuelle Stripe :",
+        items: [
+          { title: "Réduction multi-familiale", body: "Obtenez une **réduction spéciale de 10 %** sur votre abonnement mensuel dès le deuxième membre du foyer inscrit." },
+          { title: "Réduction par fréquence", body: "Bénéficiez d'un **tarif préférentiel par cours** en programmant deux cours hebdomadaires ou plus par élève." },
+        ],
+      },
+      note: "Le tarif final est confirmé lorsque vous nous contactez, selon **la durée et la fréquence**.",
+    },
+    enroll: {
+      hero: { eyebrow: "Inscription", title: "Inscription et enregistrement", subtitle: "Tout ce qu'il faut pour rejoindre Alondra : les trois étapes, notre accord simple et le formulaire qui **réserve votre créneau hebdomadaire**." },
       stepsTitle: "Le chemin le plus simple pour commencer",
       stepsSubtitle: "Nous avons conçu un **processus agile et transparent** pour que votre famille commence son voyage musical sans complications et **en toute sécurité**.",
       steps: [
@@ -1614,23 +1609,6 @@ export const translations: Record<Lang, Dict> = {
           { label: "Environnement sûr à la maison", body: "Nous exigeons la **présence physique d'un adulte** au domicile pendant toute la leçon." },
         ],
       },
-      pricingTitle: "Des tarifs transparents, sans surprises",
-      pricingSubtitle: "**Sans contrats forcés ni frais cachés**. Choisissez le format idéal pour les objectifs et le rythme d'apprentissage de votre enfant.",
-      priceFrom: "à partir de",
-      priceLabel: "/ cours",
-      formats: [
-        { name: "Cours privé", description: "Approche individualisée et **entièrement personnalisée** selon les objectifs spécifiques de l'élève.", price: "$50", points: ["Un professeur dédié à 100 %", "Programme d'étude à votre propre rythme"] },
-        { name: "Cours partagé", description: "Format de haut niveau dispensé en **petits groupes de 3 à 6 élèves**.", price: "$35", points: ["Socialisation et motivation mutuelle", "Instruction technique individualisée"] },
-      ],
-      benefits: {
-        title: "Plus de musique, plus d'économies",
-        subtitle: "Nous récompensons la régularité de votre foyer par des **avantages compétitifs** appliqués automatiquement à votre facturation mensuelle Stripe :",
-        items: [
-          { title: "Réduction multi-familiale", body: "Obtenez une **réduction spéciale de 10 %** sur votre abonnement mensuel dès le deuxième membre du foyer inscrit." },
-          { title: "Réduction par fréquence", body: "Bénéficiez d'un **tarif préférentiel par cours** en programmant deux cours hebdomadaires ou plus par élève." },
-        ],
-      },
-      note: "Le tarif final est confirmé lorsque vous nous contactez, selon **la durée et la fréquence**.",
     },
     contact: {
       hero: { eyebrow: "Contact & Zones", title: "Nous venons chez vous", subtitle: "Nous servons les élèves à Miami-Dade et Broward avec **chaleur et précision**." },
@@ -1666,8 +1644,8 @@ export const translations: Record<Lang, Dict> = {
     footer: {
       tagline: "**Une connexion qui inspire. Des progrès qui s’entendent.** Cours de musique à domicile à Miami-Dade et Broward.",
       columns: [
-        { title: "Académie", links: [{ label: "Accueil", page: "home" }, { label: "Programmes", page: "programs" }, { label: "Académie", page: "about" }, { label: "Travaillez avec nous", page: "careers" }] },
-        { title: "Inscription", links: [{ label: "Inscription", page: "registration" }, { label: "Contact", page: "contact" }] },
+        { title: "Académie", links: [{ label: "Accueil", page: "home" }, { label: "Formats", page: "programs" }, { label: "Professeurs", page: "teachers" }, { label: "Académie", page: "about" }] },
+        { title: "Inscription", links: [{ label: "Tarifs", page: "registration" }, { label: "Inscription", page: "enroll" }, { label: "Contact", page: "contact" }, { label: "Travaillez avec nous", page: "careers" }] },
       ],
       contact: "Contact",
       rights: "Tous droits réservés.",
@@ -1757,8 +1735,6 @@ export const translations: Record<Lang, Dict> = {
       successTitle: "Candidature reçue !",
       successBody: "Merci de votre intérêt pour Alondra. Nous vous contacterons si un poste correspondant s'ouvre.",
       successAgain: "Envoyer une autre candidature",
-      teamTitle: "Rencontrez notre équipe",
-      teamSubtitle: "Chaque professeur d'Alondra allie une formation de conservatoire à une véritable vocation d'enseignant. Découvrez leurs parcours.",
     },
   },
 };

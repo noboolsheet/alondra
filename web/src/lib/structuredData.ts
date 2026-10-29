@@ -211,7 +211,7 @@ const lessonService = (t: Dict, lang: Lang, url: string): JsonLd => ({
 
 /** El equipo de /about. Nombre, rol y foto: nada que no esté ya en la página. */
 const people = (t: Dict): JsonLd[] =>
-  [t.teachers.director, ...t.about.team.members].map((m) => ({
+  [t.teachers.director, ...t.teachers.team].map((m) => ({
     "@type": "Person",
     "@id": `${SITE_ORIGIN}/#person-${m.slug}`,
     name: m.name,
@@ -251,7 +251,7 @@ export const graphFor = (t: Dict, lang: Lang, page: PageKey): JsonLd => {
   if (!isHome) graph.push(breadcrumb(t, lang, page, url));
   if (page === "programs") graph.push(...courses(t, lang, url));
   if (page === "registration") graph.push(lessonService(t, lang, url));
-  if (page === "about") graph.push(...people(t));
+  if (page === "teachers") graph.push(...people(t));
 
   return { "@context": "https://schema.org", "@graph": graph };
 };

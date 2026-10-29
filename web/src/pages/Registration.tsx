@@ -1,85 +1,32 @@
-import { FileText, ShieldCheck, ArrowRight, Check, Gift } from "lucide-react";
+import { ShieldCheck, Clock, ArrowRight, Check, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
-import { RegistrationWidget } from "@/components/RegistrationWidget";
+import { PageLink } from "@/components/PageLink";
 import { StepUp } from "@/components/StepUp";
+import { CTABanner } from "@/components/CTABanner";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
 
+/**
+ * Precios, y sólo precios.
+ *
+ * Esta página compartía sitio con la inscripción, y el orden estaba invertido:
+ * los pasos y el contrato iban antes del precio, y el widget de My Music Staff
+ * cargaba un iframe de terceros para alguien que sólo venía a comparar. El
+ * precio es material de evaluación; el cierre vive en /enrollment y se llega
+ * desde el final de esta página.
+ */
 const Registration = () => {
   const { t } = useLang();
 
   return (
     <Layout>
       {/* Hero */}
-      <StepUp />
-
       <section className="pt-12 pb-10 md:pt-20 md:pb-14">
         <div className="container-narrow text-center">
           <span className="eyebrow">{t.registration.hero.eyebrow}</span>
           <h1 className="mt-4 font-serif text-5xl md:text-6xl text-primary text-balance leading-[1.05]">{t.registration.hero.title}</h1>
           <p className="mt-6 text-lg text-primary/70 max-w-2xl mx-auto">{rich(t.registration.hero.subtitle)}</p>
-          <div className="mt-8">
-            <a href="#enroll" className="btn-cta">
-              {t.registration.enrollCta}
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* How enrollment works */}
-      <section className="pb-14">
-        <div className="container-full">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="font-serif text-3xl md:text-4xl text-primary">{t.registration.stepsTitle}</h2>
-            <p className="mt-4 text-primary/70">{rich(t.registration.stepsSubtitle)}</p>
-          </div>
-          <div className="mt-10 grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
-            {t.registration.steps.map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="rounded-3xl border border-border bg-card shadow-soft p-8"
-              >
-                <div className="font-serif font-semibold italic text-accent text-4xl leading-none">{String(i + 1).padStart(2, "0")}</div>
-                <h3 className="mt-4 font-serif text-2xl text-primary">{step.title}</h3>
-                <p className="mt-2 text-sm text-primary/70 leading-relaxed">{rich(step.body)}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Enrollment agreement / contract */}
-      <section className="pb-14">
-        <div className="container-wide max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="rounded-3xl border border-border bg-secondary/40 p-8 md:p-12"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-accent/20 flex items-center justify-center mb-4">
-              <FileText className="w-6 h-6 text-primary" />
-            </div>
-            <h2 className="font-serif text-2xl md:text-3xl text-primary">{t.registration.contract.title}</h2>
-                <p className="mt-3 text-primary/70 leading-relaxed">{rich(t.registration.contract.body)}</p>
-                <ul className="mt-5 space-y-3">
-                  {t.registration.contract.points.map((p) => (
-                    <li key={p.label} className="flex items-start gap-3">
-                      <Check className="mt-1 h-4 w-4 flex-shrink-0 text-accent-ink" strokeWidth={2.5} />
-                      <span className="text-primary/70 leading-relaxed">
-                        <span className="font-semibold text-primary">{p.label}:</span> {rich(p.body)}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-          </motion.div>
         </div>
       </section>
 
@@ -120,6 +67,21 @@ const Registration = () => {
             ))}
           </div>
 
+          {/* Cuánto dura una clase. Esto sólo existía escondido en la FAQ, y es
+              parte de lo que se compra: un precio por clase no se puede comparar
+              sin saber cuánto dura la clase. */}
+          <div className="mt-10 mx-auto max-w-3xl rounded-3xl border border-border bg-secondary/40 p-6 md:p-8">
+            <div className="flex items-start gap-4">
+              <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl bg-accent/20">
+                <Clock className="h-5 w-5 text-primary" strokeWidth={1.8} />
+              </span>
+              <div>
+                <h3 className="font-sans font-bold text-lg text-primary">{t.registration.lessonLengthTitle}</h3>
+                <p className="mt-1.5 text-sm text-primary/70 leading-relaxed">{rich(t.registration.lessonLength)}</p>
+              </div>
+            </div>
+          </div>
+
           <p className="mt-8 flex items-center justify-center gap-2 text-sm text-primary/70 text-center">
             <ShieldCheck className="w-4 h-4 text-accent flex-shrink-0" />
             <span>{rich(t.registration.note)}</span>
@@ -157,12 +119,21 @@ const Registration = () => {
         </div>
       </section>
 
-      {/* Enrollment widget */}
-      <section id="enroll" className="py-16 md:py-24 bg-secondary/40 scroll-mt-24">
-        <div className="max-w-3xl mx-auto px-2 sm:px-6">
-          <RegistrationWidget />
+      {/* Step Up For Students. Va aquí, no encima del h1 como antes: es un
+          argumento de financiación y sólo pesa cuando ya se ha visto el precio. */}
+      <StepUp />
+
+      {/* La salida al cierre */}
+      <section className="pb-16 md:pb-24">
+        <div className="container-narrow text-center">
+          <PageLink to="enroll" className="btn-outline inline-flex">
+            {t.registration.enrollCta}
+            <ArrowRight className="w-4 h-4" />
+          </PageLink>
         </div>
       </section>
+
+      <CTABanner />
     </Layout>
   );
 };

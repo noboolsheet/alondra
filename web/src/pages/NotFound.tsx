@@ -19,6 +19,7 @@ const NotFound = () => {
 
   const elsewhere: { page: PageKey; label: string }[] = [
     { page: "programs", label: t.nav.programs },
+    { page: "teachers", label: t.nav.teachers },
     { page: "registration", label: t.nav.registration },
     { page: "contact", label: t.nav.contact },
   ];

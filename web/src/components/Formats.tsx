@@ -1,14 +1,8 @@
 import { motion } from "framer-motion";
-import { User, Users, Baby, type LucideIcon } from "lucide-react";
 import { useLang } from "@/i18n/LanguageContext";
+import { formatIcon } from "@/lib/icons";
 import { reveal, fadeUp, staggerParent, staggerSide } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
-
-const FORMAT_ICON: Record<string, LucideIcon> = {
-  individual: User,
-  pianoLab: Users,
-  littleMozart: Baby,
-};
 
 export const Formats = () => {
   const { t } = useLang();
@@ -23,7 +17,7 @@ export const Formats = () => {
 
         <motion.div className="grid gap-6 md:grid-cols-3" {...reveal(staggerParent())}>
           {t.programs.formats.map((f) => {
-            const Icon = FORMAT_ICON[f.key] ?? User;
+            const Icon = formatIcon(f.key);
             return (
               <motion.div
                 key={f.key}

@@ -14,7 +14,7 @@ export const TeamAccordion = () => {
   const { t } = useLang();
   const isMobile = useIsMobile();
   const { hash } = useLocation();
-  const teachers = [t.teachers.director, ...t.about.team.members];
+  const teachers = [t.teachers.director, ...t.teachers.team];
 
   const [open, setOpen] = useState("");
   useEffect(() => {
@@ -26,8 +26,8 @@ export const TeamAccordion = () => {
     <section id="team" className="py-20 md:py-28 scroll-mt-24">
       <div className="container-narrow">
         <motion.div {...reveal(fadeUp)} className="text-center mb-12 max-w-2xl mx-auto">
-          <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.careers.teamTitle}</h2>
-          <p className="mt-4 text-primary/70">{rich(t.careers.teamSubtitle)}</p>
+          <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.teachers.bios.title}</h2>
+          <p className="mt-4 text-primary/70">{rich(t.teachers.bios.subtitle)}</p>
         </motion.div>
 
         <motion.div {...reveal(staggerParent(0.05))}>

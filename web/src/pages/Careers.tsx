@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Heart, CalendarClock, TrendingUp, ShieldCheck, Briefcase, MapPin } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { ApplicationForm } from "@/components/ApplicationForm";
-import { TeamAccordion } from "@/components/TeamAccordion";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
 
@@ -96,9 +95,6 @@ const Careers = () => {
           <ApplicationForm />
         </div>
       </section>
-
-      {/* Meet the team — full bios in an accordion (targets of the "ver más" links) */}
-      <TeamAccordion />
     </Layout>
   );
 };
