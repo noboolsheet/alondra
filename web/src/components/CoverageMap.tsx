@@ -5,7 +5,7 @@ import { rich } from "@/lib/richtext";
 
 export const CoverageMap = () => {
   const { t } = useLang();
-  const { status, onLoad, onError } = useIframeStatus();
+  const { status, onLoad, onError, containerRef } = useIframeStatus();
 
   return (
     <section className="py-20 md:py-28 bg-secondary/40">
@@ -76,7 +76,10 @@ export const CoverageMap = () => {
 
           {/* Real map — Miami, Florida */}
           <div className="lg:col-span-3">
-            <div className="relative w-full rounded-3xl overflow-hidden border border-border shadow-soft aspect-[4/3] lg:aspect-auto lg:h-full min-h-[360px]">
+            <div
+              ref={containerRef}
+              className="relative w-full rounded-3xl overflow-hidden border border-border shadow-soft aspect-[4/3] lg:aspect-auto lg:h-full min-h-[360px]"
+            >
               {status !== "error" && (
                 <iframe
                   title="Alondra Music Academy, Miami service area"

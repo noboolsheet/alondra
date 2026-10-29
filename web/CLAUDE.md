@@ -203,6 +203,16 @@ terceros **My Music Staff** en un iframe (desde `public/mms-widget.html`),
 endurecido con skeleton de carga y fallback por timeout (`useIframeStatus`, que
 usa también `CoverageMap`).
 
+**El timeout de `useIframeStatus` arranca cuando el embed entra en pantalla, no al
+montar.** Los dos iframes llevan `loading="lazy"`, así que el navegador no los pide
+hasta que el visitante se acerca; con el reloj corriendo desde el montaje, el mapa
+de la portada (que está al final de la página) anunciaba «no se puede cargar» un
+mapa que nunca se había llegado a pedir, mientras el de contacto, que está arriba,
+funcionaba. Por eso el llamante pasa `containerRef` al envoltorio del iframe: si lo
+olvida, el hook cae al comportamiento antiguo tras un tick de gracia, pero vuelve
+el fallo. Y armar no reescribe el estado, o el esqueleto parpadearía encima de un
+embed ya cargado.
+
 **El CTA del sitio es una llamada de descubrimiento gratuita de 15 minutos** (va a
 contacto). La academia **no ofrece clases de prueba ni gratuitas**: fue una
 decisión consciente, y «la primera clase gratis» de la competencia no es un modelo
@@ -239,7 +249,13 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
 - `src/data/googleReviews.ts` guarda reseñas reales, una por idioma con su
   `originalLang`. Sólo se destacan reseñas de familias de verdad: quien tenga otra
   relación con la academia (profesores, colaboradores) no puede aparecer, y las
-  traducciones se etiquetan como tales.
+  traducciones se etiquetan como tales. Lo que la FTC exige es que la relación se
+  **revele**, así que una reseña que la declara dentro de su propio texto («conozco
+  a Ilena desde siempre») puede publicarse tal cual; lo que no vale es que no la
+  revele nadie.
+- Una reseña larga (más de `LONG_REVIEW_CHARS` en `GoogleReviews.tsx`) no se
+  recorta en el dato: se pinta como texto corrido, plegada, con un botón para
+  leerla entera. El original nunca se toca.
 
 ## Convenciones
 

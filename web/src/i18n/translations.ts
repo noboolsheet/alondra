@@ -40,6 +40,8 @@ export type Dict = {
     seeAll: string;
     reviewsSuffix: string;
     translatedNote: string;
+    readMore: string;
+    readLess: string;
   };
   pedagogy: {
     eyebrow: string;
@@ -62,6 +64,7 @@ export type Dict = {
     title: string;
     subtitle: string;
     photoLabel: string;
+    cta: string;
   };
   /** Todo el profesorado vive aquí: la página /teachers y el teaser de la portada. */
   teachers: {
@@ -294,6 +297,8 @@ export const translations: Record<Lang, Dict> = {
       seeAll: "See all on Google",
       reviewsSuffix: "Google reviews",
       translatedNote: "Translated from the original",
+      readMore: "Read the full review",
+      readLess: "Show less",
     },
     pedagogy: {
       eyebrow: "Our Method",
@@ -316,6 +321,7 @@ export const translations: Record<Lang, Dict> = {
       title: "Formats",
       subtitle: "Choose the format that fits you. Every option keeps the same pedagogical rigor.",
       photoLabel: "Formats photo",
+      cta: "See the formats in detail",
     },
     teachers: {
       hero: { eyebrow: "Our Faculty", title: "Meet the teachers", subtitle: "Who will be in your home each week, where they trained, and how Ilena decides which of them fits your child." },
@@ -829,6 +835,8 @@ export const translations: Record<Lang, Dict> = {
       seeAll: "Ver todas en Google",
       reviewsSuffix: "reseñas de Google",
       translatedNote: "Traducida del idioma original",
+      readMore: "Leer la reseña completa",
+      readLess: "Mostrar menos",
     },
     pedagogy: {
       eyebrow: "Nuestro Método",
@@ -851,6 +859,7 @@ export const translations: Record<Lang, Dict> = {
       title: "Formatos",
       subtitle: "Elige el formato que mejor se adapte a ti. Todas las opciones mantienen el mismo rigor pedagógico.",
       photoLabel: "Foto de formatos",
+      cta: "Ver los formatos en detalle",
     },
     teachers: {
       hero: { eyebrow: "Nuestros profesores", title: "Conoce a quien enseñará a tu hijo", subtitle: "Quién entra en tu casa cada semana, dónde se formó y cómo elige Ilena al que mejor encaja con tu hijo." },
@@ -1299,6 +1308,8 @@ export const translations: Record<Lang, Dict> = {
       seeAll: "Voir tous sur Google",
       reviewsSuffix: "avis Google",
       translatedNote: "Traduit de la langue d'origine",
+      readMore: "Lire l'avis en entier",
+      readLess: "Afficher moins",
     },
     pedagogy: {
       eyebrow: "Notre Méthode",
@@ -1321,6 +1332,7 @@ export const translations: Record<Lang, Dict> = {
       title: "Formats",
       subtitle: "Choisissez le format qui vous convient. Chaque option conserve la même rigueur pédagogique.",
       photoLabel: "Photo des formats",
+      cta: "Voir les formats en détail",
     },
     teachers: {
       hero: { eyebrow: "Nos professeurs", title: "Rencontrez ceux qui enseigneront à votre enfant", subtitle: "Qui entre chez vous chaque semaine, où il s'est formé et comment Ilena choisit celui qui convient à votre enfant." },

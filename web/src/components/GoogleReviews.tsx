@@ -7,6 +7,11 @@ import { googleReviews, googleProfileUrl, googleRating, googleReviewCount } from
 
 const AUTOPLAY_MS = 15000;
 
+// A partir de aquí una reseña deja de caber en la tarjeta a tamaño de cita y se
+// renderiza como texto corrido, recortado, con un botón para leerla entera. Las
+// reseñas no se tocan ni se recortan en el dato: lo que cambia es cómo se pintan.
+const LONG_REVIEW_CHARS = 420;
+
 // Directional slide for the review transition (dir: 1 = forward, -1 = back).
 const reviewVariants = {
   enter: (d: number) => ({ opacity: 0, x: 40 * d, scale: 0.98 }),
@@ -67,6 +72,12 @@ export const GoogleReviews = () => {
   };
 
   const review = items[i];
+  const body = review.text[lang];
+  const isLong = body.length > LONG_REVIEW_CHARS;
+
+  // Se vuelve a plegar al cambiar de reseña, o la siguiente llegaría expandida.
+  const [expanded, setExpanded] = useState(false);
+  useEffect(() => setExpanded(false), [i, lang]);
 
   return (
     <section className="py-20 md:py-28">
@@ -145,9 +156,28 @@ export const GoogleReviews = () => {
                 <div className="flex justify-center mb-6">
                   <Stars rating={review.rating} />
                 </div>
-                <blockquote className="font-serif text-xl md:text-2xl text-primary leading-relaxed text-balance">
-                  "{review.text[lang]}"
-                </blockquote>
+                {isLong ? (
+                  <>
+                    <blockquote
+                      className={`mx-auto max-w-[62ch] text-left font-serif text-base md:text-lg text-primary leading-relaxed text-pretty ${
+                        expanded ? "" : "line-clamp-[8]"
+                      }`}
+                    >
+                      "{body}"
+                    </blockquote>
+                    <button
+                      type="button"
+                      onClick={() => setExpanded((v) => !v)}
+                      className="mt-3 text-sm font-semibold text-accent-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+                    >
+                      {expanded ? t.testimonials.readLess : t.testimonials.readMore}
+                    </button>
+                  </>
+                ) : (
+                  <blockquote className="font-serif text-xl md:text-2xl text-primary leading-relaxed text-balance">
+                    "{body}"
+                  </blockquote>
+                )}
                 {review.originalLang !== lang && (
                   <div className="mt-3 text-xs text-primary/50">{t.testimonials.translatedNote}</div>
                 )}

@@ -50,7 +50,7 @@ const About = () => {
           <motion.div {...reveal(fadeUp)} className="rounded-3xl border border-border bg-secondary/40 p-8 md:p-12 text-center">
             <h2 className="font-serif text-3xl md:text-4xl text-primary text-balance">{t.about.teamLink.title}</h2>
             <p className="mt-4 text-primary/70 leading-relaxed max-w-[60ch] mx-auto">{rich(t.about.teamLink.body)}</p>
-            <PageLink to="teachers" className="btn-outline mt-8 inline-flex">
+            <PageLink to="teachers" className="btn-cta mt-8 inline-flex">
               {t.about.teamLink.cta}
               <ArrowRight className="w-4 h-4" />
             </PageLink>

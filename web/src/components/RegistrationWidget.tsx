@@ -11,7 +11,7 @@ import { rich } from "@/lib/richtext";
 
 export const RegistrationWidget = () => {
   const { t } = useLang();
-  const { status, reloadKey, onLoad, onError, reload } = useIframeStatus();
+  const { status, reloadKey, onLoad, onError, reload, containerRef } = useIframeStatus();
   const phoneDigits = t.contact.infoPhone.replace(/[^\d+]/g, "");
 
   return (
@@ -31,7 +31,7 @@ export const RegistrationWidget = () => {
         {/* My Music Staff widget, isolated in its own document. Skeleton covers the
             load; a timeout in useIframeStatus swaps to a contact fallback if it
             never loads (ad-block / CSP / slow third party). */}
-        <div className="relative mt-6 -mx-4 sm:mx-0 h-[600px] sm:h-[700px]">
+        <div ref={containerRef} className="relative mt-6 -mx-4 sm:mx-0 h-[600px] sm:h-[700px]">
           {status !== "error" && (
             <iframe
               key={reloadKey}

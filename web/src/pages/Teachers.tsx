@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { ArrowRight, ShieldCheck, Briefcase } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { PageLink } from "@/components/PageLink";
-import { TeachersGrid } from "@/components/TeachersGrid";
 import { TeamAccordion } from "@/components/TeamAccordion";
 import { CTABanner } from "@/components/CTABanner";
 import { useLang } from "@/i18n/LanguageContext";
@@ -17,6 +16,11 @@ import { rich } from "@/lib/richtext";
  * quería leer sobre su profesora aterrizaba en un anuncio de trabajo. Esta
  * página es su sitio, y es también la que sostiene el mensaje de que Ilena
  * selecciona al profesor: quien lo lee quiere ver a quién.
+ *
+ * Aquí no hay rejilla de retratos por delante del acordeón. Enseñaba las caras
+ * para, al clicarlas, mandarte más abajo a las mismas caras; y repetía de Ilena
+ * un resumen que es palabra por palabra el primer párrafo de su biografía. Las
+ * fotos están ahora en el propio desplegable, visibles con todo cerrado.
  *
  * El proceso de verificación se queda en /about, que es la página de confianza
  * de la academia; aquí va el enlace, porque es justo donde se pregunta.
@@ -39,9 +43,20 @@ const Teachers = () => {
         </div>
       </section>
 
-      <TeachersGrid />
-
       <TeamAccordion />
+
+      {/* Si no conecta con su profesor. Va justo debajo de las fichas, porque es
+          exactamente donde un padre se pregunta «¿y si no se llevan bien?». */}
+      <section className="pb-16 md:pb-20">
+        <div className="container-narrow">
+          <motion.p
+            {...reveal(fadeUp)}
+            className="mx-auto max-w-2xl text-center text-sm text-primary/70 leading-relaxed"
+          >
+            {rich(t.teachers.matchPromise)}
+          </motion.p>
+        </div>
+      </section>
 
       {/* Las dos salidas de esta página: el proceso de verificación, que vive en
           la academia, y la candidatura para quien llega buscando trabajo. */}

@@ -54,6 +54,24 @@ describe("arquitectura de información", () => {
     }
   });
 
+  it("la ficha de la directora llega abierta y las caras se ven con todo cerrado", async () => {
+    at("/music-teachers", <Teachers />);
+    const team = [translations.en.teachers.director, ...translations.en.teachers.team];
+
+    // Todas las fotos visibles sin abrir nada: la página enseñaba una rejilla de
+    // retratos cuyo único efecto era mandarte más abajo, al mismo acordeón.
+    for (const m of team) {
+      expect(screen.getByAltText(m.name), m.slug).toBeInTheDocument();
+    }
+
+    await waitFor(() =>
+      expect(document.querySelector(`#${translations.en.teachers.director.slug} [data-state="open"]`)).not.toBeNull(),
+    );
+    for (const m of translations.en.teachers.team) {
+      expect(document.querySelector(`#${m.slug} [data-state="open"]`), m.slug).toBeNull();
+    }
+  });
+
   it("la página de empleo ya no lleva las biografías", () => {
     at("/music-teacher-jobs", <Careers />);
     expect(screen.queryByText(translations.en.teachers.bios.title)).toBeNull();
