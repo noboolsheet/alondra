@@ -225,7 +225,12 @@ app.get(Object.keys(LEGACY_REDIRECTS), (req, res) => {
 // --- Serve the built SPA (production) -------------------------------------
 // In local dev the Vite dev server serves the UI and proxies /api here, so
 // dist/ may not exist — that's fine, these handlers simply won't match.
-app.use(express.static(DIST_DIR));
+// `redirect: false` es obligatorio desde que el build prerenderiza: con el valor
+// por defecto, una petición a /music-teachers encuentra el directorio del mismo
+// nombre y responde un 301 a /music-teachers/, que el middleware de barra final
+// devuelve a /music-teachers. Bucle infinito. Los ficheros de ruta los sirve el
+// catch-all de abajo, que ya sabe cuáles son rutas reales.
+app.use(express.static(DIST_DIR, { redirect: false }));
 
 // Known routes, emitted at build time from src/i18n/routes.ts (see vite.config.ts).
 // Without this the catch-all answers 200 to every URL, which Google reads as a
@@ -248,6 +253,32 @@ const isKnown = (reqPath) => {
   return knownPaths.has(clean || "/");
 };
 
+/**
+ * Qué HTML le toca a esta URL.
+ *
+ * El build escribe un fichero por ruta conocida: las cinco páginas que importan
+ * con la página entera dentro, el resto sólo con sus metadatos. Servir el que
+ * corresponde es lo que hace que cada URL lleve su propio título y su propio
+ * canonical en el HTML, sin esperar a que el navegador ejecute nada.
+ *
+ * Lo desconocido va a `404.html`, un esqueleto con `noindex` y sin canonical.
+ * Antes aquí se servía `index.html`, que desde el prerenderizado es la portada
+ * con su contenido dentro: una URL inventada se habría anunciado como la portada.
+ *
+ * La ruta sólo se construye a partir de la lista del build, nunca de lo que
+ * mande el cliente. Y si falta un fichero (build antiguo), se cae a `index.html`,
+ * que es el comportamiento de siempre: una lista obsoleta no debe tumbar el sitio.
+ */
+const htmlFor = (reqPath, found) => {
+  if (found) {
+    const clean = reqPath.length > 1 ? reqPath.replace(/\/+$/, "") : reqPath;
+    const file = path.join(DIST_DIR, clean === "/" ? "index.html" : path.join(clean, "index.html"));
+    if (file.startsWith(DIST_DIR) && fs.existsSync(file)) return file;
+  }
+  const shell = path.join(DIST_DIR, "404.html");
+  return fs.existsSync(shell) ? shell : path.join(DIST_DIR, "index.html");
+};
+
 app.get(/^\/(?!api\/).*/, (req, res) => {
   const found = isKnown(req.path);
   const status = found ? 200 : 404;
@@ -257,9 +288,7 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
     return res.status(404).type("txt").send("Not found");
   }
 
-  // Unknown pages still render the app, so the visitor gets the styled 404 page —
-  // but with a 404 status, which is what crawlers act on.
-  res.status(status).sendFile(path.join(DIST_DIR, "index.html"));
+  res.status(status).sendFile(htmlFor(req.path, found));
 });
 
 app.listen(PORT, () => {

@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 import { LanguageProvider } from "@/i18n/LanguageContext";
 import { ThemeProvider } from "@/theme/ThemeContext";
 import { PAGE_KEYS, pathFor } from "@/i18n/routes";
@@ -36,37 +36,50 @@ const RouteEffects = () => {
   return null;
 };
 
-const App = () => (
+/**
+ * Los proveedores que envuelven al router.
+ *
+ * Separados del router porque el prerenderizado del build monta el mismo árbol
+ * con `StaticRouter` en vez de `BrowserRouter`: duplicar la pila de proveedores
+ * en dos sitios era garantizar que se desincronizara.
+ */
+export const AppProviders = ({ children }: { children: ReactNode }) => (
   <MotionConfig reducedMotion="user">
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <BrowserRouter>
-            <LanguageProvider>
-              <ScrollToTop />
-              <RouteEffects />
-              <Suspense fallback={<RouteFallback />}>
-                <Routes>
-                  {/* One route per page and language, generated from the map in
-                      i18n/routes.ts. Add a page there, not here. */}
-                  {LANGS.flatMap((lang) =>
-                    PAGE_KEYS.map((key) => {
-                      const Page = PAGES[key];
-                      return <Route key={`${lang}-${key}`} path={pathFor(key, lang)} element={<Page />} />;
-                    }),
-                  )}
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </LanguageProvider>
-          </BrowserRouter>
+          {children}
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </MotionConfig>
+);
+
+const App = () => (
+  <AppProviders>
+    <BrowserRouter>
+      <LanguageProvider>
+        <ScrollToTop />
+        <RouteEffects />
+        <Suspense fallback={<RouteFallback />}>
+          <Routes>
+            {/* One route per page and language, generated from the map in
+                i18n/routes.ts. Add a page there, not here. */}
+            {LANGS.flatMap((lang) =>
+              PAGE_KEYS.map((key) => {
+                const Page = PAGES[key];
+                return <Route key={`${lang}-${key}`} path={pathFor(key, lang)} element={<Page />} />;
+              }),
+            )}
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </LanguageProvider>
+    </BrowserRouter>
+  </AppProviders>
 );
 
 export default App;

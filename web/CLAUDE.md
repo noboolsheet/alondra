@@ -123,8 +123,33 @@ recuerda la preferencia; nunca manda sobre la URL, y `/` sirve siempre inglés p
 que la URL canónica y su contenido no puedan contradecirse. Un enlace roto bajo
 `/es/` sigue resolviendo como español, así que su 404 se renderiza en español.
 
-**Los metadatos de SEO se escriben por ruta.** Esto es una SPA renderizada en el
-cliente con un único `index.html`, así que `usePageMeta()` (`src/lib/pageMeta.ts`)
+**El build prerenderiza las cinco páginas que deciden.** `npm run build` corre
+`vite build` y después `scripts/prerender.mjs`, que hace un build de servidor de
+`src/entry-server.tsx` y escribe **un fichero HTML por ruta conocida**: portada,
+formatos, profesores, precios y contacto llevan la página entera dentro, en los
+tres idiomas; las 18 restantes llevan sólo sus metadatos. El motivo no es Google,
+que ejecuta JavaScript aunque con retraso: son los rastreadores que alimentan las
+respuestas generativas, que **no lo ejecutan**, y para los que el sitio era una
+página en blanco.
+
+Tres cosas que hay que respetar al tocar esto:
+
+- **`express.static` va con `redirect: false`.** Con el valor por defecto, una
+  petición a `/music-teachers` encuentra el directorio del mismo nombre y
+  responde un 301 a `/music-teachers/`, que el middleware de barra final devuelve
+  a `/music-teachers`: bucle infinito. El HTML de cada ruta lo elige `htmlFor()`
+  en `server/index.mjs`, nunca el servidor de estáticos.
+- **Lo desconocido se sirve desde `404.html`**, un esqueleto con `noindex`. Antes
+  se servía `index.html`, que desde el prerenderizado es la portada con su
+  contenido y su canonical dentro: una URL inventada se habría anunciado como la
+  portada, que hace más daño que no tener canonical.
+- **Una página nueva en `lazy()` no se prerenderiza sola.** `renderToString` no
+  espera a la promesa de un `lazy`, así que escribiría el esqueleto de carga en
+  vez de la página, y el fichero se generaría igual y pesaría parecido. Por eso
+  `src/pages/registry.ts` expone `loadPage()` además de `PAGES`, y hay un test
+  (`src/test/prerender.test.tsx`) que comprueba que el HTML trae texto de verdad.
+
+**Los metadatos de SEO se escriben también por ruta en el cliente.** `usePageMeta()` (`src/lib/pageMeta.ts`)
 pone title, description, canonical, el juego de `hreflang` (más `x-default`),
 Open Graph y Twitter en cada cambio de ruta, a partir de `t.meta[pageKey]`. En un
 404 escribe un título de «no encontrado», añade `noindex` y **retira** canonical y
@@ -168,7 +193,8 @@ GET y los formularios dejarían de funcionar.
 para que no puedan desincronizarse: `sitemap.xml` (con alternates hreflang) y
 `routes.json`. `server/index.mjs` lee `routes.json` para responder un **404 real**
 en rutas desconocidas en vez de servir la SPA con un 200, que Google lee como un
-soft 404. Si falta `routes.json`, el server cae a responder 200 en todo: una lista
+soft 404, y es además la lista de la que el prerenderizado saca qué ficheros
+escribir. Si falta `routes.json`, el server cae a responder 200 en todo: una lista
 de rutas obsoleta nunca debe tumbar el sitio.
 
 **Analítica.** GA4 se carga desde `index.html`, con una guarda `ga-disable-*` para

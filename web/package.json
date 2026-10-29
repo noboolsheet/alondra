@@ -8,7 +8,7 @@
     "server": "node --watch server/index.mjs",
     "dev:all": "concurrently -n web,api -c cyan,magenta \"vite\" \"node --watch server/index.mjs\"",
     "prebuild": "node scripts/optimize-images.mjs",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs",
     "build:dev": "vite build --mode development",
     "start": "node server/index.mjs",
     "lint": "eslint .",
@@ -18,7 +18,8 @@
     "images": "node scripts/optimize-images.mjs",
     "images:watch": "node scripts/optimize-images.mjs --watch",
     "images:force": "node scripts/optimize-images.mjs --force",
-    "og": "node scripts/make-og-images.mjs"
+    "og": "node scripts/make-og-images.mjs",
+    "prerender": "node scripts/prerender.mjs"
   },
   "dependencies": {
     "@fontsource/fraunces": "^5.2.9",
