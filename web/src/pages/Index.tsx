@@ -5,6 +5,7 @@ import { GoogleReviews } from "@/components/GoogleReviews";
 import { Pedagogy } from "@/components/Pedagogy";
 import { InstrumentsGrid } from "@/components/InstrumentsGrid";
 import { Formats } from "@/components/Formats";
+import { StepUp } from "@/components/StepUp";
 import { TeachersGrid } from "@/components/TeachersGrid";
 import { CoverageMap } from "@/components/CoverageMap";
 import { FAQ } from "@/components/FAQ";
@@ -21,6 +22,7 @@ const Index = () => {
       <Pedagogy />
       <InstrumentsGrid />
       <Formats />
+      <StepUp />
       <TeachersGrid />
       <CoverageMap />
       <FAQ />

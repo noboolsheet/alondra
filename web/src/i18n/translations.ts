@@ -68,6 +68,7 @@ export type Dict = {
     photoLabel: string;
     moreLink: string;
     teamTitle: string;
+    matchPromise: string;
     director: Teacher;
   };
   coverage: {
@@ -91,6 +92,13 @@ export type Dict = {
     eyebrow: string;
     title: string;
     items: { q: string; a: string }[];
+  };
+  stepUp: {
+    eyebrow: string;
+    title: string;
+    body: string;
+    points: { title: string; body: string }[];
+    note: string;
   };
   ctaBanner: {
     title: string;
@@ -326,6 +334,7 @@ export const translations: Record<Lang, Dict> = {
       photoLabel: "Director photo",
       moreLink: "Learn about {name}",
       teamTitle: "The team who teaches",
+      matchPromise: "If your child does not click with their teacher, tell us and we will look at it and find a better match. Lessons already taught are paid for and there is no refund, but reassigning does not cost a new registration fee.",
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -372,6 +381,18 @@ export const translations: Record<Lang, Dict> = {
         { q: "Are there recitals or performances?", a: "Yes. **Seasonal recitals** are part of the academy's program: they are the occasion for each student to share their progress with family and community. Dates are announced to enrolled families in advance." },
         { q: "How do I enroll?", a: "It's very simple! Just click our Contact Us button to message us on WhatsApp, or fill out the form on the site. Within 48 hours we'll set up your **free discovery phone call** to get to know your child and match them with the ideal specialist teacher." },
       ],
+    },
+    stepUp: {
+      eyebrow: "Step Up For Students",
+      title: "If your family has Step Up funds, you can use them here",
+      body: "We are a **direct provider**, so the lessons are paid from the scholarship without you having to front the money and claim it back. It is not the only thing that makes it workable, though: the paperwork is where most families get stuck.",
+      points: [
+        { title: "Direct provider", body: "The funds go to the academy. No advancing money, no waiting for a refund." },
+        { title: "We help with the paperwork", body: "The part that takes an afternoon the first time. We have done it before and we walk you through it." },
+        { title: "In English, Spanish or French", body: "Including the paperwork. If the forms are not in your language, that is where families give up." },
+        { title: "At home, like every lesson", body: "Using the scholarship changes nothing about how the class works." },
+      ],
+      note: "We do not decide who qualifies: that is Step Up's call, and their requirements change. What we do is make the funds simple to use once you have them.",
     },
     ctaBanner: {
       title: "Ready to begin your musical journey?",
@@ -859,6 +880,7 @@ export const translations: Record<Lang, Dict> = {
       photoLabel: "Foto de la directora",
       moreLink: "Conoce a {name}",
       teamTitle: "El equipo que enseña",
+      matchPromise: "Si tu hijo no conecta con su profesor, dínoslo: revisamos la situación y buscamos una mejor combinación. Las clases ya impartidas se pagan y no hay devolución, pero la reasignación no cobra matrícula nueva.",
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -905,6 +927,18 @@ export const translations: Record<Lang, Dict> = {
         { q: "¿Hay recitales o presentaciones?", a: "Sí. Los **recitales de temporada** forman parte del programa de la academia: son la ocasión para que cada estudiante comparta su progreso con su familia y su comunidad. Las fechas se anuncian con antelación a las familias inscritas." },
         { q: "¿Cómo me inscribo?", a: "¡Es muy sencillo! Solo haz clic en nuestro botón de Contáctanos para escribirnos por WhatsApp o completa el formulario del sitio. En menos de 48 horas coordinaremos tu **llamada telefónica de descubrimiento gratuita** para conocer a tu hijo y asignarle al profesor especialista ideal." },
       ],
+    },
+    stepUp: {
+      eyebrow: "Step Up For Students",
+      title: "Si tu familia tiene fondos de Step Up, puedes usarlos aquí",
+      body: "Somos **proveedor directo**, así que las clases se pagan desde la beca sin que tengas que adelantar el dinero y reclamarlo después. Pero no es lo único que lo hace viable: donde se atascan casi todas las familias es en el trámite.",
+      points: [
+        { title: "Proveedor directo", body: "Los fondos van a la academia. Sin adelantar dinero y sin esperar un reembolso." },
+        { title: "Te ayudamos con el trámite", body: "La parte que la primera vez se lleva una tarde. Ya lo hemos hecho y te acompañamos." },
+        { title: "En inglés, español o francés", body: "El trámite incluido. Si los formularios no están en tu idioma, es ahí donde se abandona." },
+        { title: "A domicilio, como siempre", body: "Usar la beca no cambia nada de cómo funciona la clase." },
+      ],
+      note: "No decidimos quién califica: eso lo decide Step Up y sus requisitos cambian. Lo que hacemos es que usar los fondos sea sencillo una vez los tienes.",
     },
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
@@ -1324,6 +1358,7 @@ export const translations: Record<Lang, Dict> = {
       photoLabel: "Photo de la directrice",
       moreLink: "Découvrir {name}",
       teamTitle: "L’équipe qui enseigne",
+      matchPromise: "Si votre enfant n’accroche pas avec son professeur, dites-le-nous : nous examinons la situation et cherchons une meilleure combinaison. Les cours déjà donnés sont dus et ne sont pas remboursés, mais la réaffectation n’entraîne pas de nouveaux frais d’inscription.",
       director: {
         slug: "profe-ilena",
         name: "Ilena Peña Fernández",
@@ -1370,6 +1405,18 @@ export const translations: Record<Lang, Dict> = {
         { q: "Y a-t-il des récitals ?", a: "Oui. Les **récitals saisonniers** font partie du programme de l'académie : ils sont l'occasion pour chaque élève de partager ses progrès avec sa famille et sa communauté. Les dates sont annoncées à l'avance aux familles inscrites." },
         { q: "Comment s'inscrire ?", a: "C'est très simple ! Cliquez sur notre bouton Contactez-nous pour nous écrire sur WhatsApp, ou remplissez le formulaire du site. En moins de 48 heures, nous organiserons votre **appel téléphonique de découverte gratuit** pour connaître votre enfant et lui attribuer le professeur spécialiste idéal." },
       ],
+    },
+    stepUp: {
+      eyebrow: "Step Up For Students",
+      title: "Si votre famille a des fonds Step Up, vous pouvez les utiliser ici",
+      body: "Nous sommes **prestataire direct**, donc les cours sont payés par la bourse sans que vous ayez à avancer l’argent puis à le réclamer. Ce n’est pas le seul point : c’est sur les démarches que la plupart des familles se bloquent.",
+      points: [
+        { title: "Prestataire direct", body: "Les fonds vont à l’académie. Rien à avancer, aucun remboursement à attendre." },
+        { title: "Nous aidons pour les démarches", body: "La partie qui prend un après-midi la première fois. Nous l’avons déjà faite et nous vous accompagnons." },
+        { title: "En anglais, espagnol ou français", body: "Les démarches comprises. Si les formulaires ne sont pas dans votre langue, c’est là qu’on abandonne." },
+        { title: "À domicile, comme toujours", body: "Utiliser la bourse ne change rien au déroulement du cours." },
+      ],
+      note: "Nous ne décidons pas qui est éligible : c’est Step Up qui le décide et ses critères évoluent. Ce que nous faisons, c’est rendre l’usage des fonds simple une fois que vous les avez.",
     },
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",

@@ -99,6 +99,17 @@ export const TeachersGrid = () => {
             </motion.li>
           ))}
         </ul>
+
+        {/* Si no conecta con su profesor. Va aqui, debajo de las caras, porque es
+            exactamente donde un padre se pregunta «¿y si no se llevan bien?».
+            Sustituye al mecanismo que daba la competencia (la primera clase
+            gratis) sin regalar una clase, que es lo que la academia no hace. */}
+        <motion.p
+          {...reveal(fadeUp)}
+          className="mt-14 mx-auto max-w-2xl text-center text-sm text-primary/70 leading-relaxed"
+        >
+          {rich(t.teachers.matchPromise)}
+        </motion.p>
       </div>
     </section>
   );

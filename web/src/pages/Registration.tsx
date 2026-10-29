@@ -2,6 +2,7 @@ import { FileText, ShieldCheck, ArrowRight, Check, Gift } from "lucide-react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/Layout";
 import { RegistrationWidget } from "@/components/RegistrationWidget";
+import { StepUp } from "@/components/StepUp";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
 
@@ -11,6 +12,8 @@ const Registration = () => {
   return (
     <Layout>
       {/* Hero */}
+      <StepUp />
+
       <section className="pt-12 pb-10 md:pt-20 md:pb-14">
         <div className="container-narrow text-center">
           <span className="eyebrow">{t.registration.hero.eyebrow}</span>
