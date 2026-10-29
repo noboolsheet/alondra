@@ -73,6 +73,14 @@ describe("datos estructurados", () => {
     expect(typed(nodes, "Course")).toHaveLength(translations.en.programs.disciplines.length);
   });
 
+  it("cada Course declara las cuatro dimensiones del método", async () => {
+    const nodes = await graph("/music-lessons");
+    const [course] = typed(nodes, "Course");
+    // Son las de pedagogy.pillars. Si alguien vuelve a meter ahí un beneficio
+    // cognitivo, acaba publicado como dato estructurado: este test lo frena.
+    expect(course.teaches).toEqual(["Technique", "Rhythm", "Music reading", "Interpretation"]);
+  });
+
   it("/pricing emite los precios reales en USD", async () => {
     const nodes = await graph("/pricing");
     const [service] = typed(nodes, "Service");

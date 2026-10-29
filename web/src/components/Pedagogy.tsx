@@ -1,10 +1,12 @@
-import { Brain, Heart, Sparkles } from "lucide-react";
+import { Hand, Activity, BookOpen, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
 import { reveal, fadeUp, staggerParent, staggerSide } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
 
-const ICONS = [Brain, Heart, Sparkles];
+// Un icono por dimensión. Antes eran tres y el primero era un cerebro: el icono
+// iba a juego con la promesa cognitiva que esta seccion acaba de dejar de hacer.
+const ICONS = [Hand, Activity, BookOpen, Sparkles];
 
 export const Pedagogy = () => {
   const { t } = useLang();

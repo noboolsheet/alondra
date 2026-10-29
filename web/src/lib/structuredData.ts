@@ -151,14 +151,16 @@ const faqEntities = (t: Dict) =>
 /**
  * Las disciplinas de /music-lessons como cursos.
  *
- * Sin `teaches`, a propósito. Lo natural sería poner ahí las cuatro dimensiones
- * del método —técnica, ritmo, lectura, interpretación—, pero hoy no existen como
- * lista en `translations.ts`: viven dentro de una frase en `about.mission`. Los
- * pilares de `pedagogy.pillars` NO sirven de sustituto: son los beneficios
- * cognitivos (memoria lógica, psicomotricidad), y convertirlos en una propiedad
- * `teaches` sería declararle a Google como dato lo que la disciplina de claims
- * no permite afirmar como resultado. Cuando la sección «Método Alondra» aterrice
- * con las cuatro dimensiones en el diccionario, este es su sitio.
+ * `teaches` lleva las cuatro dimensiones del método — técnica, ritmo, lectura e
+ * interpretación — leídas de `pedagogy.pillars`, que es donde viven desde que la
+ * sección «Método Alondra» sustituyó a los pilares antiguos.
+ *
+ * Esta propiedad estuvo deliberadamente ausente hasta hoy, y el motivo importa:
+ * los pilares de entonces eran los beneficios cognitivos (memoria lógica,
+ * psicomotricidad), y declararlos en `teaches` habría sido entregarle a Google
+ * como dato estructurado justo lo que la disciplina de claims no permite
+ * afirmar. Ahora los pilares describen lo que se trabaja en clase, así que la
+ * propiedad dice la verdad y puede entrar.
  */
 const courses = (t: Dict, lang: Lang, url: string): JsonLd[] =>
   t.programs.disciplines.map((d) => ({
@@ -169,6 +171,7 @@ const courses = (t: Dict, lang: Lang, url: string): JsonLd[] =>
     provider: { "@id": ORG_ID },
     inLanguage: lang,
     courseMode: "onsite",
+    teaches: t.pedagogy.pillars.map((pillar) => plain(pillar.title)),
     audience: { "@type": "EducationalAudience", educationalRole: "student" },
   }));
 

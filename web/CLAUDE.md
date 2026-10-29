@@ -204,6 +204,10 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
 - No anuncies recitales hasta que estén programados de verdad.
 - Describe lo que **sí** hace el método de Alondra (técnica, ritmo, lectura
   musical, interpretación); nunca afirmes que otras academias no lo enseñan.
+  Esas cuatro dimensiones viven en `pedagogy.pillars` y **viajan al JSON-LD**
+  como `teaches` de cada `Course`: lo que se escriba ahí deja de ser copy y
+  pasa a ser un dato que le entregas a Google. Antes eran los beneficios
+  cognitivos, y por eso la propiedad estuvo deliberadamente ausente.
 - `src/data/googleReviews.ts` guarda reseñas reales, una por idioma con su
   `originalLang`. Sólo se destacan reseñas de familias de verdad: quien tenga otra
   relación con la academia (profesores, colaboradores) no puede aparecer, y las
