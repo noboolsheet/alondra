@@ -30,7 +30,7 @@ export interface GoogleReview {
 export const googleProfileUrl = "https://www.google.com/search?client=mobilesearchapp&sca_esv=e1870cce4b49432d&channel=iss&cs=0&hl=es_419&rlz=1MDAPLA___US1103US1103&v=424.4.924152415&sxsrf=APpeQnuTEsNcBSzb3mvoWgPtK0TO8ReNpQ:1783101531406&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_xXwVMoXK98licszObE84D4hKgV87aJ0M_Ha46_zO0bEOaxojWfDFHcLszlN8UTfcN6nnHcQTpqAO0OgOsW3a_E7tPPDfLpW6ejaMTYZV3-k1S-_LFp9DOJDKvGKzqbKvcqbEtY%3D&q=Alondra+Music+Academy+-+In+Home+Music+Lessons+Opiniones&sa=X&ved=2ahUKEwiOx4LrireVAxUd_7sIHeQ5GoMQ0bkNegQIJhAF&biw=1536&bih=730&dpr=1.25";
 
 export const googleRating = 5.0;
-export const googleReviewCount = 18;
+export const googleReviewCount = 9;
 
 export const googleReviews: GoogleReview[] = [
   {

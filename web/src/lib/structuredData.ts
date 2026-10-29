@@ -20,7 +20,7 @@ import { SITE_ORIGIN } from "./siteOrigin";
  * que no existe no debe declararse como una página real.
  *
  * ── Qué NO está aquí, a propósito ────────────────────────────────────────────
- * **`aggregateRating` con las 18 reseñas de Google.** Es la pieza que falta a
+ * **`aggregateRating` con las reseñas de Google.** Es la pieza que falta a
  * ojos de cualquier auditoría de SEO, y está fuera por decisión: las directrices
  * de Google para fragmentos de reseña excluyen las *self-serving reviews*, que es
  * exactamente esto — la valoración del propio negocio, marcada en su propio
