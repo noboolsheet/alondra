@@ -77,9 +77,10 @@ describe("arquitectura de información", () => {
     at("/music-teachers", <Teachers />);
     const photo = (name: string) => screen.getByAltText(name) as HTMLImageElement;
 
-    // Ilena llega abierta: su foto ocupa el ancho en móvil y es grande en escritorio.
+    // Ilena llega abierta: su foto ocupa el ancho en móvil y, en escritorio, la
+    // altura entera de la ficha en vez de quedarse como un cuadrado arriba.
     await waitFor(() => expect(photo(translations.en.teachers.director.name)).toHaveClass("w-full"));
-    expect(photo(translations.en.teachers.director.name)).toHaveClass("md:w-44");
+    expect(photo(translations.en.teachers.director.name)).toHaveClass("md:w-56", "md:self-stretch", "md:aspect-auto");
 
     // Las demás, cerradas, se quedan en miniatura junto al nombre.
     for (const m of translations.en.teachers.team) {

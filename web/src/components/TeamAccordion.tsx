@@ -63,8 +63,10 @@ export const TeamAccordion = () => {
                   >
                     <div
                       className={cn(
-                        "flex gap-4 items-center",
-                        isOpen && "flex-col items-stretch md:flex-row md:items-start md:gap-6",
+                        "flex gap-4",
+                        isOpen
+                          ? "flex-col items-stretch md:flex-row md:items-stretch md:gap-6"
+                          : "items-center",
                       )}
                     >
                       <img
@@ -74,11 +76,15 @@ export const TeamAccordion = () => {
                         width={600}
                         height={600}
                         className={cn(
-                          "aspect-square shrink-0 object-cover object-center rounded-2xl shadow-soft",
+                          "shrink-0 object-cover rounded-2xl shadow-soft",
                           "transition-[width,margin] duration-500 motion-reduce:transition-none",
                           isOpen
-                            ? "w-full mt-5 md:mt-6 md:w-44 lg:w-52"
-                            : "w-16 md:w-20 my-4 md:my-5",
+                            // Escritorio: la foto se estira a la altura de la ficha
+                            // entera en vez de quedarse como un cuadrado pequeño
+                            // arriba. `object-top` porque al recortar a vertical el
+                            // centro de un retrato cuadrado deja la cara fuera.
+                            ? "aspect-square object-center w-full mt-5 md:mt-5 md:mb-5 md:w-56 lg:w-64 md:aspect-auto md:h-auto md:self-stretch md:max-h-[26rem] md:object-top"
+                            : "aspect-square object-center w-16 md:w-20 my-4 md:my-5",
                         )}
                       />
 
@@ -93,12 +99,17 @@ export const TeamAccordion = () => {
                           <div
                             onClick={() => {
                               if (!isMobile) return;
+                              // Subir primero, y sin animación. Al revés (cerrar y después
+                              // hacer scroll suave) el scroll corría mientras el panel se
+                              // plegaba y la página se acortaba bajo los pies: el navegador
+                              // perdía el destino y se veía venir la ficha desde abajo dando
+                              // un giro. Así el cierre se ve desde la cabecera de la tarjeta,
+                              // igual que cuando se pulsa el disparador. `instant` es
+                              // necesario porque `html` lleva `scroll-behavior: smooth`.
+                              document
+                                .getElementById(teacher.slug)
+                                ?.scrollIntoView({ behavior: "instant", block: "start" });
                               setOpen("");
-                              // Al cerrar desde el fondo del texto, la página se acorta y el
-                              // scroll quedaría en el footer; devolvemos la vista a la ficha.
-                              requestAnimationFrame(() =>
-                                document.getElementById(teacher.slug)?.scrollIntoView({ behavior: "smooth", block: "start" }),
-                              );
                             }}
                             className="space-y-3 text-primary/70 leading-relaxed text-[15px] cursor-pointer md:cursor-auto"
                           >
