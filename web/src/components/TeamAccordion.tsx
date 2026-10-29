@@ -111,7 +111,7 @@ export const TeamAccordion = () => {
                                 ?.scrollIntoView({ behavior: "instant", block: "start" });
                               setOpen("");
                             }}
-                            className="space-y-3 text-primary/70 leading-relaxed text-[15px] cursor-pointer md:cursor-auto"
+                            className="space-y-3 text-primary/70 leading-relaxed text-base cursor-pointer md:cursor-auto"
                           >
                             {teacher.bio.map((paragraph, i) => (
                               <p key={i}>{rich(paragraph)}</p>

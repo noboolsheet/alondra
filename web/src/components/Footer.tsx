@@ -3,7 +3,10 @@ import { Instagram, Facebook, Mail, Phone } from "lucide-react";
 import { useLang } from "@/i18n/LanguageContext";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 import { rich } from "@/lib/richtext";
-import logoUrl from "@/assets/logo-alondra.png";
+// El PNG original (1920 x 1920, 153 KB) se queda en el repo como fuente, pero lo
+// que se sirve es el WebP a 384: se pinta a 144 px como mucho, asi que el PNG era
+// 6,7 veces mas grande de lo necesario y el tercer fichero mas pesado del build.
+import logoUrl from "@/assets/logo-alondra.webp";
 
 export const Footer = () => {
   const { t } = useLang();
@@ -20,7 +23,7 @@ export const Footer = () => {
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-center">
           {/* Brand block */}
           <div className="lg:-mt-8 lg:self-start max-w-[16rem]">
-            <img src={logoUrl} alt="Alondra Music Academy" width={320} height={320} loading="lazy" className="w-32 h-32 md:w-36 md:h-36 rounded-full" />
+            <img src={logoUrl} alt="Alondra Music Academy" width={384} height={384} loading="lazy" className="w-32 h-32 md:w-36 md:h-36 rounded-full" />
             <p className="mt-5 text-sm text-primary-foreground/70 leading-relaxed">{rich(t.footer.tagline, "font-semibold text-primary-foreground")}</p>
             {/* Contact */}
             <div className="mt-6 flex flex-col gap-2 text-sm text-primary-foreground/70">

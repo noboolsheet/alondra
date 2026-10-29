@@ -732,8 +732,8 @@ export const translations: Record<Lang, Dict> = {
     footer: {
       tagline: "**Connection that inspires. Progress you can hear.** In-home music lessons across Miami-Dade and Broward.",
       columns: [
-        { title: "Academy", links: [{ label: "Home", page: "home" }, { label: "Formats", page: "programs" }, { label: "Teachers", page: "teachers" }, { label: "Academy", page: "about" }] },
-        { title: "Enroll", links: [{ label: "Prices", page: "registration" }, { label: "Enrollment", page: "enroll" }, { label: "Contact", page: "contact" }, { label: "Work with us", page: "careers" }] },
+        { title: "Academy", links: [{ label: "Home", page: "home" }, { label: "Lessons", page: "programs" }, { label: "Teachers", page: "teachers" }, { label: "Academy", page: "about" }, { label: "Work with us", page: "careers" }] },
+        { title: "Enroll", links: [{ label: "Prices", page: "registration" }, { label: "Enrollment", page: "enroll" }, { label: "Contact", page: "contact" }] },
       ],
       contact: "Contact",
       rights: "All rights reserved.",
@@ -1213,8 +1213,8 @@ export const translations: Record<Lang, Dict> = {
     footer: {
       tagline: "**Conexión que inspira. Progreso que se escucha.** Clases de música a domicilio en Miami-Dade y Broward.",
       columns: [
-        { title: "Academia", links: [{ label: "Inicio", page: "home" }, { label: "Formatos", page: "programs" }, { label: "Profesores", page: "teachers" }, { label: "Academia", page: "about" }] },
-        { title: "Inscripción", links: [{ label: "Precios", page: "registration" }, { label: "Inscripción", page: "enroll" }, { label: "Contacto", page: "contact" }, { label: "Trabaja con nosotros", page: "careers" }] },
+        { title: "Academia", links: [{ label: "Inicio", page: "home" }, { label: "Clases", page: "programs" }, { label: "Profesores", page: "teachers" }, { label: "Academia", page: "about" }, { label: "Trabaja con nosotros", page: "careers" }] },
+        { title: "Inscripción", links: [{ label: "Precios", page: "registration" }, { label: "Inscripción", page: "enroll" }, { label: "Contacto", page: "contact" }] },
       ],
       contact: "Contacto",
       rights: "Todos los derechos reservados.",
@@ -1694,8 +1694,8 @@ export const translations: Record<Lang, Dict> = {
     footer: {
       tagline: "**Une connexion qui inspire. Des progrès qui s’entendent.** Cours de musique à domicile à Miami-Dade et Broward.",
       columns: [
-        { title: "Académie", links: [{ label: "Accueil", page: "home" }, { label: "Formats", page: "programs" }, { label: "Professeurs", page: "teachers" }, { label: "Académie", page: "about" }] },
-        { title: "Inscription", links: [{ label: "Tarifs", page: "registration" }, { label: "Inscription", page: "enroll" }, { label: "Contact", page: "contact" }, { label: "Travaillez avec nous", page: "careers" }] },
+        { title: "Académie", links: [{ label: "Accueil", page: "home" }, { label: "Cours", page: "programs" }, { label: "Professeurs", page: "teachers" }, { label: "Académie", page: "about" }, { label: "Travaillez avec nous", page: "careers" }] },
+        { title: "Inscription", links: [{ label: "Tarifs", page: "registration" }, { label: "Inscription", page: "enroll" }, { label: "Contact", page: "contact" }] },
       ],
       contact: "Contact",
       rights: "Tous droits réservés.",

@@ -26,6 +26,12 @@
     --accent: 37 100% 60%;               /* #FFB236 — bright yellow for fills / icons / dark surfaces */
     --accent-foreground: 280 66% 13%;
     --accent-ink: 36 100% 28%;           /* darker amber for yellow-AS-TEXT on the lavender field (WCAG AA) */
+    /* El mismo oro para texto grande. La Regla del Suelo de Contraste se estaba
+       aplicando por igual a 11 px y a 72 px, y a 72 px el mínimo es 3:1, no 4,5:1:
+       el adorno del hero y los kickers salían marrón oliva en claro, o sea que el
+       color de marca dejaba de ser el color de marca. 38% da 3,2:1 sobre el campo
+       lavanda y se parece al dorado de verdad. Sólo para >=24 px. */
+    --accent-ink-display: 37 100% 38%;
 
     --secondary: 280 34% 91%;            /* deepened so bg-secondary section banding reads on the new lavender field */
     --secondary-foreground: 280 66% 13%;
@@ -92,6 +98,7 @@
     --accent: 37 100% 60%;
     --accent-foreground: 280 66% 13%;
     --accent-ink: 37 100% 60%;           /* on dark surfaces the bright yellow already passes AA as text */
+    --accent-ink-display: 37 100% 60%;
 
     --secondary: 280 32% 18%;
     --secondary-foreground: 270 60% 96%;
@@ -117,7 +124,14 @@
        morado profundo, pero se lee como bloque. */
     --gradient-hero: linear-gradient(135deg, hsl(280 45% 30%) 0%, hsl(281 42% 38%) 100%);
 
-    --shadow-soft: 0 4px 24px -6px hsl(280 80% 3% / 0.5);
+    /* Sombra corta en oscuro, no un halo ancho.
+       DESIGN.md §5 dice que no se junten un borde de 1 px y una sombra ancha y
+       difusa en el mismo elemento: hay que elegir. En oscuro se juntaban 21 veces
+       (24 px de desenfoque detrás de una línea de 1 px), y sobre un campo morado
+       profundo la sombra ancha no separa nada: lo que separa es el borde más el
+       salto tonal de la tarjeta. Así que la sombra se queda corta y con offset,
+       como apoyo, y el borde manda. En claro sigue siendo la Soft de DESIGN.md. */
+    --shadow-soft: 0 2px 8px -2px hsl(280 80% 3% / 0.55);
     --shadow-lift: 0 24px 48px -20px hsl(280 80% 3% / 0.7);
     --shadow-glow: 0 0 40px hsl(37 100% 60% / 0.35);
 
@@ -141,6 +155,7 @@
     --accent: 37 100% 60%;
     --accent-foreground: 280 66% 13%;
     --accent-ink: 37 100% 60%;           /* deep-purple region: bright yellow reads as text here */
+    --accent-ink-display: 37 100% 60%;
     --border: 280 30% 90%;
   }
 }

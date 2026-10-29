@@ -27,7 +27,7 @@ export const TeachersGrid = () => {
       <div className="container-full">
         <motion.div {...reveal(fadeUp)} className="text-center mb-14 max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.teachers.title}</h2>
-          <p className="mt-4 text-primary/70">{rich(t.teachers.subtitle)}</p>
+          <p className="mt-4 text-primary/70 max-w-[68ch] mx-auto">{rich(t.teachers.subtitle)}</p>
         </motion.div>
 
         <div className="grid gap-8 lg:gap-10 lg:grid-cols-2 items-center max-w-4xl mx-auto">
@@ -41,7 +41,7 @@ export const TeachersGrid = () => {
               height={1448}
               className="aspect-[3/4] w-full object-cover object-center rounded-3xl shadow-lift"
             />
-            <div className="on-brand-dark absolute top-4 left-4 inline-flex items-center gap-1.5 bg-primary-foreground text-primary text-[10px] font-semibold tracking-wider uppercase px-3 py-1.5 rounded-full shadow-soft">
+            <div className="on-brand-dark absolute top-4 left-4 inline-flex items-center gap-1.5 bg-primary-foreground text-primary text-[11px] font-semibold tracking-wider uppercase px-3 py-1.5 rounded-full shadow-soft">
               <BadgeCheck className="w-3.5 h-3.5 text-accent" />
               {t.teachers.verified}
             </div>
@@ -106,7 +106,7 @@ export const TeachersGrid = () => {
             gratis) sin regalar una clase, que es lo que la academia no hace. */}
         <motion.p
           {...reveal(fadeUp)}
-          className="mt-14 mx-auto max-w-2xl text-center text-sm text-primary/70 leading-relaxed"
+          className="mt-14 mx-auto max-w-[62ch] text-center text-sm text-primary/70 leading-relaxed"
         >
           {rich(t.teachers.matchPromise)}
         </motion.p>

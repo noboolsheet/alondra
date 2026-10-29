@@ -28,9 +28,12 @@ export const Hero = () => {
       />
 
       {/* Legibility scrims — theme-adaptive (light in light mode, dark in dark mode) */}
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 dark:via-background/85 to-background/30 pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute top-24 -left-20 w-96 h-96 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
+      {/* En claro este halo dorado, con el vinilo cálido asomando al 85%, teñía el
+          tercio izquierdo del campo de melocotón: la Regla del No-Crema dice que el
+          calor lo trae el oro y la imagen, nunca el fondo. En oscuro no pasa. */}
+      <div className="absolute top-24 -left-20 w-96 h-96 rounded-full bg-accent/[0.07] dark:bg-accent/15 blur-3xl pointer-events-none" />
 
       <div className="relative w-full py-14 sm:py-20 md:py-28 pl-10 sm:pl-20 lg:pl-40 pr-6">
         <div className="max-w-2xl text-left">
@@ -41,7 +44,7 @@ export const Hero = () => {
             className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] text-primary leading-[0.98] text-balance"
           >
             {t.hero.title1}{" "}
-            <span className="font-serif font-normal italic text-accent-ink text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] block sm:inline mt-2 sm:mt-0">
+            <span className="font-serif font-normal italic text-accent-display text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem] block sm:inline mt-2 sm:mt-0">
               {t.hero.title2}
             </span>
           </motion.h1>

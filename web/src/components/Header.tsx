@@ -73,7 +73,7 @@ export const Header = () => {
                 height={128}
                 className="h-6 md:h-7 w-auto"
               />
-              <div className="text-[9px] font-semibold tracking-[0.25em] uppercase text-accent mt-1.5">Music Academy</div>
+              <div className="text-[11px] font-semibold tracking-[0.2em] uppercase text-accent-ink mt-1.5">Music Academy</div>
             </div>
           </PageLink>
 

@@ -5,6 +5,8 @@ colors:
   night-purple: "#150A1E"
   concert-purple: "#260B38"
   velvet-purple: "#4A2060"
+  lifted-purple: "#582A6F"
+  lifted-purple-top: "#70388A"
   golden-note: "#FFB236"
   warm-glow: "#FFE7C2"
   lavender-light: "#FCF9FF"
@@ -145,6 +147,8 @@ A deep-purple stage lit by one golden note, on a lavender-white base — committ
 **The No-Cream Rule.** The default surface is night-purple (`#150A1E`); the light-theme base is lavender-white (`#FCF9FF`), tinted toward the brand's purple. Never drift either background toward warm cream, sand, beige, or ivory. Warmth is carried by the Golden Note and by imagery — never by a warm-tinted background.
 
 **The Dark-First Parity Rule.** Dark is the shipped default (`index.html` boots `class="dark"`; `ThemeContext` defaults to dark). The light lavender theme is one toggle away, so it is never a second-class citizen: every surface, contrast ratio, and component state must hold in **both** themes. Design and test the dark field first, then verify light.
+
+**The Lifted-Panel Rule.** A deep-purple panel on the deep-purple dark field needs its own stops, not the light theme's. `--gradient-hero` (Concert Purple → a 22% midpoint) sits at **1.21:1** against the night-purple body, so on the shipped theme it disappears: the CTA banner, `BrandFrame` and the contact card were all invisible as blocks. In `.dark` the gradient runs **Lifted Purple (`#582A6F`) → Lifted Purple Top (`#70388A`)**, which is 1.79:1 and 2.38:1 against the body. Still deep purple, but a panel. Any new `on-brand-dark` surface inherits this and must not be re-pinned to the light stops.
 
 **The Contrast Floor Rule.** In light theme, Muted Plum (`#6B5775`) and Concert Purple at `/60` on Lavender Light sit at or below the 4.5:1 AA floor. For anything smaller than 18px or that must be reliably readable, use Concert Purple at `/70` opacity or darker — never lighten body text "for elegance." Placeholder and helper text still owe the reader 4.5:1 in both themes.
 

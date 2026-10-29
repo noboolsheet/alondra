@@ -61,7 +61,7 @@ export const Stats = () => {
               <div className="font-serif text-4xl sm:text-5xl md:text-6xl text-primary leading-none">
                 <CountUp raw={s.v} />
               </div>
-              <div className="mt-2 text-[11px] sm:text-sm text-primary/70 leading-snug text-balance">{s.l}</div>
+              <div className="mt-2 text-xs sm:text-sm text-primary/70 leading-snug text-balance">{s.l}</div>
             </div>
           ))}
         </div>

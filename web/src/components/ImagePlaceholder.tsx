@@ -30,7 +30,7 @@ export const ImagePlaceholder = ({ label, className, aspect = "video", rounded =
       <div className="absolute inset-0 opacity-40" style={{ backgroundImage: "radial-gradient(circle at 30% 20%, hsl(var(--accent) / 0.3), transparent 50%), radial-gradient(circle at 70% 80%, hsl(var(--primary) / 0.15), transparent 50%)" }} />
       <div className="relative flex flex-col items-center gap-2 text-primary/60">
         <ImageIcon className="w-8 h-8" strokeWidth={1.4} />
-        {label && <span className="text-[10px] font-semibold tracking-[0.2em] uppercase">{label}</span>}
+        {label && <span className="text-[11px] font-semibold tracking-[0.2em] uppercase">{label}</span>}
       </div>
     </div>
   );

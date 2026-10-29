@@ -70,7 +70,7 @@ export const StepUp = () => {
             El enlace a contacto se queda como enlace de texto a propósito: esta
             sección se monta también en /pricing, que cierra con un único dorado
             (ver la cabecera de CTABanner), y hay un test que lo guarda. */}
-        <motion.p {...reveal(fadeUp)} className="mt-8 text-sm text-primary/60 max-w-2xl">
+        <motion.p {...reveal(fadeUp)} className="mt-8 text-sm text-primary/60 max-w-[62ch]">
           {t.stepUp.note}{" "}
           <a
             href="https://www.stepupforstudents.org/"

@@ -28,7 +28,7 @@ export const InstrumentsGrid = () => {
       <div className="container-full">
         <motion.div {...reveal(fadeUp)} className="text-center mb-10 max-w-2xl mx-auto">
           <h2 className="font-serif text-4xl md:text-5xl text-primary text-balance">{t.instruments.title}</h2>
-          <p className="mt-4 text-primary/70">{rich(t.instruments.subtitle)}</p>
+          <p className="mt-4 text-primary/70 max-w-[68ch] mx-auto">{rich(t.instruments.subtitle)}</p>
         </motion.div>
 
         <motion.ul

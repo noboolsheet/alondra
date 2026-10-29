@@ -20,7 +20,7 @@ export const FAQ = () => {
   const { t } = useLang();
   const track = useTrack();
   return (
-    <section id="faq" className="py-20 md:py-28 bg-secondary/30">
+    <section id="faq" className="scroll-mt-20 md:scroll-mt-24 py-20 md:py-28 bg-secondary/30">
       <div className="container-narrow">
         <motion.div {...reveal(fadeUp)} className="text-center mb-12">
           <h2 className="font-serif text-4xl md:text-5xl text-primary">{t.faq.title}</h2>
@@ -37,7 +37,7 @@ export const FAQ = () => {
                   <AccordionTrigger className="text-left font-sans font-semibold text-lg md:text-xl text-primary data-[state=open]:text-primary-soft dark:data-[state=open]:text-accent-ink transition-colors hover:no-underline py-5">
                     {it.q}
                   </AccordionTrigger>
-                  <AccordionContent className="text-primary/70 leading-relaxed pb-5 text-[15px]">
+                  <AccordionContent className="text-primary/70 leading-relaxed pb-5 text-base">
                     {rich(it.a)}
                   </AccordionContent>
                 </AccordionItem>
@@ -46,7 +46,7 @@ export const FAQ = () => {
           </Accordion>
         </motion.div>
 
-        <motion.p {...reveal(fadeUp)} className="mt-10 text-center text-primary/70 leading-relaxed">
+        <motion.p {...reveal(fadeUp)} className="mt-10 mx-auto max-w-[68ch] text-center text-primary/70 leading-relaxed">
           {rich(t.faq.more)}{" "}
           <PageLink
             to="contact"

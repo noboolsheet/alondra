@@ -13,7 +13,10 @@ export const Pedagogy = () => {
   return (
     <section className="py-20 md:py-28">
       <div className="container-wide">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+        {/* `items-start` dejaba la columna izquierda (unas 340 px) arriba contra una
+            derecha de cuatro pilares, y el hueco quedaba entero debajo del texto.
+            Centrada reparte ese aire arriba y abajo. */}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start lg:items-center">
           <motion.div {...reveal(fadeUp)}>
             <span className="eyebrow">{t.pedagogy.eyebrow}</span>
             <h2 className="mt-4 font-serif text-3xl md:text-4xl text-primary text-balance leading-[1.1]">
