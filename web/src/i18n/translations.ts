@@ -101,6 +101,8 @@ export type Dict = {
   faq: {
     eyebrow: string;
     title: string;
+    /** Lo que no está en la lista se responde en la llamada, no en la página. */
+    more: string;
     items: { q: string; a: string }[];
   };
   stepUp: {
@@ -430,6 +432,7 @@ export const translations: Record<Lang, Dict> = {
     faq: {
       eyebrow: "FAQ",
       title: "Frequent questions",
+      more: "Anything else you want to ask? **Ilena answers it herself** on the free 15 minute call, with your child's age, level and schedule in front of her.",
       items: [
         { q: "At what age can lessons start?", a: "We welcome students from 0 years old through our **early stimulation program**, with formal instrumental study typically beginning at age 4, and there's no upper age limit, adult beginners included." },
         { q: "Do you teach adult students?", a: "Yes. Children are our primary focus, but we teach **students of all ages**. There's no age limit to start. We tailor the repertoire and pace to each student." },
@@ -809,7 +812,7 @@ export const translations: Record<Lang, Dict> = {
     meta: {
       home: { title: "Clases de Música a Domicilio en Miami | Alondra", description: "Clases de música a domicilio en Miami-Dade y Broward. Elegimos al profesor adecuado para que tu hijo disfrute aprendiendo y progrese." },
       programs: { title: "Clases de Música en Miami: Piano, Violín, Canto y Guitarra", description: "Piano, violín, canto, guitarra, flauta y bajo a domicilio en Miami. Cada clase integra técnica, ritmo, lectura e interpretación." },
-      teachers: { title: "Conoce a Nuestros Profesores de Música en Miami", description: "Ilena Peña y el equipo de Alondra: dónde se formó cada profesor, qué instrumentos enseña y cómo lo elegimos para cada alumno." },
+      teachers: { title: "Conoce a Nuestros Profesores de Música | Alondra", description: "Ilena Peña y el equipo de Alondra: dónde se formó cada profesor, qué instrumentos enseña y cómo lo elegimos para cada alumno." },
       about: { title: "Sobre Alondra Music Academy | Clases a Domicilio Miami", description: "Cómo enseña Alondra: nuestra filosofía, las cuatro dimensiones de cada clase y la verificación, el seguro y el registro detrás de cada profesor." },
       registration: { title: "Precios de Clases de Música en Miami | Alondra", description: "Clases de música a domicilio en Miami-Dade y Broward desde $50 la clase privada y $35 la compartida, con descuentos por hogar y frecuencia." },
       enroll: { title: "Inscripción en Clases de Música en Miami | Alondra", description: "Cómo es la inscripción en Alondra: los tres pasos, el acuerdo mensual, el aviso de 24 horas y el formulario que reserva tu horario semanal." },
@@ -908,7 +911,7 @@ export const translations: Record<Lang, Dict> = {
           bio: [
             "Rafael Paseiro es un reconocido bajista, compositor, arreglista y profesor de guitarra con **más de tres décadas de experiencia** en la música. **Graduado con honores** de la Escuela Nacional de Arte de Cuba bajo la tutela del prestigioso bajista Carlos del Puerto, ha desarrollado una sobresaliente carrera que combina la interpretación, la composición, los arreglos musicales y una profunda vocación por la enseñanza.",
             "Como intérprete, compositor y arreglista, Rafael ha colaborado en numerosas producciones discográficas y ha compartido escenario con destacados artistas como Issac Delgado, Gonzalo Rubalcaba, Harold López-Nussa, Roberto Carcassés, Raúl Paz y The Temptations, entre muchos otros. Su talento lo ha llevado a presentarse en algunos de los festivales de jazz más importantes del mundo y a realizar giras por América, Europa, Asia y el Caribe, consolidándose como un músico de **reconocido prestigio internacional**.",
-            "En Alondra Music Academy, Rafael comparte su amplia experiencia para formar a la nueva generación de músicos a través de una enseñanza personalizada de guitarra y bajo eléctrico. Su metodología combina una **sólida formación técnica** con el desarrollo de la creatividad, la expresión musical y la confianza en cada estudiante, inspirando a niños, jóvenes y adultos a descubrir y **alcanzar su máximo potencial** artístico.",
+            "En Alondra Music Academy, Rafael comparte su amplia experiencia para formar a la nueva generación de músicos a través de una enseñanza personalizada de guitarra y bajo eléctrico. Su metodología combina una **sólida formación técnica** con el desarrollo de la creatividad, la expresión musical y la confianza en cada estudiante, inspirando a niños, jóvenes y adultos a descubrir y alcanzar su máximo potencial artístico.",
           ],
         },
         {
@@ -919,7 +922,7 @@ export const translations: Record<Lang, Dict> = {
           summary: "Pianista y flautista formada en el Conservatorio Esteban Salas y el ISA; ofrece **clases dinámicas y personalizadas** centradas en cada estudiante.",
           bio: [
             "Conoce a Claudia Nuevo, una talentosa pianista, flautista y educadora apasionada por inspirar a sus estudiantes a través de la música. Graduada del prestigioso Conservatorio Esteban Salas y con estudios en Producción y Grabación Musical en la Universidad de las Artes (ISA) de Cuba, combina una **sólida formación académica** con una destacada trayectoria como intérprete y docente.",
-            "A lo largo de su carrera ha enseñado piano y flauta en reconocidas instituciones musicales, además de participar como pianista acompañante e integrante de orquestas, coros, bandas y agrupaciones profesionales. Su experiencia internacional y su vocación por la enseñanza le permiten ofrecer clases dinámicas, personalizadas y enfocadas en el **crecimiento integral de cada estudiante**.",
+            "A lo largo de su carrera ha enseñado piano y flauta en reconocidas instituciones musicales, además de participar como pianista acompañante e integrante de orquestas, coros, bandas y agrupaciones profesionales. Su experiencia internacional y su vocación por la enseñanza le permiten ofrecer **clases dinámicas y personalizadas** enfocadas en el **crecimiento integral de cada estudiante**.",
             "En Alondra Music Academy, Claudia crea un ambiente donde la técnica, la creatividad y la expresión musical se desarrollan de manera natural. Su objetivo es que cada alumno no solo aprenda a tocar un instrumento, sino que **gane confianza**, disfrute del aprendizaje y descubra una pasión por la música que lo acompañe toda la vida.",
           ],
         },
@@ -930,7 +933,7 @@ export const translations: Record<Lang, Dict> = {
           photo: "/images/profe-claudia-rodriguez.webp",
           summary: "Eufonista, cantante y educadora; especialista en **eufonio, tuba y música de cámara**, con trayectoria internacional dentro y fuera de Cuba.",
           bio: [
-            "Conoce a Claudia D. Rodríguez, una talentosa eufonista, cantante y educadora musical apasionada por formar estudiantes con **excelencia, creatividad y amor por la música**. Su sólida preparación académica y su amplia experiencia como docente e intérprete le permiten ofrecer una enseñanza dinámica y personalizada, inspirando a alumnos de todas las edades a desarrollar su máximo potencial.",
+            "Conoce a Claudia D. Rodríguez, una talentosa eufonista, cantante y educadora musical apasionada por formar estudiantes con **excelencia, creatividad y amor por la música**. Su sólida preparación académica y su amplia experiencia como docente e intérprete le permiten ofrecer una enseñanza dinámica y personalizada, inspirando a **alumnos de todas las edades** a desarrollar su máximo potencial.",
             "Graduada de la Universidad de las Artes (ISA) de Cuba como Licenciada en Música, con **especialización en Eufonio**, y formada en el prestigioso Conservatorio Esteban Salas, Claudia ha impartido clases de eufonio, tuba, piano y música de cámara en reconocidas instituciones musicales. Además, ha desarrollado una destacada trayectoria como instrumentista y cantante, participando en bandas de concierto, coros profesionales y agrupaciones internacionales, presentándose en escenarios dentro y fuera de Cuba.",
             "En Alondra Music Academy, Claudia crea un ambiente de aprendizaje motivador donde **la técnica, la expresión artística y la confianza** crecen de la mano. Su compromiso es que cada estudiante disfrute del proceso de aprender música, fortalezca sus habilidades y descubra una pasión que lo acompañe durante toda la vida.",
           ],
@@ -969,6 +972,7 @@ export const translations: Record<Lang, Dict> = {
     faq: {
       eyebrow: "Preguntas Frecuentes",
       title: "Preguntas frecuentes",
+      more: "¿Te queda alguna otra duda? **Te la responde Ilena en persona** en la llamada gratuita de 15 minutos, con la edad, el nivel y el horario de tu hijo delante.",
       items: [
         { q: "¿A qué edad se puede empezar?", a: "Recibimos estudiantes desde los 0 años en nuestro **programa de estimulación temprana**. El estudio instrumental formal inicia usualmente a los 4 años, y no hay límite de edad para empezar, adultos incluidos." },
         { q: "¿Aceptan estudiantes adultos?", a: "Sí. Los niños son nuestro público principal, pero enseñamos a **estudiantes de todas las edades**. No hay límite de edad para empezar. Adaptamos el repertorio y el ritmo a cada alumno." },
@@ -1042,15 +1046,15 @@ export const translations: Record<Lang, Dict> = {
           tag: "Todas las disciplinas",
           title: "Clases individuales",
           body: "**Clases uno a uno** diseñadas por completo alrededor de un solo estudiante: ritmo, repertorio y objetivos ajustados clase a clase. Disponible para todas las disciplinas, con la teoría musical incluida sin costo adicional.",
-          points: ["Un instructor dedicado para un solo estudiante.", "Currículo y repertorio **totalmente personalizado**s.", "Teoría musical incluida gratis, aparte en Canto."],
+          points: ["Un instructor dedicado para un solo estudiante.", "Currículo y repertorio totalmente personalizados.", "Teoría musical incluida gratis, aparte en Canto."],
         },
         {
           key: "pianoLab",
-          label: "Laboratorio de piano",
+          label: "Piano Lab",
           tag: "Piano · Grupo reducido",
-          title: "Laboratorio de piano",
+          title: "Piano Lab",
           body: "Varios estudiantes aprenden piano en la misma sala al mismo tiempo, cada uno en su propio teclado digital premium, con audífonos. El profesor rota de estación en estación, dando a cada estudiante **tiempo uno a uno** para pulir la técnica y fijar nuevos hitos. Nadie se queda atrás ni va apurado por el grupo.",
-          points: ["Cada estudiante en su propio teclado digital premium, con audífonos.", "El profesor rota para dar atención uno a uno en cada estación.", "El avance de una clase privada dentro de un ambiente social e inspirador."],
+          points: ["Cada estudiante en su propio teclado digital premium, con audífonos.", "El profesor rota para dar **atención uno a uno** en cada estación.", "El avance de una clase privada dentro de un ambiente social e inspirador."],
         },
         {
           key: "littleMozart",
@@ -1080,7 +1084,7 @@ export const translations: Record<Lang, Dict> = {
         title: "Nuestra filosofía",
         blocks: [
           { heading: "Conectando la ciencia pedagógica con la sensibilidad artística", body: "Cada clase integra **técnica, ritmo, lectura e interpretación**, adaptadas a la manera de aprender de cada estudiante." },
-          { heading: "Excelencia pedagógica guiada por nuestra fundadora", body: "Alondra Music Academy está dirigida personalmente por su **directora fundadora**. Cada sesión es impartida de forma exclusiva por profesionales de la alta escuela clásica, rigurosamente formados y con **antecedentes totalmente verificados** para tu absoluta tranquilidad." },
+          { heading: "Excelencia pedagógica guiada por nuestra fundadora", body: "Alondra Music Academy está dirigida personalmente por su **directora fundadora**. Cada sesión es impartida de forma exclusiva por profesionales de la alta escuela clásica, rigurosamente formados y con **antecedentes totalmente verificados** para tu **absoluta tranquilidad**." },
         ],
       },
       teamLink: {
@@ -1243,7 +1247,7 @@ export const translations: Record<Lang, Dict> = {
       hero: {
         eyebrow: "Empleo",
         title: "Trabaja con nosotros",
-        subtitle: "Ayuda a **estudiantes de todas las edades** a descubrir la alegría de la música. Si eres un **músico-educador apasionado y rigurosamente formado**, nos encantaría conocerte.",
+        subtitle: "Ayuda a estudiantes de todas las edades a descubrir la alegría de la música. Si eres un **músico-educador apasionado y rigurosamente formado**, nos encantaría conocerte.",
       },
       whyTitle: "Por qué trabajar con Alondra",
       whyBody: "En Alondra estamos formando un claustro de **músicos-educadores excepcionales** que se preocupan tanto por sus estudiantes como por la música. Invertimos en nuestros profesores, cuidamos su tiempo y les damos el apoyo para dar lo mejor de sí, en una academia cálida, profesional y en crecimiento.",
@@ -1369,7 +1373,7 @@ export const translations: Record<Lang, Dict> = {
           summary: "Pianiste et éducatrice forte de **plus de trois décennies d'expérience**, reconnue pour son approche humaine et personnalisée de la pédagogie du piano, qui a également exercé comme musicothérapeute à une étape antérieure de sa carrière.",
           bio: [
             "Rencontrez Olivia García Rey, pianiste et éducatrice de renom qui, à une étape antérieure de sa carrière, a exercé comme musicothérapeute, forte de **plus de trois décennies d'expérience** à former des musiciens et à cultiver le talent d'enfants, de jeunes et d'adultes. Sa solide formation dans de prestigieuses institutions musicales de Cuba, ainsi qu'une longue carrière de professeure en conservatoires et écoles d'art, font d'elle une maître d'un niveau exceptionnel, reconnue pour sa profonde maîtrise de la pédagogie du piano, de l'interprétation et de la formation complète du musicien.",
-            "Tout au long de sa carrière, Olivia a guidé des centaines d'élèves, les aidant à développer non seulement une excellente technique pianistique, mais aussi **la discipline, la sensibilité artistique et la confiance en soi**. Son expérience de musicothérapeute lui a permis de comprendre l'impact de la musique sur le développement cognitif, émotionnel et social, enrichissant sa méthode d'une approche humaine, proche et **entièrement personnalisée**, adaptée aux forces, aux besoins et aux objectifs de chaque élève.",
+            "Tout au long de sa carrière, Olivia a guidé des centaines d'élèves, les aidant à développer non seulement une excellente technique pianistique, mais aussi **la discipline, la sensibilité artistique et la confiance en soi**. Son expérience de musicothérapeute lui a permis de comprendre l'impact de la musique sur le développement cognitif, émotionnel et social, enrichissant sa méthode d'une approche humaine, proche et entièrement personnalisée, adaptée aux forces, aux besoins et aux objectifs de chaque élève.",
             "À Alondra Music Academy, Olivia partage sa passion pour la musique avec l'engagement d'inspirer chaque élève à **atteindre son plein potentiel**. Ses cours offrent bien plus que l'apprentissage du piano : ils proposent une **formation artistique de grande qualité** qui favorise la créativité, l'expression musicale, l'épanouissement complet et un amour de la musique qui dure toute la vie.",
           ],
         },
@@ -1393,7 +1397,7 @@ export const translations: Record<Lang, Dict> = {
           summary: "Pianiste et flûtiste formée au Conservatoire Esteban Salas et à l'ISA ; elle propose des **cours dynamiques et personnalisés** centrés sur chaque élève.",
           bio: [
             "Rencontrez Claudia Nuevo, pianiste, flûtiste et éducatrice de talent, passionnée par l'idée d'inspirer ses élèves à travers la musique. Diplômée du prestigieux Conservatoire Esteban Salas et titulaire d'études en Production et Enregistrement musical à l'Université des Arts (ISA) de Cuba, elle allie une **solide formation académique** à une belle carrière d'interprète et de professeure.",
-            "Tout au long de sa carrière, elle a enseigné le piano et la flûte dans des institutions musicales reconnues, tout en se produisant comme pianiste accompagnatrice et membre d'orchestres, de chœurs, d'ensembles et de formations professionnelles. Son expérience internationale et sa vocation d'enseignante lui permettent d'offrir des cours dynamiques, personnalisés et axés sur l'**épanouissement complet de chaque élève**.",
+            "Tout au long de sa carrière, elle a enseigné le piano et la flûte dans des institutions musicales reconnues, tout en se produisant comme pianiste accompagnatrice et membre d'orchestres, de chœurs, d'ensembles et de formations professionnelles. Son expérience internationale et sa vocation d'enseignante lui permettent d'offrir des **cours dynamiques et personnalisés** axés sur l'**épanouissement complet de chaque élève**.",
             "À Alondra Music Academy, Claudia crée un environnement où la technique, la créativité et l'expression musicale se développent naturellement. Son objectif est que chaque élève apprenne non seulement à jouer d'un instrument, mais **gagne en confiance**, prenne plaisir à apprendre et découvre une passion pour la musique qui l'accompagnera toute sa vie.",
           ],
         },
@@ -1443,6 +1447,7 @@ export const translations: Record<Lang, Dict> = {
     faq: {
       eyebrow: "FAQ",
       title: "Questions fréquentes",
+      more: "Vous avez d'autres questions ? **Ilena y répond elle-même** lors de l'appel gratuit de 15 minutes, avec l'âge, le niveau et les horaires de votre enfant sous les yeux.",
       items: [
         { q: "À quel âge peut-on commencer ?", a: "Nous accueillons les élèves dès 0 an via notre **programme de stimulation précoce** ; l'étude instrumentale formelle commence généralement à 4 ans, et il n'y a pas de limite d'âge, débutants adultes bienvenus." },
         { q: "Acceptez-vous les élèves adultes ?", a: "Oui. Les enfants sont notre public principal, mais nous enseignons aux **élèves de tous âges**. Il n'y a pas de limite d'âge pour commencer. Nous adaptons le répertoire et le rythme à chaque élève." },
@@ -1450,7 +1455,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Comment vérifiez-vous vos professeurs ?", a: "Chaque professeur passe une **vérification d'antécédents stricte** au niveau de l'État et fédéral (Background Check), une évaluation d'aptitude psychologique et un audit technique musical. Nous nous assurons que seuls des professionnels vérifiés, talentueux et dotés d'une profonde sensibilité humaine entrent **dans le confort de votre foyer**." },
         { q: "Quel instrument mon enfant doit-il choisir ?", a: "L'instrument idéal se choisit en équilibrant l'âge de votre enfant (maturité motrice) avec ses propres préférences et intérêts. Pour bien démarrer, nous offrons un **appel de découverte gratuit** où nous évaluons son profil et planifions son cours avec le spécialiste idéal, garantissant un début motivant et personnalisé dès le premier jour." },
         { q: "Combien de temps dure un cours ?", a: "Le format standard pour la plupart des instruments et le **programme de stimulation précoce** est de 45 minutes, portées à 60 minutes pour les niveaux avancés. Les séances de 30 minutes ne sont disponibles que lorsque plus de deux élèves s'inscrivent dans le même foyer, optimisant la dynamique familiale." },
-        { q: "Fournissez-vous l'instrument ?", a: "Au début, oui : si vous avez besoin de quelques jours pour acheter le vôtre, nous apportons l'instrument au cours pour que votre enfant ne perde pas de temps. Mais c'est une solution temporaire, et nous recommandons d'en acheter un : **l'enfant a besoin d'un instrument à la maison pour travailler pendant la semaine**, et c'est ce travail entre les cours qui fait réellement progresser. Nous vous donnons un **guide d'achat et de configuration expert** pour choisir le bon, facilement et **en toute sécurité**." },
+        { q: "Fournissez-vous l'instrument ?", a: "Au début, oui : si vous avez besoin de quelques jours pour acheter le vôtre, nous apportons l'instrument au cours pour que votre enfant ne perde pas de temps. Mais c'est une solution temporaire, et nous recommandons d'en acheter un : **l'enfant a besoin d'un instrument à la maison pour travailler pendant la semaine**, et c'est ce travail entre les cours qui fait réellement progresser. Nous vous donnons un **guide d'achat et de configuration expert** pour choisir le bon, facilement et en toute sécurité." },
         { q: "Les frères et sœurs peuvent-ils partager un cours ?", a: "Oui, nous offrons des **remises fratrie** et des formats de cours partagé quand l'âge le permet." },
         { q: "Que faire si nous devons reprogrammer ?", a: "Si vous nous prévenez **plus de 24 heures à l'avance**, le cours est reprogrammé sans problème. Pour les annulations de dernière minute, la séance sera considérée comme donnée, sauf en cas d'urgences ou d'imprévus médicaux démontrables. De plus, en cas d'absences fréquentes au cours d'un même mois, 50 % des cours seront rattrapés pour préserver la continuité de votre enfant." },
         { q: "Y a-t-il des récitals ?", a: "Oui. Les **récitals saisonniers** font partie du programme de l'académie : ils sont l'occasion pour chaque élève de partager ses progrès avec sa famille et sa communauté. Les dates sont annoncées à l'avance aux familles inscrites." },
@@ -1520,9 +1525,9 @@ export const translations: Record<Lang, Dict> = {
         },
         {
           key: "pianoLab",
-          label: "Laboratoire de piano",
+          label: "Piano Lab",
           tag: "Piano · Petit groupe",
-          title: "Laboratoire de piano",
+          title: "Piano Lab",
           body: "Plusieurs élèves apprennent le piano dans la même salle en même temps, chacun à son propre clavier numérique premium, au casque. Le professeur passe d'une station à l'autre, offrant à chaque élève un **temps individuel dédié** pour affiner la technique et fixer de nouveaux objectifs. Personne n'est jamais freiné ni bousculé par le groupe.",
           points: ["Chaque élève à son propre clavier numérique premium, au casque.", "Le professeur tourne pour un **temps individuel dédié** à chaque station.", "Les progrès d'un cours privé dans un cadre social et stimulant."],
         },
@@ -1554,7 +1559,7 @@ export const translations: Record<Lang, Dict> = {
         title: "Notre philosophie",
         blocks: [
           { heading: "Relier la science pédagogique à la sensibilité artistique", body: "Chaque cours intègre **technique, rythme, lecture et interprétation**, adaptés à la façon d'apprendre de chaque élève." },
-          { heading: "Excellence pédagogique guidée par notre fondatrice", body: "Alondra Music Academy est dirigée personnellement par sa **directrice fondatrice**. Chaque séance est assurée exclusivement par des professionnels de la haute école classique, rigoureusement formés et aux **antécédents entièrement vérifiés** pour votre absolue tranquillité." },
+          { heading: "Excellence pédagogique guidée par notre fondatrice", body: "Alondra Music Academy est dirigée personnellement par sa **directrice fondatrice**. Chaque séance est assurée exclusivement par des professionnels de la haute école classique, rigoureusement formés et aux **antécédents entièrement vérifiés** pour votre **absolue tranquillité**." },
         ],
       },
       teamLink: {
