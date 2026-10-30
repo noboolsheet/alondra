@@ -20,6 +20,12 @@ let serverRedirects: Record<string, string>;
 
 beforeAll(async () => {
   process.env.PORT = "0"; // que el sistema elija un puerto libre
+  // Los topes POR IDENTIDAD sólo viven cuando el conector del túnel resuelve: sin
+  // eso la clave sería compartida y repartir por ella cerraría el formulario a
+  // terceros (ver la cabecera del bloque de identidad en el servidor). Apuntar
+  // `TUNNEL_CONTAINER` a loopback hace que estas peticiones cuenten como entradas
+  // por el túnel, que es la vía donde esos topes funcionan en producción.
+  process.env.TUNNEL_CONTAINER = "127.0.0.1";
   const mod = await import("../../server/index.mjs");
   // Después del import, nunca antes: el servidor hace `import "dotenv/config"`,
   // así que borrarlas primero sólo conseguía que dotenv las repusiera desde
@@ -29,10 +35,15 @@ beforeAll(async () => {
   server = mod.server;
   serverRedirects = mod.LEGACY_REDIRECTS;
   if (!server.listening) await new Promise((ok) => server.once("listening", ok));
+  // La resolución del conector arranca al importar y es asíncrona.
+  await new Promise((ok) => setTimeout(ok, 50));
   base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 });
 
-afterAll(() => server?.close());
+afterAll(() => {
+  server?.close();
+  delete process.env.TUNNEL_CONTAINER;
+});
 
 /** Los siete campos que el servidor exige en /api/send-contact. */
 const VALID = {

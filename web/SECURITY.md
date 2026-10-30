@@ -4,7 +4,7 @@ Qué se revisó, qué se decidió a propósito y qué sigue abierto. Se escribe 
 porque las decisiones de no actuar son tan importantes como los arreglos: sin el
 motivo escrito, la siguiente persona las reabre o las repite.
 
-Última revisión: 30-10-2026. Fuente revisada: el árbol de trabajo sobre `0a5ea6e`.
+Última revisión: 30-10-2026 (noche). Fuente revisada: el árbol de trabajo sobre `e347ddf`.
 
 **Cómo leer este fichero.** Cada cosa está marcada con dónde está aplicada:
 
@@ -31,14 +31,19 @@ caída del proceso contra producción.
 
 Consecuencia que conviene tener clara: **la cabecera `cf-connecting-ip` no es
 manipulable desde internet** (el borde la pone), pero **sí** por la vía del puerto
-publicado, el tailnet y un Funnel activo. Eso es lo que atacó la ronda de la tarde:
-el servidor ya sólo se cree esa cabecera cuando la petición viene del conector del
-túnel (siguiente sección). Hasta que se despliegue, el tope global de envíos es lo
-único que acota el daño en esa vía.
+publicado, el tailnet y un Funnel activo. Eso es lo que atacó la ronda de la tarde,
+**ya desplegada y comprobada**: el servidor sólo se cree esa cabecera cuando la
+petición viene del conector del túnel, y por el puerto publicado usa el peer TCP
+(evidencia en «Lo verificado en producción»). La fila de esta tabla se queda porque
+el hecho sigue siendo cierto: la cabecera **se puede** poner por esa vía. Lo que
+cambió es que ya no sirve de nada.
 
 ## Lo que endureció la ronda del 30-10-2026 (tarde)
 
-Todo esto está **`[local]`**: en el repositorio y probado en local, sin desplegar.
+Todo esto está **`[producción]`**: desplegado el 30-10-2026 por la noche y
+comprobado contra el servidor (las evidencias, en «Lo verificado en producción»).
+La única pieza posterior, el endurecimiento de la rama degradada, está marcada
+aparte más abajo.
 
 ### La identidad de los contadores ya no se apoya en una cabecera falsificable
 
@@ -53,21 +58,55 @@ compartida, así que su nombre se resuelve por el DNS interno de Docker:
   por visitante en esa vía (ahí `req.ip` es el conector para todo el mundo);
 - **desde cualquier otro sitio** (puerto publicado, tailnet, otro contenedor de la
   red compartida): se usa `req.ip`, el peer TCP real;
-- **si la resolución falla**: se cae al comportamiento anterior. Degradar es
-  aceptable; cerrarle el formulario a las familias por un fallo de DNS no lo es.
+- **si la resolución falla**: la identidad es `req.ip` y se marca **sin
+  verificar**. La cabecera no vuelve a entrar.
 
 `trust proxy` de Express sigue **sin** configurar a propósito: con él `req.ip`
 pasaría a leerse de `x-forwarded-for`, que sí es falsificable, y es además lo que
 mantiene inerte el aviso crítico de `proxy-addr`.
 
+#### La rama degradada, corregida (**`[local]`**)
+
+La primera versión de esa tercera rama estaba mal, y es el tipo de error que se
+escribe solo: «se mantiene el comportamiento anterior» significaba volver a aceptar
+`cf-connecting-ip` **de cualquier origen**, o sea deshacer el arreglo entero cada
+vez que el DNS tuviera un hipo. El modo de fallo elegido para proteger la
+disponibilidad reintroducía exactamente la vulnerabilidad.
+
+El contrato correcto son las dos cosas a la vez, y el principio que lo resuelve es
+este: **un tope sólo se aplica a través de una clave que de verdad identifique a
+alguien.** Sin resolver el conector, `req.ip` es el conector para todo el que entra
+por el túnel, o sea una clave común, así que:
+
+- la identidad es el peer TCP y la cabecera no se usa de nadie;
+- los topes **por identidad** quedan suspendidos, porque repartir por una clave
+  compartida cerraría el formulario a terceros (y con el contador de intentos
+  bastarían diez peticiones vacías de cualquiera para dejar la candidatura en 429
+  para todo el mundo: un interruptor de apagado);
+- los topes **globales** siguen, y son los que protegen el recurso de verdad
+  escaso, el cupo diario de Gmail.
+
+**Lo que se acepta a cambio** (y conviene tenerlo escrito, no descubrirlo): durante
+esa ventana quien abuse no tiene tope propio y puede llegar al tope global. Es un
+techo conocido, 50 a la hora y 150 al día; la ventana dura como mucho un minuto
+porque el refresco reintenta; y **el cambio de estado se anuncia en el log**, que es
+lo que antes faltaba: si la resolución se caía con el proceso ya arrancado, la línea
+de arranque pasaba a ser mentira y nada lo delataba.
+
+**Evidencia.** Tres tests nuevos en `src/test/tunnel-identity.test.ts`, y se
+comprobó que **fallan** con la lógica anterior (429 en la petición 11, en los tres)
+y pasan con la nueva. Cubren las tres mitades del contrato: que repetir la misma
+cabecera no llena ningún cubo, que el tope global sigue cortando en 50, y que el
+contador de intentos no se vuelve un apagón. Además, los dos tests que ya
+ejercitaban los topes por identidad (`server.test.ts`, `send-quota.test.ts`)
+tuvieron que apuntar `TUNNEL_CONTAINER` a loopback: sin conector resuelto esos topes
+ya no existen, y que los tests lo noten es la señal de que el cambio es real.
+
 **Evidencia.** Tres tests en `src/test/tunnel-identity.test.ts` cubren las tres
 ramas, forzándolas sin red (se apunta `TUNNEL_CONTAINER` a una IP literal, que
 `dns.lookup` resuelve a sí misma). El servidor imprime al arrancar si resolvió el
-conector, así que en producción se comprueba leyendo una línea de log, no
-creyéndose esto. Lo que **no** se puede probar aquí es la resolución real del
-nombre dentro de la red de Docker, que necesita un demonio; la evidencia indirecta
-es que el conector ya resuelve hoy `alondra.app.prod` para alcanzar la aplicación,
-o sea que el DNS interno maneja este formato de nombre.
+conector. **Y la resolución real dentro de Docker ya está comprobada contra
+producción**, sin demonio y sin mandar un correo: ver «Lo verificado en producción».
 
 ### Las vías de entrada, analizadas
 
@@ -269,7 +308,90 @@ argumento sale de `pathFor()` sobre el mapa de rutas propio, no de la URL. Todos
 venga de la URL, del fragmento o de un tercero. Si eso ocurre, el salto a 7 pasa de
 innecesario a obligatorio.
 
+## Lo verificado en producción (30-10-2026, noche)
+
+Todo con peticiones de solo lectura o que **no mandan correo ni gastan cupo de
+envío**. No se provocó ninguna caída, no se tocó ninguna configuración del
+servidor y no apareció ninguna credencial en ninguna salida.
+
+### El conector resuelve, y el puerto publicado ya no da identidad
+
+Ésta era la pieza que no se podía comprobar en local por no haber demonio de
+Docker, y resultó comprobable desde fuera. Por el puerto publicado del tailnet
+(`100.91.3.5:4232`), que **no** pasa por el conector, se mandaron 11 candidaturas
+inválidas con `cf-connecting-ip` **rotando** en cada una:
+
+```
+1:400 2:400 3:400 4:400 5:400 6:400 7:400 8:400 9:400 10:400 11:429
+```
+
+El 429 de la onceava es la prueba de las dos cosas a la vez:
+
+1. **La cabecera no da identidad por esa vía.** Si el servidor se la creyera, cada
+   valor nuevo habría abierto un cubo limpio y no habría cortado nunca. Cortó en el
+   tope por identidad, o sea que la clave fue el peer TCP, el mismo para las once.
+2. **El conector resuelve de verdad en la red de Docker.** Si no resolviera, la
+   versión desplegada habría caído a su rama degradada, que se creía la cabecera,
+   y tampoco habría cortado.
+
+Por qué no es una prueba disruptiva: son peticiones inválidas, así que se rechazan
+con 400 sin llegar a multer ni a nodemailer; no mandan correo, no gastan cupo de
+envío, y el contador que consumen es el **de mi propia identidad**, no uno
+compartido. Caduca a los dos minutos, y se comprobó que caduca.
+
+Lo que **no** se comprobó así es la rama del conector (que ahí la cabecera sí se
+use): hacerlo habría exigido 11 intentos por el túnel, y si esa rama estuviera mal
+habrían caído en un cubo compartido, dejando la candidatura cerrada dos minutos a
+visitantes reales. Eso sí habría sido una prueba disruptiva, así que no se hizo:
+queda cubierta por tests y por el hecho de que la otra rama, comprobada, sólo
+existe cuando el conector está resuelto.
+
+### El resto de la superficie pública
+
+| Comprobación | Resultado |
+|---|---|
+| Portada por el túnel | 200, `server: cloudflare`, `cf-ray` presente |
+| Rutas en los tres idiomas (`/pricing`, `/es/precios`, `/fr/tarifs`) | 200 las tres |
+| Ruta inventada | 404 real, no un 200 con la portada |
+| Redirección abierta (arreglo anterior) | `//example.org/` responde `location: /example.org`. Sigue cerrada |
+| `x-powered-by` | Ausente |
+| Cabeceras de seguridad | CSP `frame-ancestors 'self'`, HSTS `max-age=15552000`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options` |
+| HTML sin cachear en el borde | `cf-cache-status: DYNAMIC` |
+| Host canónico | `www` responde 301 a `https://alondrama.com/` |
+| Formularios alcanzables y validando | 400 a cuerpos inválidos, 429 al llegar al tope: el camino de validación y el limitador están vivos |
+| Contador de intentos: caduca | Pasada la ventana de dos minutos, la misma vía vuelve a responder 400. No hay bloqueo permanente, y el barrido de los mapas funciona |
+
+### Lo que sigue sin verificar desde aquí, y cómo se cierra
+
+| Pendiente | Por qué | Orden que lo cierra |
+|---|---|---|
+| El proceso corre como `uid=1000` | Hace falta entrar al servidor; desde este portátil no hay acceso por SSH (`Permission denied (publickey)`) ni demonio de Docker | `docker exec alondra.app.prod id` |
+| La línea de arranque del conector | Lo mismo | `docker logs alondra.app.prod 2>&1 \| grep -i 'Conector del tunel'` |
+| **Un correo que llegue de verdad** | Mandarlo significa un correo real a la bandeja del cliente y una marca de cupo. No es una decisión que tome yo | Rellenar el formulario una vez y comprobar la bandeja. Si no llega: `docker logs alondra.app.prod \| grep 'sendMail failed'` lleva el lead |
+
+La evidencia del puerto publicado hace innecesaria la segunda para saber *si*
+resuelve (ya se sabe que sí), pero sigue siendo la forma de verlo en un vistazo
+después de cada despliegue.
+
 ## Riesgos residuales
+
+Tres grupos, que no se mezclan: **corregidos** (ya no son un riesgo, y se dice con
+qué evidencia), **aceptados** (se decide no arreglarlos, con el motivo) y **a
+supervisar** (no se arreglan de una vez; hay que mirarlos).
+
+### Corregidos
+
+| Riesgo | Estado | Evidencia |
+|---|---|---|
+| Una petición sin autenticar mataba el proceso | **`[producción]`** | Tipos raros responden 400 y el proceso sigue vivo; tests de regresión |
+| Redirección abierta por la barra final | **`[producción]`** | `//example.org/` responde `location: /example.org` contra el sitio vivo |
+| La identidad de los topes salía de una cabecera falsificable | **`[producción]`** | 11 intentos con la cabecera rotando por el puerto publicado cortan en el tope: la clave es el peer TCP |
+| La rama degradada reintroducía esa cabecera | **`[local]`** | Tres tests que fallan con la lógica anterior y pasan con la nueva |
+| El contenedor corría como root | **`[producción]`**, pendiente de confirmar con `id` | `USER node` en la imagen desplegada; tests estáticos. Falta la línea del servidor |
+| Imágenes con etiqueta flotante | **`[producción]`** | Digests fijados en el Dockerfile y en el compose del conector |
+| Un envío fallido gastaba cupo igual | **`[producción]`** | `refundSend`, con test de las dos rutas de fallo |
+| El tope global de intentos era un apagón accionable | **`[producción]`** | Expulsión de la clave más antigua, con test |
+| 14 de los 17 avisos de dependencias | **`[producción]`** | `npm audit --omit=dev` baja de 17 a 3 |
 
 ### Aceptados, con su motivo
 
@@ -335,15 +457,22 @@ de correo, conviene rellenar el formulario una vez y comprobar que llega. Si no
 llega, `docker logs alondra.app.prod | grep 'sendMail failed'` lleva la causa y el
 lead no se pierde, que es para lo que está ese log.
 
-**La resolución del conector dentro de Docker.** Es el único supuesto de esta ronda
-que no se pudo probar en local, por no haber demonio. Se comprueba con una línea:
+**La resolución del conector dentro de Docker.** Comprobada una vez contra
+producción (arriba), pero no es un hecho de una vez para siempre: depende de que el
+conector esté levantado y de que conserve su `container_name`. Se mira con una
+línea:
 
 ```sh
 docker logs alondra.app.prod 2>&1 | grep -i 'Conector del tunel'
 ```
 
-Si dice **SIN resolver**, el endurecimiento de la identidad no está activo (se
-mantiene el comportamiento anterior, que no es peor que antes, pero tampoco mejor) y
-hay que averiguar por qué: lo más probable es que el conector esté apagado o que su
-`container_name` haya cambiado, y entonces se ajusta con la variable de entorno
-`TUNNEL_CONTAINER`.
+Si dice **SIN resolver**, el servidor queda en la rama degradada: la cabecera no se
+acepta de nadie (eso no se pierde nunca), pero **los topes por identidad están
+suspendidos** y sólo quedan los globales, 50 a la hora y 150 al día. No es una
+urgencia, es un techo más alto de lo normal durante la ventana. La causa más
+probable es que el conector esté apagado o que le hayan cambiado el nombre, y
+entonces se ajusta con `TUNNEL_CONTAINER`.
+
+Desde esta ronda, además, **no hace falta estar mirando el log**: un cambio de
+estado con el proceso ya arrancado imprime su propia línea. Antes la de arranque
+decía «resuelto» y, si la resolución se caía después, nadie se enteraba.

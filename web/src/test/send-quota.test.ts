@@ -43,6 +43,12 @@ const servidores: Server[] = [];
 
 const nuevoServidor = async () => {
   process.env.PORT = "0";
+  // Los topes POR IDENTIDAD sólo viven cuando el conector del túnel resuelve: sin
+  // eso la clave sería compartida y repartir por ella cerraría el formulario a
+  // terceros (ver la cabecera del bloque de identidad en el servidor). Apuntar
+  // `TUNNEL_CONTAINER` a loopback hace que estas peticiones cuenten como entradas
+  // por el túnel, que es la vía donde esos topes funcionan en producción.
+  process.env.TUNNEL_CONTAINER = "127.0.0.1";
   // `vi.resetModules()` vacía el registro de módulos, así que el import siguiente
   // vuelve a evaluar el servidor con sus contadores a cero. Tiene que ser un
   // especificador literal: Vite no sabe analizar uno construido con plantilla.
@@ -51,6 +57,8 @@ const nuevoServidor = async () => {
   const server: Server = mod.server;
   if (!server.listening) await new Promise((ok) => server.once("listening", ok));
   servidores.push(server);
+  // La resolución del conector arranca al importar y es asíncrona.
+  await new Promise((ok) => setTimeout(ok, 50));
   return `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
 };
 
@@ -87,6 +95,7 @@ afterAll(() => {
   for (const s of servidores) s.close();
   delete process.env.GMAIL_USER;
   delete process.env.GMAIL_APP_PASSWORD;
+  delete process.env.TUNNEL_CONTAINER;
 });
 
 beforeEach(() => {

@@ -109,14 +109,75 @@ describe("petición que SÍ viene del conector", () => {
   });
 });
 
+/**
+ * La rama degradada es la que más fácil se escribe mal, y la primera versión lo
+ * estaba: «se mantiene el comportamiento anterior» significaba volver a aceptar
+ * `cf-connecting-ip` de cualquier origen, o sea deshacer el arreglo entero cada
+ * vez que el DNS tuviera un hipo.
+ *
+ * El contrato correcto son las dos cosas a la vez: la cabecera NO da identidad a
+ * nadie, y el formulario NO se cierra. Se consigue suspendiendo los topes POR
+ * IDENTIDAD (su clave sería el conector, compartida por todos los que entran por
+ * el túnel) y dejando los GLOBALES, que son los que protegen el cupo de Gmail.
+ *
+ * Los tres tests de aquí abajo cubren las tres mitades de eso: que la cabecera no
+ * sirve de clave, que lo que acota sigue acotando, y que el contador de intentos
+ * no se convierte en un interruptor de apagado.
+ */
 describe("conector sin resolver", () => {
-  it("se mantiene el comportamiento anterior en vez de endurecer a ciegas", async () => {
+  it("el formulario sigue abierto: un fallo de DNS no cierra nada", async () => {
     // Un nombre que no resuelve: es el caso de desarrollo local y el de un DNS con
     // hipo. Cerrarle el formulario a las familias por eso sería peor que el riesgo
-    // que se está acotando, así que se degrada a lo de antes.
+    // que se está acotando.
     const base = await servidorCon("conector-que-no-existe.invalid");
     for (let i = 0; i < 20; i++) {
       expect((await enviar(base, `203.0.116.${i}`)).status).toBe(200);
     }
+  });
+
+  it("la cabecera no vuelve a dar identidad: repetir la misma no llena ningún cubo", async () => {
+    const base = await servidorCon("conector-que-no-existe.invalid");
+
+    // VEINTE peticiones con la MISMA cabecera. Con la rama degradada anterior, la
+    // cabecera era la clave: a partir de la décima (cuando entra el reparto, ver
+    // SEND_FAIR_FROM) ese cubo tenía ya diez marcas y la onceava se iba a 429.
+    // Ahora la cabecera no es la clave de nadie, así que no hay cubo que llenar.
+    for (let i = 0; i < 20; i++) {
+      const res = await enviar(base, "203.0.117.9");
+      expect(res.status, `peticion ${i + 1} con la cabecera repetida`).toBe(200);
+    }
+    expect(sendMail).toHaveBeenCalledTimes(20);
+  });
+
+  it("lo que sigue acotando es el tope global, no la cabecera", async () => {
+    const base = await servidorCon("conector-que-no-existe.invalid");
+
+    // Suspender los topes por identidad no deja el endpoint abierto: el tope
+    // global horario (50) corta igual, y da lo mismo que la cabecera rote o no.
+    for (let i = 0; i < 50; i++) {
+      expect((await enviar(base, `203.0.118.${i % 7}`)).status).toBe(200);
+    }
+    const res = await enviar(base, "203.0.119.1");
+    expect(res.status).toBe(429);
+    expect(await res.json()).toEqual({ ok: false, error: "too_many" });
+    expect(sendMail).toHaveBeenCalledTimes(50);
+  });
+
+  it("el contador de intentos no se vuelve un interruptor de apagado", async () => {
+    const base = await servidorCon("conector-que-no-existe.invalid");
+
+    // Doce candidaturas inválidas con la misma cabecera. El contador de intentos
+    // corta a las diez por identidad y lo hace ANTES de multer, así que con una
+    // clave compartida bastarían diez peticiones vacías de cualquiera para dejar
+    // la candidatura en 429 para todo el mundo. Tienen que seguir siendo 400.
+    for (let i = 0; i < 12; i++) {
+      const res = await fetch(`${base}/api/send-application`, {
+        method: "POST",
+        headers: { "cf-connecting-ip": "203.0.120.5" },
+        body: new FormData(), // sin ningún campo: inválida
+      });
+      expect(res.status, `intento ${i + 1}`).toBe(400);
+    }
+    expect(sendMail).not.toHaveBeenCalled();
   });
 });

@@ -255,9 +255,24 @@ let allSends = [];
  *   y sería la misma para todo el mundo).
  * - Cualquier otra procedencia (puerto publicado, tailnet, otro contenedor de la
  *   red compartida): se usa `req.ip`, el peer TCP real. No se puede falsificar.
- * - Si la resolución falla (fuera de Docker, conector caído, DNS con hipo): se
- *   cae al comportamiento de antes. Degradar a lo de siempre es aceptable;
- *   cerrarle el formulario a las familias por un fallo de DNS no lo es.
+ * - Si la resolución falla (fuera de Docker, conector caído, DNS con hipo): la
+ *   identidad es `req.ip` y se marca **sin verificar**. La cabecera NO vuelve a
+ *   entrar: si no se puede saber quién la escribió, no vale como identidad.
+ *
+ * El principio que sostiene la rama degradada: **un tope sólo se aplica a través
+ * de una clave que de verdad identifique a alguien.** Sin resolver el conector,
+ * `req.ip` es el conector para todo el que entra por el túnel, o sea una clave
+ * compartida; repartir por ella cerraría el formulario a las familias en cuanto
+ * un tercero gastase el cubo común (y con el contador de intentos bastarían diez
+ * peticiones en dos minutos para dejar la candidatura cerrada para todos). Así
+ * que los topes POR IDENTIDAD se suspenden y quedan los GLOBALES, que son los que
+ * protegen el recurso de verdad escaso, el cupo diario de Gmail.
+ *
+ * Lo que se acepta a cambio: durante esa ventana, quien abuse no tiene tope
+ * propio y puede llegar hasta el tope global. Es un techo conocido (50 a la hora,
+ * 150 al día), la ventana dura como mucho un minuto porque el refresco reintenta,
+ * y el cambio de estado se anuncia en el log. Lo contrario (negar el formulario a
+ * visitantes reales por un fallo de DNS) no es un intercambio aceptable.
  *
  * `trust proxy` de Express sigue SIN configurar a propósito: con él, `req.ip`
  * pasaría a leerse de `x-forwarded-for`, que sí es falsificable, y además es lo
@@ -267,7 +282,10 @@ const TUNNEL_CONTAINER = process.env.TUNNEL_CONTAINER || "alondra.cloudflared";
 let ipsDelTunel = new Set();
 let tunelResuelto = false;
 
+let arrancado = false;
+
 const resolverTunel = async () => {
+  const antes = tunelResuelto;
   try {
     const dirs = await dns.lookup(TUNNEL_CONTAINER, { all: true });
     ipsDelTunel = new Set(dirs.map((d) => d.address));
@@ -278,6 +296,17 @@ const resolverTunel = async () => {
     ipsDelTunel = new Set();
     tunelResuelto = false;
   }
+  // Sólo en el CAMBIO de estado. El refresco corre cada minuto y fuera de Docker
+  // falla siempre, así que avisar en cada vuelta llenaría el log; pero si la
+  // resolución se cae con el proceso ya arrancado, la línea de arranque pasa a
+  // ser mentira y esto es lo único que lo delata.
+  if (arrancado && antes !== tunelResuelto) {
+    console.log(
+      tunelResuelto
+        ? `Conector del tunel resuelto de nuevo (${TUNNEL_CONTAINER}): vuelven los topes por identidad`
+        : `Conector del tunel SIN resolver (${TUNNEL_CONTAINER}): topes por identidad suspendidos, siguen los globales`,
+    );
+  }
 };
 
 /** Normaliza `::ffff:172.18.0.3` a `172.18.0.3` para poder comparar. */
@@ -285,13 +314,37 @@ const sinPrefijoV6 = (ip) => (ip || "").replace(/^::ffff:/, "");
 
 const vieneDelTunel = (req) => tunelResuelto && ipsDelTunel.has(sinPrefijoV6(req.ip));
 
-const ipOf = (req) => {
-  if (vieneDelTunel(req)) return req.headers["cf-connecting-ip"] || req.ip || "desconocida";
-  // Sin resolver el conector no se puede distinguir la vía, así que se mantiene
-  // el comportamiento anterior en vez de endurecer a ciegas.
-  if (!tunelResuelto) return req.headers["cf-connecting-ip"] || req.ip || "desconocida";
-  return sinPrefijoV6(req.ip) || "desconocida";
+/**
+ * Primer valor de `cf-connecting-ip`, acotado. Node junta las cabeceras
+ * repetidas con comas, y la clave de un Map no debe poder crecer sin tope.
+ */
+const cabeceraCf = (req) => {
+  const v = req.headers["cf-connecting-ip"];
+  const s = typeof v === "string" ? v : Array.isArray(v) ? v[0] : "";
+  return sinPrefijoV6(String(s).split(",")[0].trim()).slice(0, 64);
 };
+
+/**
+ * La identidad y si sirve para distinguir visitantes.
+ *
+ * `verificada: false` quiere decir «esta clave NO identifica a nadie en
+ * particular»: los topes por identidad se saltan (ver cabecera del bloque), los
+ * globales siguen.
+ */
+const identidad = (req) => {
+  const peer = sinPrefijoV6(req.ip) || "desconocida";
+  if (vieneDelTunel(req)) {
+    const cf = cabeceraCf(req);
+    // Entrada por el túnel sin cabecera: no debería pasar, pero si pasa el peer
+    // es el conector, o sea una clave común. No se reparte por ella.
+    return cf ? { id: cf, verificada: true } : { id: peer, verificada: false };
+  }
+  if (!tunelResuelto) return { id: peer, verificada: false };
+  return { id: peer, verificada: true };
+};
+
+/** La clave para apuntar. Apuntar siempre es inocuo; lo que se filtra es leer. */
+const ipOf = (req) => identidad(req).id;
 
 let ultimoBarrido = 0;
 
@@ -324,7 +377,9 @@ const atSendLimit = (req) => {
   const ultimaHora = allSends.filter((t) => now - t < SEND_WINDOW_MS).length;
   if (ultimaHora >= SEND_MAX_TOTAL || allSends.length >= SEND_MAX_DAY) return true;
   if (ultimaHora < SEND_FAIR_FROM) return false; // ver SEND_FAIR_FROM
-  return (sendLog.get(ipOf(req)) ?? []).length >= SEND_MAX;
+  const { id, verificada } = identidad(req);
+  if (!verificada) return false; // clave compartida: repartir por ella castiga a terceros
+  return (sendLog.get(id) ?? []).length >= SEND_MAX;
 };
 
 /**
@@ -338,7 +393,11 @@ const atSendLimit = (req) => {
  */
 const atAttemptLimit = (req) => {
   sweepSends(Date.now());
-  return (attemptLog.get(ipOf(req)) ?? []).length >= ATTEMPT_MAX;
+  const { id, verificada } = identidad(req);
+  // Con la clave compartida esto sería un interruptor de apagado: diez intentos
+  // en dos minutos, de cualquiera, y la candidatura queda cerrada para todos.
+  if (!verificada) return false;
+  return (attemptLog.get(id) ?? []).length >= ATTEMPT_MAX;
 };
 
 const noteAttempt = (req) => {
@@ -787,8 +846,9 @@ resolverTunel().then(() => {
       ? `Conector del tunel resuelto (${TUNNEL_CONTAINER}, ${ipsDelTunel.size} direccion/es): ` +
         "cf-connecting-ip solo se acepta desde ahi; el resto usa el peer TCP"
       : `Conector del tunel SIN resolver (${TUNNEL_CONTAINER}): ` +
-        "se mantiene el comportamiento anterior, cf-connecting-ip se acepta de cualquier origen",
+        "cf-connecting-ip NO se acepta de nadie; topes por identidad suspendidos, siguen los globales",
   );
+  arrancado = true; // desde aquí, un cambio de estado sí merece una línea
 });
 setInterval(resolverTunel, 60_000).unref();
 
