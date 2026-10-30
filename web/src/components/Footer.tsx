@@ -32,13 +32,15 @@ export const Footer = () => {
                 la direccion entera, que es lo mas largo del pie y repite lo que
                 ya dice el recuadro de contactos. Aqui basta el icono: la
                 etiqueta accesible lleva el dato para quien no lo ve. */}
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5 flex gap-3">
               <a href="https://www.instagram.com/alondra_music_academy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <Instagram className="w-4 h-4" />
               </a>
               <a href="https://www.facebook.com/people/Alondra-Music-Academy/61590624003294/#" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <Facebook className="w-4 h-4" />
               </a>
+            </div>
+            <div className="mt-3 flex gap-3">
               <a data-track-loc="footer" href="https://wa.me/17868431028" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <WhatsAppIcon className="w-4 h-4" />
               </a>

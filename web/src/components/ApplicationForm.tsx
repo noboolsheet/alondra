@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Upload, FileText, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { PageLink } from "@/components/PageLink";
 import { useLang } from "@/i18n/LanguageContext";
 import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
@@ -222,6 +223,16 @@ export const ApplicationForm = () => {
               />
               <span>{t.careers.fields.terms}</span>
             </label>
+            {/* Fuera del <label>: dentro, pulsar el enlace activaría también el
+                label y marcaría la casilla de paso. */}
+            <p className="-mt-2 pl-7 text-sm">
+              <PageLink
+                to="privacy"
+                className="text-accent-ink underline underline-offset-4 hover:no-underline"
+              >
+                {t.legal.links.privacy}
+              </PageLink>
+            </p>
 
             {submitError && <p className="text-sm text-destructive">{submitError}</p>}
 

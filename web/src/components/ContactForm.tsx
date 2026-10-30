@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2 } from "lucide-react";
+import { PageLink } from "@/components/PageLink";
 import { useLang } from "@/i18n/LanguageContext";
 import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
@@ -148,7 +149,7 @@ export const ContactForm = () => {
                 setPromo(false);
                 setData(EMPTY);
               }}
-              className="mt-6 text-sm font-semibold text-primary underline underline-offset-4 hover:text-accent transition-colors"
+              className="mt-6 text-sm font-semibold text-primary underline underline-offset-4 hover:text-accent-ink transition-colors"
             >
               {t.contact.successAgain}
             </button>
@@ -200,6 +201,16 @@ export const ContactForm = () => {
               />
               <span>{t.contact.fields.terms}</span>
             </label>
+            {/* Fuera del <label>: dentro, pulsar el enlace activaría también el
+                label y marcaría la casilla de paso. */}
+            <p className="-mt-2 pl-7 text-sm">
+              <PageLink
+                to="privacy"
+                className="text-accent-ink underline underline-offset-4 hover:no-underline"
+              >
+                {t.legal.links.privacy}
+              </PageLink>
+            </p>
             {/* Separada de los terminos a proposito: enviar el formulario
                 autoriza a responder esa consulta, no a mandar promociones. */}
             <label className="flex items-start gap-3 text-sm text-primary/70 cursor-pointer">
