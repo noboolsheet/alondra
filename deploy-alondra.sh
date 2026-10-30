@@ -29,7 +29,7 @@ fi
 
 # 3. Ensure the Gmail secret file exists (GMAIL_APP_PASSWORD lives here, gitignored).
 if [ ! -f "$WEB_DIR/.env.$ENV" ]; then
-    echo "❌ Error: $SCRIPT_DIR/.env not found."
+    echo "❌ Error: $WEB_DIR/.env.$ENV not found."
     echo "   Copia web/.env.example a web/.env.$ENV y pon GMAIL_USER + GMAIL_APP_PASSWORD."
     exit 1
 fi

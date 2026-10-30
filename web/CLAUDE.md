@@ -284,7 +284,15 @@ Para probarlos en local, `?ga=on` levanta la guarda de localhost y enciende
 
 **Los formularios van contra un backend de correo real.** `server/index.mjs` es un
 Express (nodemailer sobre Gmail SMTP) que expone `POST /api/send-contact` y
-`POST /api/send-application` (honeypot + validación + CV adjunto). `ContactForm` y
+`POST /api/send-application` (honeypot + validación + CV adjunto). Los dos
+endpoints tienen un **tope de cinco envíos por hora y por IP**, contado sobre
+`cf-connecting-ip` (la IP real que pone el túnel; `req.ip` es la del conector y
+sería la misma para todos los visitantes) y comprobado justo antes de enviar,
+para que un formulario mal rellenado cinco veces no deje a una familia fuera una
+hora. Sin ese tope, un script en bucle agota el cupo diario de la cuenta de
+Gmail y a partir de ahí el formulario devuelve error a las familias de verdad.
+Si falla un envío, el log incluye los datos del lead (`docker logs`), porque no
+están guardados en ningún otro sitio. `ContactForm` y
 `ApplicationForm` hacen `fetch()` a esos endpoints con estados reales de
 `sending`/`submitError`/éxito. `RegistrationWidget` embebe el planificador de
 terceros **My Music Staff** en un iframe (desde `public/mms-widget.html`),

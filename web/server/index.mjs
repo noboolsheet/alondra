@@ -26,6 +26,7 @@ const ALLOWED_MIME = new Set([
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ]);
+const ALLOWED_EXT = /\.(pdf|docx?)$/i;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const esc = (s) =>
@@ -35,8 +36,12 @@ const esc = (s) =>
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_FILE_BYTES },
+  // El `mimetype` lo manda el navegador, no se deduce del fichero: un .html
+  // enviado como application/pdf pasaba el filtro y llegaba al buzón como si
+  // fuera un curriculum. La extensión tiene que cuadrar también, y es la misma
+  // lista que declara el `accept` del formulario.
   fileFilter: (_req, file, cb) => {
-    if (ALLOWED_MIME.has(file.mimetype)) cb(null, true);
+    if (ALLOWED_MIME.has(file.mimetype) && ALLOWED_EXT.test(file.originalname)) cb(null, true);
     else cb(new Error("INVALID_FILE_TYPE"));
   },
 });
@@ -59,7 +64,11 @@ const sendFormEmail = async (res, { subject, heading, name, email, rows, attachm
     await t.transporter.sendMail({
       from: `"Alondra Web" <${t.user}>`,
       to: process.env.CONTACT_TO || t.user,
-      replyTo: `"${name}" <${email}>`,
+      // El nombre va como objeto, no interpolado en la plantilla de dirección:
+      // un nombre como `Bob" <otro@ejemplo.com>, x` colaba una segunda
+      // dirección, y encima la primera de la lista, así que al responder el
+      // correo se iba a ella en vez de a quien rellenó el formulario.
+      replyTo: { name: String(name), address: String(email).trim() },
       subject,
       text: rows.map(([k, v]) => `${k}: ${v}`).join("\n"),
       html: `<h2>${heading}</h2><table cellpadding="6" style="font-family:sans-serif;font-size:14px">${rows
@@ -72,9 +81,74 @@ const sendFormEmail = async (res, { subject, heading, name, email, rows, attachm
     });
     return res.json({ ok: true });
   } catch (err) {
-    console.error("sendMail failed:", err);
+    // Con el contenido, no sólo el error: estos datos no están guardados en
+    // ningún otro sitio, así que si el envío falla el lead sólo sobrevive aquí
+    // (`docker logs alondra.app.prod`).
+    console.error("sendMail failed:", err, "| lead perdido:", JSON.stringify(rows));
     return res.status(500).json({ ok: false, error: "Failed to send" });
   }
+};
+
+// --- Tope de envíos por IP -------------------------------------------------
+// Cada petición válida manda un correo, y la cuenta de Gmail tiene un tope
+// diario de unos cientos: sin límite, un script en bucle lo agota y a partir de
+// ahí el formulario devuelve error a las familias de verdad.
+//
+// La clave es `cf-connecting-ip`, la IP real del visitante que pone el túnel de
+// Cloudflare. Detrás del túnel todas las peticiones llegan con la IP del
+// conector, así que un límite sobre `req.ip` cerraría el formulario para todo el
+// mundo en cuanto spameara uno. Sin esa cabecera (localhost, LAN, tailnet) se
+// cae a `req.ip`.
+//
+// Hay además un tope global, y no es redundante: por internet la cabecera es de
+// fiar porque Cloudflare la sobreescribe, pero en prod el contenedor escucha en
+// 0.0.0.0 (LAN de casa + tailnet), y por ahí se llega al puerto sin pasar por el
+// túnel y se puede mandar una IP distinta en cada petición. El tope global es lo
+// que acota el daño al cupo de Gmail diga lo que diga la cabecera.
+//
+// Se apunta justo antes de enviar, no al entrar: así cinco intentos con un campo
+// mal puesto no dejan a una familia fuera una hora.
+const SEND_WINDOW_MS = 60 * 60 * 1000;
+const SEND_MAX = 5; // por IP
+const SEND_MAX_TOTAL = 50; // en todo el sitio
+const sendLog = new Map();
+let allSends = [];
+
+const ipOf = (req) => req.headers["cf-connecting-ip"] || req.ip || "desconocida";
+
+/** Tira las marcas caducadas. Ni el mapa ni la lista pueden crecer sin tope. */
+const sweepSends = (now) => {
+  const vivas = (stamps) => stamps.filter((t) => now - t < SEND_WINDOW_MS);
+  allSends = vivas(allSends);
+  for (const [key, stamps] of sendLog) {
+    const quedan = vivas(stamps);
+    if (quedan.length) sendLog.set(key, quedan);
+    else sendLog.delete(key);
+  }
+};
+
+/**
+ * ¿Esta petición está en el tope? Sólo mira, no apunta, así que se puede llamar
+ * antes de parsear el cuerpo: es lo que permite cortar una subida de 5 MB antes
+ * de que multer la meta en memoria.
+ */
+const atSendLimit = (req) => {
+  sweepSends(Date.now());
+  return (sendLog.get(ipOf(req)) ?? []).length >= SEND_MAX || allSends.length >= SEND_MAX_TOTAL;
+};
+
+/** Apunta un envío. Va pegado a su `atSendLimit`, sin await en medio. */
+const noteSend = (req) => {
+  const now = Date.now();
+  const ip = ipOf(req);
+  sendLog.set(ip, [...(sendLog.get(ip) ?? []), now]);
+  allSends.push(now);
+};
+
+const tooManySends = (req) => {
+  if (atSendLimit(req)) return true;
+  noteSend(req);
+  return false;
 };
 
 const app = express();
@@ -180,6 +254,8 @@ app.post("/api/send-contact", async (req, res) => {
   }
   if (!EMAIL_RE.test(email.trim())) return res.status(400).json({ ok: false, error: "Invalid email" });
 
+  if (tooManySends(req)) return res.status(429).json({ ok: false, error: "too_many" });
+
   return sendFormEmail(res, {
     subject: `Nuevo contacto: ${name} · ${instrument} · ${zip}`,
     heading: "Nuevo mensaje de contacto",
@@ -192,12 +268,12 @@ app.post("/api/send-contact", async (req, res) => {
       ["Telefono", phone],
       ["Email", email],
       ["Adulto", name],
-      ["Estudiante", student || "—"],
-      ["Edad", age || "—"],
+      ["Estudiante", student || "(sin dato)"],
+      ["Edad", age || "(sin dato)"],
       ["Instrumento", instrument],
       ["Codigo postal", zip],
-      ["Disponibilidad", availability || "—"],
-      ["Mensaje", message || "—"],
+      ["Disponibilidad", availability || "(sin dato)"],
+      ["Mensaje", message || "(sin dato)"],
       ["Como nos conocio", source],
       ["Acepta promociones", promo ? "Si" : "No"],
     ],
@@ -205,7 +281,10 @@ app.post("/api/send-contact", async (req, res) => {
 });
 
 // --- Job application → email (with CV attachment) -------------------------
-app.post("/api/send-application", upload.single("cv"), async (req, res) => {
+const blockIfAtLimit = (req, res, next) =>
+  atSendLimit(req) ? res.status(429).json({ ok: false, error: "too_many" }) : next();
+
+app.post("/api/send-application", blockIfAtLimit, upload.single("cv"), async (req, res) => {
   const { name = "", email = "", phone = "", role = "", message = "", company = "" } = req.body ?? {};
   if (String(company).trim() !== "") return res.json({ ok: true }); // honeypot
   if (!name.trim() || !email.trim() || !phone.trim() || !role.trim() || !message.trim()) {
@@ -217,8 +296,10 @@ app.post("/api/send-application", upload.single("cv"), async (req, res) => {
     ? [{ filename: req.file.originalname, content: req.file.buffer, contentType: req.file.mimetype }]
     : [];
 
+  if (tooManySends(req)) return res.status(429).json({ ok: false, error: "too_many" });
+
   return sendFormEmail(res, {
-    subject: `Nueva candidatura — ${name}`,
+    subject: `Nueva candidatura: ${name}`,
     heading: "Nueva candidatura",
     name,
     email,
@@ -228,7 +309,7 @@ app.post("/api/send-application", upload.single("cv"), async (req, res) => {
       ["Phone", phone],
       ["Role", role],
       ["Message", message],
-      ["CV", req.file ? req.file.originalname : "—"],
+      ["CV", req.file ? req.file.originalname : "(sin dato)"],
     ],
     attachments,
   });
@@ -248,7 +329,8 @@ app.use((err, _req, res, next) => {
 // in Google's index, in Nextdoor posts and in WhatsApp threads. A 301 here (not
 // a client-side redirect) is what passes the accumulated ranking to the new URL.
 // Keep in sync with LEGACY_REDIRECTS in src/i18n/routes.ts. Never drop a row.
-const LEGACY_REDIRECTS = {
+// Exportada para que un test pueda compararla con la de src/i18n/routes.ts.
+export const LEGACY_REDIRECTS = {
   "/programs": "/music-lessons",
   "/registration": "/pricing",
   "/careers": "/music-teacher-jobs",
@@ -338,6 +420,6 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
   res.status(status).sendFile(htmlFor(req.path, found));
 });
 
-app.listen(PORT, () => {
+export const server = app.listen(PORT, () => {
   console.log(`Alondra server listening on http://localhost:${PORT}`);
 });

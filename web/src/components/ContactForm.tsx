@@ -63,13 +63,15 @@ export const ContactForm = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, promo, company }),
       });
-      if (!res.ok) throw new Error("Request failed");
+      // El 429 es el tope de envíos, no un fallo: lleva su propio mensaje.
+      if (!res.ok) throw new Error(res.status === 429 ? "too_many" : "failed");
       setSent(true);
       // En la respuesta OK, nunca en el clic del boton: si se mide el clic se
       // cuentan como leads los envios que fallaron.
       track("generate_lead", { form: "contact", source: data.source, instrument: data.instrument });
-    } catch {
-      setSubmitError(t.contact.errorSend);
+    } catch (err) {
+      const tope = err instanceof Error && err.message === "too_many";
+      setSubmitError(tope ? t.contact.errorTooMany : t.contact.errorSend);
     } finally {
       setSending(false);
     }

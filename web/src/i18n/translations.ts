@@ -222,6 +222,7 @@ export type Dict = {
     sourceOptions: string[];
     sending: string;
     errorSend: string;
+    errorTooMany: string;
     successTitle: string;
     successBody: string;
     successAgain: string;
@@ -268,6 +269,7 @@ export type Dict = {
     fields: { name: string; email: string; phone: string; role: string; link: string; cvHint: string; cvRemove: string; message: string; submit: string; terms: string };
     sending: string;
     errorSend: string;
+    errorTooMany: string;
     fileError: string;
     successTitle: string;
     successBody: string;
@@ -716,6 +718,7 @@ export const translations: Record<Lang, Dict> = {
       sourceOptions: ["Nextdoor", "Google search", "Instagram or Facebook", "A family recommended you", "Somewhere else"],
       sending: "Sending…",
       errorSend: "We couldn't send your message. Please try again or email us at alondramusicacademy@gmail.com.",
+      errorTooMany: "You have sent several messages in a short time. Please wait a few minutes or email us at alondramusicacademy@gmail.com.",
       successTitle: "Thank you!",
       successBody: "We've received your message and will reply within 24 hours.",
       successAgain: "Send another message",
@@ -815,6 +818,7 @@ export const translations: Record<Lang, Dict> = {
       },
       sending: "Sending…",
       errorSend: "We couldn't send your application. Please try again or email us at alondramusicacademy@gmail.com.",
+      errorTooMany: "You have sent several applications in a short time. Please wait a few minutes or email us at alondramusicacademy@gmail.com.",
       fileError: "The file must be a PDF or Word document under 5 MB.",
       successTitle: "Application received!",
       successBody: "Thank you for your interest in Alondra. We'll be in touch if a matching role opens up.",
@@ -1196,6 +1200,7 @@ export const translations: Record<Lang, Dict> = {
       sourceOptions: ["Nextdoor", "Búsqueda en Google", "Instagram o Facebook", "Me la recomendó una familia", "En otro sitio"],
       sending: "Enviando…",
       errorSend: "No pudimos enviar tu mensaje. Inténtalo de nuevo o escríbenos a alondramusicacademy@gmail.com.",
+      errorTooMany: "Has enviado varios mensajes en poco tiempo. Espera unos minutos o escríbenos a alondramusicacademy@gmail.com.",
       successTitle: "¡Gracias!",
       successBody: "Hemos recibido tu mensaje y responderemos en menos de 24 horas.",
       successAgain: "Enviar otro mensaje",
@@ -1295,6 +1300,7 @@ export const translations: Record<Lang, Dict> = {
       },
       sending: "Enviando…",
       errorSend: "No pudimos enviar tu candidatura. Inténtalo de nuevo o escríbenos a alondramusicacademy@gmail.com.",
+      errorTooMany: "Has enviado varias candidaturas en poco tiempo. Espera unos minutos o escríbenos a alondramusicacademy@gmail.com.",
       fileError: "El archivo debe ser PDF o Word y pesar menos de 5 MB.",
       successTitle: "¡Candidatura recibida!",
       successBody: "Gracias por tu interés en Alondra. Te contactaremos si se abre un puesto que encaje.",
@@ -1676,6 +1682,7 @@ export const translations: Record<Lang, Dict> = {
       sourceOptions: ["Nextdoor", "Recherche Google", "Instagram ou Facebook", "Une famille me l’a recommandée", "Ailleurs"],
       sending: "Envoi…",
       errorSend: "Nous n'avons pas pu envoyer votre message. Réessayez ou écrivez-nous à alondramusicacademy@gmail.com.",
+      errorTooMany: "Vous avez envoyé plusieurs messages en peu de temps. Attendez quelques minutes ou écrivez-nous à alondramusicacademy@gmail.com.",
       successTitle: "Merci !",
       successBody: "Nous avons reçu votre message et répondrons sous 24 heures.",
       successAgain: "Envoyer un autre message",
@@ -1775,6 +1782,7 @@ export const translations: Record<Lang, Dict> = {
       },
       sending: "Envoi…",
       errorSend: "Nous n'avons pas pu envoyer votre candidature. Réessayez ou écrivez-nous à alondramusicacademy@gmail.com.",
+      errorTooMany: "Vous avez envoyé plusieurs candidatures en peu de temps. Attendez quelques minutes ou écrivez-nous à alondramusicacademy@gmail.com.",
       fileError: "Le fichier doit être un PDF ou Word de moins de 5 Mo.",
       successTitle: "Candidature reçue !",
       successBody: "Merci de votre intérêt pour Alondra. Nous vous contacterons si un poste correspondant s'ouvre.",

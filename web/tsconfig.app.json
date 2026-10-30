@@ -12,6 +12,7 @@
     ],
     "module": "ESNext",
     "skipLibCheck": true,
+    "allowJs": true,
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,

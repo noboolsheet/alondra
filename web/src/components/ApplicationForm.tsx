@@ -74,11 +74,13 @@ export const ApplicationForm = () => {
       fd.append("company", company);
       if (file) fd.append("cv", file);
       const res = await fetch("/api/send-application", { method: "POST", body: fd });
-      if (!res.ok) throw new Error("Request failed");
+      // El 429 es el tope de envíos, no un fallo: lleva su propio mensaje.
+      if (!res.ok) throw new Error(res.status === 429 ? "too_many" : "failed");
       setSent(true);
       track("application_submit", { form: "careers" });
-    } catch {
-      setSubmitError(t.careers.errorSend);
+    } catch (err) {
+      const tope = err instanceof Error && err.message === "too_many";
+      setSubmitError(tope ? t.careers.errorTooMany : t.careers.errorSend);
     } finally {
       setSending(false);
     }
