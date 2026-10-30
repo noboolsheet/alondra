@@ -17,7 +17,10 @@ name: stack-site-alondra-tunnel
 # Arranque:  ./tunnel.sh up
 services:
   cloudflared:
-    image: cloudflare/cloudflared:latest
+    # Fijado por digest: `:latest` hacia que dos despliegues pudieran traer
+    # conectores distintos. Para subir de version, `./tunnel.sh update` dice el
+    # digest nuevo y esta es la unica linea que hay que cambiar (ver SECURITY.md).
+    image: cloudflare/cloudflared:latest@sha256:4955524aeaa379e154023d5a027c250f7b35041a2e7e950cf13f144bc9b9c5ba
     container_name: alondra.cloudflared
     restart: unless-stopped
     command: tunnel --config /etc/cloudflared/config.yml --no-autoupdate run

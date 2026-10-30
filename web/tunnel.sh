@@ -16,7 +16,8 @@ set -e
 #   ./tunnel.sh status    # estado del contenedor cloudflared
 #   ./tunnel.sh logs      # sigue los logs del conector
 #   ./tunnel.sh version   # version en ejecucion frente a la ultima publicada
-#   ./tunnel.sh update    # baja la ultima imagen y recrea el conector
+#   ./tunnel.sh update    # compara el digest fijado con la ultima publicada
+#   ./tunnel.sh update-forzado  # pull + recreate de lo que diga el compose
 #
 # Sobre actualizar: el conector corre con --no-autoupdate a proposito. Un
 # cloudflared que se autoactualiza reemplaza su binario DENTRO del contenedor, y
@@ -80,7 +81,42 @@ case "${1:-up}" in
             || echo "  (no se pudo consultar)"
         ;;
     update)
-        echo "⬆️  Bajando la ultima imagen de cloudflared ..."
+        # La imagen esta fijada por digest en el compose, asi que un `pull` a secas
+        # volveria a bajar el MISMO conector y este verbo no haria nada, en
+        # silencio. Lo que hace ahora es comparar y decir exactamente que cambiar.
+        FIJADO=$(grep -oE 'cloudflared:latest@sha256:[0-9a-f]+' "$COMPOSE_FILE" | cut -d@ -f2)
+        echo "📌 Fijado en el compose: ${FIJADO:-(ninguno: la imagen no esta fijada)}"
+        echo "⬇️  Consultando la ultima publicada ..."
+        docker pull -q cloudflare/cloudflared:latest >/dev/null 2>&1 || {
+            echo "❌ No se pudo consultar el registro."; exit 1; }
+        ULTIMO=$(docker image inspect --format '{{index .RepoDigests 0}}' \
+            cloudflare/cloudflared:latest 2>/dev/null | cut -d@ -f2)
+        echo "🆕 Ultima publicada:     ${ULTIMO:-(no se pudo leer)}"
+        if [ -z "$ULTIMO" ]; then
+            echo "❌ Sin digest de la ultima; no se cambia nada."; exit 1
+        fi
+        if [ "$FIJADO" = "$ULTIMO" ]; then
+            echo "✅ Ya estas en la ultima. Nada que actualizar."
+            echo "   (si quieres recrear el conector de todas formas: ./tunnel.sh up)"
+            exit 0
+        fi
+        echo
+        echo "Hay una version nueva. Son dos pasos, a proposito: fijar por digest"
+        echo "significa que subir de version es un cambio revisable y versionado,"
+        echo "no algo que pase solo en un despliegue."
+        echo
+        echo "  1. Cambia esta linea en $COMPOSE_FILE:"
+        echo "       image: cloudflare/cloudflared:latest@$ULTIMO"
+        echo "  2. ./tunnel.sh up     (corte de unos segundos al recrear)"
+        echo
+        echo "El UUID, las credenciales y los CNAME no se tocan: el dominio no"
+        echo "corre ningun riesgo. Para volver atras, repon el digest anterior"
+        echo "($FIJADO) y vuelve a lanzar ./tunnel.sh up."
+        exit 0
+        ;;
+
+    update-forzado)
+        echo "⬆️  Bajando la imagen que diga el compose ..."
         "${CF[@]}" pull
         echo "♻️  Recreando el conector (corte de unos segundos) ..."
         "${CF[@]}" up -d

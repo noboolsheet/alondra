@@ -56,6 +56,22 @@ además los dos endpoints de correo por el proxy de `/api`. Ahora:
   de extenderla. El directorio vive dentro de la raíz de Vite porque `tunnel.sh`
   exige la credencial ahí, y su nombre no encaja con ningún patrón por defecto.
 
+**La imagen corre como `node` (uid 1000) y las bases van fijadas por digest.**
+Dos cosas que hay que respetar al tocar el `Dockerfile`:
+
+- **`USER node` va después de todos los `COPY`.** Si se colara antes, los ficheros
+  quedarían a nombre del usuario que atiende las peticiones y el proceso podría
+  reescribir su propio código. Como está, el servidor no necesita escribir nada en
+  runtime (lee `routes.json`, sirve `dist/`, y multer usa `memoryStorage`) y el
+  puerto 3000 no pide privilegios.
+- **Las dos etapas llevan el mismo digest de `node:22-alpine`.** Si difirieran, el
+  build y el runtime podrían usar Nodes distintos. El conector del túnel va fijado
+  igual en `cloudflared.docker-compose.yml`, y por eso `./tunnel.sh update` ya no
+  actualiza solo: compara y te dice qué línea cambiar, porque subir de versión debe
+  quedar versionado. El verbo antiguo sigue como `update-forzado`. Hay tests
+  estáticos de las tres cosas en `src/test/build-context.test.ts`, y en
+  `SECURITY.md` está cómo refrescar los digests.
+
 **Pipeline de imágenes.** `scripts/optimize-images.mjs` (sharp) convierte los
 originales a `.webp` en `public/images/`, conservando subcarpetas, y se refiere en
 los componentes como `/images/<nombre>.webp`. Es incremental (salta lo que ya está

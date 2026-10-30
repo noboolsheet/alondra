@@ -45,6 +45,37 @@ describe("contexto de build de Docker", () => {
     expect(dockerignore()).toContain("**/.DS_Store");
   });
 
+  it("el proceso no corre como root", () => {
+    // El contenedor corría como uid 0 por no declarar usuario. No hace falta:
+    // el servidor no escribe en disco y el puerto es 3000, por encima de 1024.
+    const df = readFileSync("Dockerfile", "utf8");
+    const lineas = df.split("\n").map((l) => l.trim());
+    const iUser = lineas.findIndex((l) => l === "USER node");
+    const iCmd = lineas.findIndex((l) => l.startsWith("CMD"));
+    expect(iUser, "falta `USER node` en el Dockerfile").toBeGreaterThan(-1);
+    expect(iUser, "`USER node` tiene que ir antes del CMD").toBeLessThan(iCmd);
+    // Y después de los COPY: si se cuela antes, los ficheros quedarían a nombre
+    // del usuario de la aplicación, que es justo lo que no se quiere.
+    const ultimoCopy = lineas.reduce((acc, l, i) => (l.startsWith("COPY") ? i : acc), -1);
+    expect(iUser).toBeGreaterThan(ultimoCopy);
+  });
+
+  it("las imágenes están fijadas por digest, no por etiqueta flotante", () => {
+    // `node:22-alpine` y `cloudflared:latest` hacían que dos despliegues del mismo
+    // commit pudieran construir con bases distintas. Cómo refrescarlos: SECURITY.md.
+    const df = readFileSync("Dockerfile", "utf8");
+    const froms = df.split("\n").filter((l) => l.startsWith("FROM"));
+    expect(froms).toHaveLength(2);
+    for (const f of froms) expect(f, `FROM sin digest: ${f}`).toMatch(/@sha256:[0-9a-f]{64}/);
+    // Las dos etapas tienen que usar la MISMA base, o el build y el runtime
+    // podrían diferir en versión de Node.
+    const digests = froms.map((f) => f.match(/@(sha256:[0-9a-f]{64})/)![1]);
+    expect(digests[0]).toBe(digests[1]);
+
+    const cf = readFileSync("cloudflared.docker-compose.yml", "utf8");
+    expect(cf).toMatch(/image: cloudflare\/cloudflared:\S*@sha256:[0-9a-f]{64}/);
+  });
+
   it("la etapa de runtime sigue copiando sólo el build y el servidor", () => {
     // La exposición de la credencial quedaba en la capa del builder justamente
     // porque el runtime no arrastra el directorio. Si alguien amplía estos COPY,

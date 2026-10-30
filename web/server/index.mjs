@@ -14,6 +14,7 @@ import express from "express";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
+import dns from "node:dns/promises";
 import nodemailer from "nodemailer";
 import multer from "multer";
 
@@ -231,7 +232,66 @@ const sendLog = new Map();
 const attemptLog = new Map();
 let allSends = [];
 
-const ipOf = (req) => req.headers["cf-connecting-ip"] || req.ip || "desconocida";
+/**
+ * Identidad del visitante para los contadores, sin apoyarse en una cabecera que
+ * cualquiera pueda poner.
+ *
+ * El problema: `cf-connecting-ip` sólo es de fiar si la petición entró por el
+ * túnel, porque es el borde de Cloudflare quien la escribe (comprobado contra el
+ * sitio vivo: mandándola como `http` el origen sigue viendo https). Pero el
+ * perfil de producción publica además el puerto en `0.0.0.0`, que en vibox
+ * significa LAN de casa y tailnet, y ésa es una decisión del dueño (quiere entrar
+ * desde la red local, 27-09-2026). Por esa vía la cabecera la elige quien llama,
+ * así que servía para escapar del tope propio y, peor, para gastarle el cubo a
+ * una visitante concreta.
+ *
+ * La solución es distinguir las dos vías por algo que no se puede falsificar: la
+ * dirección del otro extremo del socket. El conector del túnel es un contenedor
+ * de la misma red compartida, así que su nombre se resuelve por el DNS interno de
+ * Docker y su IP se puede comparar con `req.ip`.
+ *
+ * - Peticiones **desde el conector**: la cabecera es de fiar y se usa, que es lo
+ *   único que da identidad por visitante en esa vía (ahí `req.ip` es el conector
+ *   y sería la misma para todo el mundo).
+ * - Cualquier otra procedencia (puerto publicado, tailnet, otro contenedor de la
+ *   red compartida): se usa `req.ip`, el peer TCP real. No se puede falsificar.
+ * - Si la resolución falla (fuera de Docker, conector caído, DNS con hipo): se
+ *   cae al comportamiento de antes. Degradar a lo de siempre es aceptable;
+ *   cerrarle el formulario a las familias por un fallo de DNS no lo es.
+ *
+ * `trust proxy` de Express sigue SIN configurar a propósito: con él, `req.ip`
+ * pasaría a leerse de `x-forwarded-for`, que sí es falsificable, y además es lo
+ * que mantiene inerte el aviso crítico de `proxy-addr`.
+ */
+const TUNNEL_CONTAINER = process.env.TUNNEL_CONTAINER || "alondra.cloudflared";
+let ipsDelTunel = new Set();
+let tunelResuelto = false;
+
+const resolverTunel = async () => {
+  try {
+    const dirs = await dns.lookup(TUNNEL_CONTAINER, { all: true });
+    ipsDelTunel = new Set(dirs.map((d) => d.address));
+    tunelResuelto = ipsDelTunel.size > 0;
+  } catch {
+    // Silencioso a propósito: fuera de Docker esto falla en cada refresco y no
+    // es un error, es el modo de desarrollo.
+    ipsDelTunel = new Set();
+    tunelResuelto = false;
+  }
+};
+
+/** Normaliza `::ffff:172.18.0.3` a `172.18.0.3` para poder comparar. */
+const sinPrefijoV6 = (ip) => (ip || "").replace(/^::ffff:/, "");
+
+const vieneDelTunel = (req) => tunelResuelto && ipsDelTunel.has(sinPrefijoV6(req.ip));
+
+const ipOf = (req) => {
+  if (vieneDelTunel(req)) return req.headers["cf-connecting-ip"] || req.ip || "desconocida";
+  // Sin resolver el conector no se puede distinguir la vía, así que se mantiene
+  // el comportamiento anterior en vez de endurecer a ciegas.
+  if (!tunelResuelto) return req.headers["cf-connecting-ip"] || req.ip || "desconocida";
+  return sinPrefijoV6(req.ip) || "desconocida";
+};
 
 let ultimoBarrido = 0;
 
@@ -714,6 +774,23 @@ app.get(/^\/(?!api\/).*/, (req, res) => {
 // sin host (Node ata 0.0.0.0 y ::). El contenedor necesita 0.0.0.0 para que la
 // publicación de puertos de Docker funcione, y lo pone el propio Dockerfile.
 const BIND_HOST = process.env.BIND_HOST || "127.0.0.1";
+
+// Se resuelve al arrancar y se refresca, porque la IP del conector cambia si se
+// recrea su contenedor. `unref()` para no mantener vivo el bucle de eventos: en
+// los tests el proceso tiene que poder terminar.
+// Una línea al arrancar para que esto sea comprobable en producción y no una
+// creencia: dice si el conector se resolvió y, por tanto, qué identidad usan los
+// contadores en cada vía. No imprime ninguna IP de visitante.
+resolverTunel().then(() => {
+  console.log(
+    tunelResuelto
+      ? `Conector del tunel resuelto (${TUNNEL_CONTAINER}, ${ipsDelTunel.size} direccion/es): ` +
+        "cf-connecting-ip solo se acepta desde ahi; el resto usa el peer TCP"
+      : `Conector del tunel SIN resolver (${TUNNEL_CONTAINER}): ` +
+        "se mantiene el comportamiento anterior, cf-connecting-ip se acepta de cualquier origen",
+  );
+});
+setInterval(resolverTunel, 60_000).unref();
 
 export const server = app.listen(PORT, BIND_HOST, () => {
   console.log(`Alondra server listening on http://${BIND_HOST}:${PORT}`);
