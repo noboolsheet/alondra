@@ -10,10 +10,11 @@ pública ni puertos abiertos en el router.
 
 | Perfil | Puerto | Cómo se llega |
 |--------|--------|---------------|
-| `dev`  | 4230 | `http://localhost:4230` (sólo LAN/tailnet) |
+| `dev`  | 4230 | `http://localhost:4230` (sólo loopback: `envs/.env.dev` ata a `127.0.0.1`) |
 | `prod` | 4232 | público en `alondrama.com` por el túnel |
 
-Para trabajar en la web sin Docker: `npm run dev` levanta Vite en el **8080**.
+Para trabajar en la web sin Docker: `npm run dev` levanta Vite en el **8080**, en
+loopback. Si necesitas verlo desde el móvil en la LAN, `VITE_HOST=:: npm run dev`.
 Ahí no hay backend de correo, así que los formularios no envían — basta para ver
 imágenes, secciones y textos.
 

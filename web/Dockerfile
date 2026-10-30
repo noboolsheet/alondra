@@ -26,6 +26,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 ENV PORT=3000
+# Dentro del contenedor hay que atar todas las interfaces o la publicación de
+# puertos de Docker no alcanza al proceso. Fuera, el servidor usa loopback por
+# defecto (ver BIND_HOST en server/index.mjs).
+ENV BIND_HOST=0.0.0.0
 
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev

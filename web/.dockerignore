@@ -1,13 +1,49 @@
+# Qué NO entra en el contexto que se manda al demonio de Docker.
+#
+# El Dockerfile hace `COPY . .` en la etapa de build, así que este fichero es el
+# ÚNICO filtro entre el árbol de trabajo y una capa de imagen. Todo lo que
+# .gitignore marque como secreto tiene que estar también aquí: son dos listas
+# distintas que protegen lo mismo, y se desincronizaron una vez (ver `cloudflared`).
+
 node_modules
 dist
 dist-ssr
 .git
+
+# Secretos de la aplicación (GMAIL_USER / GMAIL_APP_PASSWORD).
 .env
 .env.*
 !.env.example
+
+# Credencial del túnel de Cloudflare. .gitignore la excluye desde el commit
+# 35a2fe8 (web/cloudflared/*.json y *.pem, bajo el rótulo SECRETO) y este fichero
+# no se actualizó, así que en la máquina donde ese fichero existe entraba entero
+# en la capa del builder: quien pueda leer el almacén de capas o el caché de
+# build del demonio obtiene una credencial que vale para servir alondrama.com.
+# La etapa de runtime no la arrastra (sólo copia dist/ y server/), pero la del
+# builder sí. El contenedor no necesita este directorio para construir nada.
+cloudflared
+
+# Sin anclar: `.DS_Store` a secas sólo excluye el de la raíz del contexto, así que
+# los de web/public y web/public/images sí llegaban a la imagen.
+**/.DS_Store
+
+# Entradas del pipeline de imágenes: .gitignore las excluye y el build no las usa
+# (dentro de la imagen IMAGES_SRC_DIR no se define y el script sale sin hacer nada).
+imagen-sources
+imagen-sources-heic
+imagen-sources-png
+
+# Herramientas y notas de trabajo locales.
 *.log
-.DS_Store
 .lovable
 .agents
 .impeccable
+.codex
 docs-sources
+
+# Documentación interna de trabajo: no es secreta, pero tampoco hace falta dentro
+# de la imagen y hoy se copia a la capa del builder.
+CLAUDE.md
+DESIGN.md
+PRODUCT.md

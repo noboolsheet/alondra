@@ -23,7 +23,7 @@ estrategia (dossier, briefs, hojas de cálculo) vive fuera del repo, en
 ## Comandos
 
 ```sh
-npm run dev          # Vite en http://localhost:8080 (host "::")
+npm run dev          # Vite en http://localhost:8080 (sólo loopback)
 npm run dev:all      # Vite + el server Express a la vez (formularios funcionando)
 npm run build        # build de producción a dist/
 npm run build:dev    # build en modo development
@@ -37,6 +37,24 @@ npm run og           # regenera las imágenes Open Graph (1200x630)
 ```
 
 El gestor de paquetes es **npm** (`package-lock.json` versionado).
+
+**Los dos servidores escuchan sólo en loopback por defecto, y es a propósito.**
+`vite.config.ts` ataba el de desarrollo a `host: "::"`, que en macOS son todas las
+interfaces, IPv6 **y** IPv4: cualquier equipo de la misma wifi podía leer el árbol
+entero de `web/` (código, `package-lock.json`, las notas internas de trabajo y
+`cloudflared/config.yml` con el UUID del túnel), y con `npm run dev:all` alcanzaba
+además los dos endpoints de correo por el proxy de `/api`. Ahora:
+
+- `npm run dev` escucha en `localhost`. Para probar desde el móvil en la LAN,
+  `VITE_HOST=:: npm run dev`, a sabiendas.
+- `server/index.mjs` escucha en `BIND_HOST`, que por defecto es `127.0.0.1`. El
+  contenedor necesita `0.0.0.0` para que la publicación de puertos de Docker
+  alcance al proceso, y **lo pone el propio `Dockerfile`**, no el compose: así la
+  imagen funciona siempre y un `npm run server` en el portátil no publica nada.
+- `server.fs.deny` de Vite lleva `**/cloudflared/**` además de los tres patrones
+  por defecto, que hay que repetir porque esa lista **reemplaza** la de Vite en vez
+  de extenderla. El directorio vive dentro de la raíz de Vite porque `tunnel.sh`
+  exige la credencial ahí, y su nombre no encaja con ningún patrón por defecto.
 
 **Pipeline de imágenes.** `scripts/optimize-images.mjs` (sharp) convierte los
 originales a `.webp` en `public/images/`, conservando subcarpetas, y se refiere en
@@ -259,8 +277,12 @@ ponen cookies. El servidor no manda ninguna cabecera `Set-Cookie` propia; el
 idioma y el tema viven en `localStorage`, que es almacenamiento funcional de
 primera parte. **Si añades un tercero que cargue solo, apunta aquí por qué.**
 
-**Analítica.** GA4 se carga desde `index.html`, con una guarda `ga-disable-*` para
-que `npm run dev` en localhost no contamine los datos de producción. Como esto es
+**Analítica.** GA4 se carga desde `index.html`, con una guarda `ga-disable-*` que
+funciona por **lista blanca**: se apaga en cualquier hostname que no sea
+`alondrama.com` o `www.alondrama.com`. Antes enumeraba los nombres locales, así
+que abrir el sitio de desarrollo por la IP de la LAN o por el nombre de Tailscale
+caía fuera de la lista y mandaba `page_view` y `generate_lead` **reales** a la
+propiedad del cliente. Al revés es correcto en cualquier nombre futuro. Como esto es
 una SPA, la etiqueta sola sólo reportaría la página de entrada: `usePageviews()`
 (`src/lib/analytics.ts`) emite un `page_view` en cada cambio de ruta posterior.
 `track()`, en el mismo módulo, es un no-op seguro cuando gtag no está (bloqueador,
@@ -284,13 +306,61 @@ Para probarlos en local, `?ga=on` levanta la guarda de localhost y enciende
 
 **Los formularios van contra un backend de correo real.** `server/index.mjs` es un
 Express (nodemailer sobre Gmail SMTP) que expone `POST /api/send-contact` y
-`POST /api/send-application` (honeypot + validación + CV adjunto). Los dos
-endpoints tienen un **tope de cinco envíos por hora y por IP**, contado sobre
-`cf-connecting-ip` (la IP real que pone el túnel; `req.ip` es la del conector y
-sería la misma para todos los visitantes) y comprobado justo antes de enviar,
-para que un formulario mal rellenado cinco veces no deje a una familia fuera una
-hora. Sin ese tope, un script en bucle agota el cupo diario de la cuenta de
-Gmail y a partir de ahí el formulario devuelve error a las familias de verdad.
+`POST /api/send-application` (honeypot + validación + CV adjunto).
+
+**Todo campo de formulario se coerce a string antes de usarlo** (`texto()`), y los
+dos handlers van envueltos en `asyncRoute()`. `texto()` **no puede lanzar**, y eso
+no es un detalle: la primera versión del arreglo coercionaba con `String(v)` a
+secas, y eso tira `TypeError` con `{"toString": 0}` y con el objeto sin prototipo
+que produce un nombre de campo multipart con corchetes (`name[a]=X`), o sea que el
+propio arreglo era un sitio donde se lanzaba, desde una petición sin autenticar.
+Un objeto o un array nunca es un campo válido: se descarta. `asyncRoute` es la red
+que impide que un rechazo mate el proceso, pero no debe ser lo único que sostenga
+esto. No es cosmética: un cuerpo JSON puede
+traer cualquier tipo, el valor por defecto de una desestructuración sólo cubre
+`undefined`, y `{"email": 1}` llegaba a `email.trim()`, lanzaba TypeError dentro de
+un handler `async`, Express 4 descartaba el rechazo y Node 22 **mataba el proceso**.
+Una petición sin autenticar tumbaba el sitio entero, y encima antes del apunte de
+cuota, o sea sin límite de frecuencia. Hay test de regresión (`server.test.ts`): si
+vuelve a fallar, lo que falla no es una validación, es la disponibilidad.
+
+**La cuota de envíos tiene tres piezas y cada una responde a algo distinto:**
+
+- **Tope global diario** (`SEND_MAX_DAY`), porque el recurso que se protege es el
+  cupo **diario** de Gmail. Cincuenta por hora son hasta 1.200 al día: el tope
+  horario podía no saltar nunca mientras el cupo se agotaba.
+- **Tope global horario** (`SEND_MAX_TOTAL`), que acota una ráfaga.
+- **Tope por identidad** (`SEND_MAX`), que **sólo se aplica desde
+  `SEND_FAIR_FROM`**. La identidad sale de `cf-connecting-ip`, que el visitante
+  elige en las vías que no pasan por Cloudflare (puerto publicado, tailnet,
+  Funnel), así que si se aplicara siempre, llenar el cubo de otra persona le
+  negaría el formulario habiendo cupo de sobra: el tope sería un arma. Con
+  demanda real sí reparte. Consecuencia que conviene conocer: el tope efectivo
+  para quien llega con el sitio en frío es `SEND_FAIR_FROM`, no `SEND_MAX`.
+- **La cuota se devuelve si el envío no sale** (`refundSend`). El apunte va antes
+  del `await` para que no haya ventana entre comprobar y apuntar, pero sin
+  devolverlo un envío que el proveedor rechaza gastaba cupo igual. Con la ventana
+  diaria eso era grave: unas 150 peticiones baratas en pocas horas, sin que
+  saliera un solo correo, cerraban los dos formularios el resto del día. Y se
+  autoinfligía tras un despliegue sin credenciales. La rama de «sin credenciales»
+  sale antes del `try`, así que **también** tiene que devolver la marca.
+- **Contador de intentos** aparte (`ATTEMPT_MAX`), apuntado **al entrar** en la
+  candidatura. El corte previo a multer leía el contador de envíos, que sólo
+  avanza en la ruta de éxito, así que una petición que siempre falla la validación
+  no gastaba nada y el corte no podía saltar nunca: los 5 MB se buffereaban
+  enteros antes de rechazarla. Su mapa se acota **expulsando la clave más
+  antigua**, no con un tope global: un tope global que respondiera 429 a todos
+  sería un interruptor de apagado accionable con 300 peticiones vacías, unas
+  30.000 veces más barato que la avalancha de 5 MB que el contador encarece.
+  `/api/send-contact` no lleva contador de intentos, y es deliberado: su cuerpo
+  está acotado a 32 kB por `express.json`, así que una petición inválida cuesta
+  poco. Si algún día ese endpoint acepta algo caro, hay que extenderlo.
+
+**El adjunto no es lo único acotado.** multer recibía sólo `fileSize` y pasaba el
+objeto a busboy tal cual, y busboy pone `Infinity` en `files`, `fields` y `parts`.
+Ahora están declarados los siete límites, y el mapeo de errores da un código por
+cada uno. Si añades un campo al formulario, mira `parts`/`fields`.
+
 Si falla un envío, el log incluye los datos del lead (`docker logs`), porque no
 están guardados en ningún otro sitio. `ContactForm` y
 `ApplicationForm` hacen `fetch()` a esos endpoints con estados reales de
@@ -352,6 +422,16 @@ están en `ui`) son las secciones propias. Iconos con `lucide-react`, animación
 `framer-motion`, y nada de andamiaje de datos: el sitio es estático y
 `@tanstack/react-query` se quitó al no tener una sola consulta.
 
+## Seguridad
+
+`SECURITY.md` recoge la postura: qué se revisó, qué hechos del despliegue están
+comprobados contra el sitio vivo, los avisos de dependencias que **no** se arreglan
+con el motivo de cada uno, y los riesgos que siguen abiertos. Lee ese fichero antes
+de tocar los endpoints de correo, la cuota, el contexto de build o la configuración
+del servidor de desarrollo: varias cosas que parecen descuidos están ahí
+explicadas como decisiones, y una de ellas (el tope por identidad que sólo se
+aplica con demanda) se rompe sola si se "arregla" sin leer el por qué.
+
 ## Disciplina de claims
 
 El sitio publicó afirmaciones que la academia no puede sostener y se retiraron a
@@ -402,6 +482,14 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
 - **Las reseñas en su idioma original no se tocan.** Ni erratas, ni puntuación:
   son palabras textuales de una clienta y alterarlas es territorio de la FTC.
   Sus traducciones sí se pueden ajustar.
+- **`.dockerignore` y `.gitignore` protegen lo mismo para destinos distintos, y
+  tienen que ir a la par.** El `Dockerfile` hace `COPY . .`, así que
+  `.dockerignore` es el único filtro entre el árbol de trabajo y una capa de
+  imagen. Se desincronizaron una vez: el commit que añadió la credencial del
+  túnel a `.gitignore` no tocó `.dockerignore`, y en la máquina donde ese fichero
+  existe entraba entera en la capa del builder. Hay un test que lo vigila
+  (`src/test/build-context.test.ts`). Al marcar algo secreto en uno, márcalo en el
+  otro.
 - **Alias de ruta `@/` → `src/`** (configurado en `vite.config.ts`,
   `vitest.config.ts` y los `tsconfig`). Úsalo en todos los imports internos.
 - **Estilos con Tailwind + variables CSS.** Los tokens de marca y las clases de

@@ -57,8 +57,32 @@ const sitemap = () => ({
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
-    host: "::",
+    // Por defecto loopback. `host: "::"` ataba el servidor de desarrollo a TODAS
+    // las interfaces (en macOS, con v6only a 0, eso incluye las IPv4), así que
+    // cualquier equipo de la misma wifi podía leer todo el árbol de `web/`:
+    // el código, el package-lock, las notas internas de trabajo y
+    // `cloudflared/config.yml` con el UUID del túnel. Y con `npm run dev:all`
+    // alcanzaba además los dos endpoints de correo por el proxy de abajo.
+    // Para probar desde el móvil en la LAN: `VITE_HOST=:: npm run dev`.
+    host: process.env.VITE_HOST || "localhost",
     port: 8080,
+    // Esta lista REEMPLAZA la de Vite, no la extiende, así que las tres primeras
+    // entradas son las suyas por defecto y hay que repetirlas. `cloudflared` se
+    // añade porque el directorio vive dentro de la raíz de Vite y es donde
+    // `tunnel.sh` exige la credencial del túnel: su nombre no encaja con ningún
+    // patrón por defecto, así que se habría servido tal cual.
+    // `**/.git/**` no está en los tres por defecto de Vite 5 (upstream lo añadió
+    // en la línea 6). Aquí es prevención, no un agujero abierto: comprobado
+    // levantando el servidor, `/.git/HEAD` devuelve el `index.html` de la SPA por
+    // el fallback, porque el `.git` de este repo está en el directorio padre y
+    // `fs.allow` se limita a `web/`. Se deja por si algún día alguien levanta
+    // Vite con la raíz del repositorio, donde sí estaría dentro.
+    //
+    // Lo que sí se sirve con el servidor abierto a la red es el resto del árbol:
+    // `src/`, `package-lock.json` y los documentos internos (`CLAUDE.md` sale
+    // como text/markdown, comprobado). Eso es lo que hace un servidor de
+    // desarrollo, y es la razón de que por defecto escuche sólo en loopback.
+    fs: { deny: [".env", ".env.*", "*.{crt,pem}", "**/cloudflared/**", "**/.git/**"] },
     hmr: {
       overlay: false,
     },

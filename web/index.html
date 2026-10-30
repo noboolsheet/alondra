@@ -53,8 +53,13 @@
         // DebugView. Sin esto no hay forma de comprobar los eventos en local:
         // la guarda los apaga justo donde se desarrolla.
         var forced = /(?:^|[?&])ga=on(?:&|$)/.test(location.search);
+        // Lista blanca, no lista negra: la guarda enumeraba los nombres locales,
+        // así que abrir el sitio de desarrollo por la IP de la LAN o por el
+        // nombre de Tailscale caía fuera de la lista y mandaba page_view y
+        // generate_lead reales a la propiedad de producción. Al revés es correcto
+        // en cualquier nombre futuro: sólo mide el dominio del cliente.
         var h = location.hostname;
-        if (!forced && (h === "localhost" || h === "127.0.0.1" || h === "[::1]" || h.endsWith(".local"))) {
+        if (!forced && h !== "alondrama.com" && h !== "www.alondrama.com") {
           window["ga-disable-G-4K99WS2BR6"] = true;
         }
         window.__alondraGaDebug = forced;
