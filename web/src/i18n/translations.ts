@@ -27,8 +27,6 @@ export type Dict = {
     title2: string;
     subtitle: string;
     ctaPrimary: string;
-    /** Etiqueta del CTA movil, que abre WhatsApp y debe decirlo. */
-    ctaPrimaryWhatsApp: string;
     /** Microcopy bajo el CTA: dice lo que de verdad pasa al pulsarlo. */
     ctaNote: string;
     ctaSecondary: string;
@@ -300,12 +298,11 @@ export const translations: Record<Lang, Dict> = {
     nav: { home: "Home", programs: "Lessons", teachers: "Teachers", about: "Academy", registration: "Prices", enroll: "Enrollment", careers: "Work with us", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
-      title1: "Music lessons at home in Miami,",
-      title2: "with the teacher who fits your child.",
+      title1: "Give your child the superpower of music.",
+      title2: "Discover their potential today.",
       subtitle:
         "**The right teacher makes the difference.** We match your child with the one who truly connects with them, and lessons they look forward to, at home across Miami-Dade and Broward.",
-      ctaPrimary: "Request your free 15-minute call",
-      ctaPrimaryWhatsApp: "Request your call on WhatsApp",
+      ctaPrimary: "Request a free call",
       ctaNote: "Tell us your child's age and we call you within 48 hours.",
       ctaSecondary: "Explore lessons",
       badge: "Background-checked faculty",
@@ -464,6 +461,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Can siblings share a lesson slot?", a: "Yes, we offer **sibling discounts** and split-lesson formats when age-appropriate." },
         { q: "What if we need to reschedule?", a: "If you let us know **more than 24 hours in advance**, the class is rescheduled with no problem. For last-minute cancellations, the session is considered delivered, except in cases of demonstrable emergencies or medical issues. In addition, if there are frequent absences within the same month, 50% of the classes will be made up to protect your child's continuity." },
         { q: "Are there recitals or performances?", a: "Nothing is scheduled right now. When we set a date for a performance, enrolled families are the first to know." },
+        { q: "What if my child does not click with their teacher?", a: "Tell us and we will look at it and find a better match. Lessons already taught are paid for and there is no refund, but reassigning does not cost a new registration fee." },
         { q: "How do I enroll?", a: "It's very simple! Write to us on WhatsApp with the phone button in the header, or fill out the form on the contact page. Within 48 hours we'll set up your **free discovery phone call** to get to know your child and match them with the ideal specialist teacher." },
       ],
     },
@@ -848,12 +846,11 @@ export const translations: Record<Lang, Dict> = {
     nav: { home: "Inicio", programs: "Clases", teachers: "Profesores", about: "Academia", registration: "Precios", enroll: "Inscripción", careers: "Trabaja con nosotros", contact: "Contacto" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
-      title1: "Clases de música en casa, en Miami,",
-      title2: "con el profesor que encaja con tu hijo.",
+      title1: "Dale a tu hijo el superpoder de la música.",
+      title2: "Descubre su potencial hoy mismo.",
       subtitle:
         "**El profesor adecuado hace la diferencia.** Elegimos para tu hijo el que mejor conecta con él, y clases a las que le apetece volver, en casa y en todo Miami-Dade y Broward.",
-      ctaPrimary: "Solicita tu llamada gratuita de 15 min",
-      ctaPrimaryWhatsApp: "Solicítala por WhatsApp",
+      ctaPrimary: "Solicita una llamada gratuita",
       ctaNote: "Cuéntanos la edad de tu hijo y te llamamos en menos de 48 horas.",
       ctaSecondary: "Ver las clases",
       badge: "Profesorado con antecedentes verificados",
@@ -1012,6 +1009,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "¿Pueden los hermanos compartir clase?", a: "Sí, ofrecemos **descuentos para hermanos** y formatos de clase compartida cuando la edad lo permite." },
         { q: "¿Qué pasa si necesitamos reprogramar?", a: "Si nos avisas con **más de 24 horas de anticipación**, la clase se reprograma sin problema. Para cancelaciones de última hora, la sesión se considerará impartida, salvo en casos de emergencias o imprevistos médicos demostrables. Además, si se presentan ausencias frecuentes en un mismo mes, se repondrá el 50% de las clases para cuidar la continuidad de tu hijo." },
         { q: "¿Hay recitales o presentaciones?", a: "Ahora mismo no hay ninguno programado. Cuando fijemos la fecha de una presentación, las familias inscritas serán las primeras en saberlo." },
+        { q: "¿Y si mi hijo no conecta con su profesor?", a: "Dínoslo: revisamos la situación y buscamos una mejor combinación. Las clases ya impartidas se pagan y no hay devolución, pero la reasignación no cobra matrícula nueva." },
         { q: "¿Cómo me inscribo?", a: "¡Es muy sencillo! Escríbenos por WhatsApp con el botón del teléfono de la cabecera, o completa el formulario de la página de contacto. En menos de 48 horas coordinaremos tu **llamada telefónica de descubrimiento gratuita** para conocer a tu hijo y asignarle al profesor especialista ideal." },
       ],
     },
@@ -1331,12 +1329,11 @@ export const translations: Record<Lang, Dict> = {
     nav: { home: "Accueil", programs: "Cours", teachers: "Professeurs", about: "Académie", registration: "Tarifs", enroll: "Inscription", careers: "Travaillez avec nous", contact: "Contact" },
     hero: {
       eyebrow: "Miami-Dade · Broward",
-      title1: "Des cours de musique à domicile, à Miami,",
-      title2: "avec le professeur qui convient à votre enfant.",
+      title1: "Offrez à votre enfant le superpouvoir de la musique.",
+      title2: "Révélez son potentiel dès aujourd'hui.",
       subtitle:
         "**Le bon professeur fait toute la différence.** Nous choisissons pour votre enfant celui avec qui il s’entend le mieux, et des cours où il a envie de revenir, chez vous, dans tout Miami-Dade et Broward.",
-      ctaPrimary: "Demandez votre appel gratuit de 15 min",
-      ctaPrimaryWhatsApp: "Demandez-le sur WhatsApp",
+      ctaPrimary: "Demandez un appel gratuit",
       ctaNote: "Dites-nous l'âge de votre enfant et nous vous appelons sous 48 heures.",
       ctaSecondary: "Voir les cours",
       badge: "Professeurs aux antécédents vérifiés",
@@ -1495,6 +1492,7 @@ export const translations: Record<Lang, Dict> = {
         { q: "Les frères et sœurs peuvent-ils partager un cours ?", a: "Oui, nous offrons des **remises fratrie** et des formats de cours partagé quand l'âge le permet." },
         { q: "Que faire si nous devons reprogrammer ?", a: "Si vous nous prévenez **plus de 24 heures à l'avance**, le cours est reprogrammé sans problème. Pour les annulations de dernière minute, la séance sera considérée comme donnée, sauf en cas d'urgences ou d'imprévus médicaux démontrables. De plus, en cas d'absences fréquentes au cours d'un même mois, 50 % des cours seront rattrapés pour préserver la continuité de votre enfant." },
         { q: "Y a-t-il des récitals ?", a: "Rien n'est programmé pour le moment. Dès qu'une date de concert sera fixée, les familles inscrites seront les premières informées." },
+        { q: "Et si mon enfant n'accroche pas avec son professeur ?", a: "Dites-le-nous : nous examinons la situation et cherchons une meilleure combinaison. Les cours déjà donnés sont dus et ne sont pas remboursés, mais la réaffectation n'entraîne pas de nouveaux frais d'inscription." },
         { q: "Comment s'inscrire ?", a: "C'est très simple ! Écrivez-nous sur WhatsApp avec le bouton du téléphone de l'en-tête, ou remplissez le formulaire de la page de contact. En moins de 48 heures, nous organiserons votre **appel téléphonique de découverte gratuit** pour connaître votre enfant et lui attribuer le professeur spécialiste idéal." },
       ],
     },

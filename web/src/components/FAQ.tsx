@@ -1,8 +1,5 @@
-import { ArrowRight } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PageLink } from "@/components/PageLink";
 import { useLang } from "@/i18n/LanguageContext";
-import { useTrack } from "@/lib/analytics";
 import { motion } from "framer-motion";
 import { reveal, fadeUp, staggerParent, staggerUp } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
@@ -18,7 +15,6 @@ import { rich } from "@/lib/richtext";
  */
 export const FAQ = () => {
   const { t } = useLang();
-  const track = useTrack();
   return (
     <section id="faq" className="scroll-mt-20 md:scroll-mt-24 py-16 md:py-20 bg-secondary/30">
       <div className="container-narrow">
@@ -47,16 +43,7 @@ export const FAQ = () => {
         </motion.div>
 
         <motion.p {...reveal(fadeUp)} className="mt-8 mx-auto max-w-[68ch] text-center text-primary/70 leading-relaxed">
-          {rich(t.faq.more)}{" "}
-          <PageLink
-            to="contact"
-            data-cta="call"
-            className="inline-flex items-center gap-1.5 py-2 font-semibold text-accent-ink hover:gap-2.5 transition-all"
-            onClick={() => track("cta_click", { location: "faq", label: "discovery_call" })}
-          >
-            {t.ctaBanner.button}
-            <ArrowRight className="w-4 h-4" />
-          </PageLink>
+          {rich(t.faq.more)}
         </motion.p>
       </div>
     </section>

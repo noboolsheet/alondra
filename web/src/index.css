@@ -244,14 +244,14 @@
     @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent text-accent-foreground font-semibold px-7 py-3.5 text-sm tracking-wide transition-all duration-300 hover:shadow-[var(--shadow-glow)] hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
   .btn-outline {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary text-primary font-semibold px-7 py-3.5 text-sm tracking-wide transition-all duration-300 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary text-primary font-semibold px-[1.625rem] py-3 text-sm tracking-wide transition-all duration-300 hover:bg-primary hover:text-primary-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
   }
 
   /* Secundario sobre superficie oscura de marca. `btn-outline` toma el violeta
      como borde y como texto, así que dentro de `on-brand-dark` el botón y el
      fondo son el mismo color y desaparece. */
   .btn-outline-invert {
-    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary-foreground/60 text-primary-foreground font-semibold px-7 py-3.5 text-sm tracking-wide transition-all duration-300 hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary;
+    @apply inline-flex items-center justify-center gap-2 rounded-full border-2 border-primary-foreground/60 text-primary-foreground font-semibold px-[1.625rem] py-3 text-sm tracking-wide transition-all duration-300 hover:bg-primary-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary;
   }
 
   .eyebrow {

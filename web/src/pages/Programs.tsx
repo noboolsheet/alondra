@@ -7,6 +7,7 @@ import { PageLink } from "@/components/PageLink";
 import { CTABanner } from "@/components/CTABanner";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { useLang } from "@/i18n/LanguageContext";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { disciplineIcon, formatIcon } from "@/lib/icons";
 import { reveal, fadeUp, staggerParent, staggerPop, staggerUp } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
@@ -36,6 +37,7 @@ const Programs = () => {
   // El desplegable apuntado por el hash (#instrument-piano) se abre solo al
   // llegar desde la tira de la portada o desde una tarjeta de formato.
   const [open, setOpen] = useState("");
+  const isMobile = useIsMobile();
   useEffect(() => {
     const id = hash.replace(/^#/, "");
     if (id.startsWith("instrument-")) setOpen(id.slice("instrument-".length));
@@ -172,6 +174,23 @@ const Programs = () => {
                       </span>
                     </AccordionTrigger>
                     <AccordionContent className="pb-6">
+                      {/* En móvil el panel también se cierra tocando el texto, no
+                          sólo el disparador: abierto ocupa casi la pantalla y
+                          volver arriba a buscar la cabecera era el único camino.
+                          Mismo gesto que las biografías del equipo, y por el
+                          mismo motivo. Sube primero y sin animación: al revés, el
+                          scroll corre mientras el panel se pliega y el navegador
+                          pierde el destino. */}
+                      <div
+                        onClick={() => {
+                          if (!isMobile) return;
+                          document
+                            .getElementById(`instrument-${d.key}`)
+                            ?.scrollIntoView({ behavior: "instant", block: "start" });
+                          setOpen("");
+                        }}
+                        className="cursor-pointer md:cursor-auto"
+                      >
                       <div>
                         <h3 className="text-xs font-bold uppercase tracking-wide text-primary/70">{offer.methodLabel}</h3>
                         <p className="mt-1.5 text-primary/70 leading-relaxed">{rich(d.method)}</p>
@@ -183,6 +202,7 @@ const Programs = () => {
                           <ProgressItem label={offer.shortTermLabel} text={d.progress.short} />
                           <ProgressItem label={offer.longTermLabel} text={d.progress.long} />
                         </ul>
+                      </div>
                       </div>
                     </AccordionContent>
                   </AccordionItem>

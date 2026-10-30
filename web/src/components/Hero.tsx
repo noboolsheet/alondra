@@ -1,9 +1,8 @@
 import { PageLink } from "@/components/PageLink";
-import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { motion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
-import { useTrack } from "@/lib/analytics";
 import { rich } from "@/lib/richtext";
 
 export const Hero = () => {
@@ -24,7 +23,6 @@ export const Hero = () => {
   const accentSize = long
     ? "text-5xl sm:text-6xl md:text-6xl lg:text-6xl"
     : "text-5xl sm:text-6xl md:text-7xl lg:text-[4.5rem]";
-  const track = useTrack();
 
   return (
     <section className="relative min-h-[88vh] flex items-center overflow-hidden">
@@ -97,75 +95,32 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.35 }}
-            className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5"
+            className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3"
           >
-            {/* El primario va primero. Estaba detras del secundario, asi que en
-                movil el primer boton que alcanzaba el pulgar era «ver las
-                clases», que sale del embudo. */}
-            {/* Mobile: the discovery-call CTA opens WhatsApp directly (uses the
-                contact phone number). Desktop keeps the routed contact page.
-                Its label names WhatsApp: the same words on both would promise
-                the same destination and deliver two. */}
-            <a data-track-loc="hero"
+            {/* Un solo CTA, el mismo texto en los dos tamaños y el mismo destino.
+                Antes el móvil abría WhatsApp y el escritorio llevaba al
+                formulario, con etiquetas distintas para no prometer lo mismo y
+                entregar dos cosas. Ahora los dos van a WhatsApp y el icono dice
+                adónde. El seguimiento lo recoge el listener delegado por el
+                `data-track-loc`, no hace falta `onClick`. */}
+            <a
+              data-track-loc="hero"
               href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-cta sm:hidden"
-            >
-              {t.hero.ctaPrimaryWhatsApp}
-              <WhatsAppIcon className="w-4 h-4" />
-            </a>
-            <PageLink
-              to="contact"
-              className="btn-cta hidden sm:inline-flex"
-              onClick={() => track("cta_click", { location: "hero", label: "discovery_call" })}
+              className="btn-cta"
             >
               {t.hero.ctaPrimary}
-              <ArrowRight className="w-4 h-4" />
-            </PageLink>
-            {/* Secundario como enlace de texto, no como píldora.
-                En pastilla competía de igual a igual con la llamada: dos botones
-                del mismo tamaño en la primera pantalla obligan a elegir, y el
-                que sale del embudo (el catálogo de clases) es el que gana
-                cuando los dos pesan lo mismo. El destino sigue existiendo y a un
-                toque; lo que cambia es el peso. */}
-            <PageLink
-              to="programs"
-              className="inline-flex items-center gap-1.5 py-2 self-start font-semibold text-accent-ink transition-all hover:gap-2.5"
-            >
+              <WhatsAppIcon className="w-4 h-4" />
+            </a>
+            {/* `btn-outline` ya es el fondo transparente con borde y el relleno
+                al pasar por encima, y además cambia con el tema: el borde es
+                blanco sobre el campo morado y morado sobre el lavanda. Un borde
+                blanco fijo desaparecería en el tema claro. */}
+            <PageLink to="programs" className="btn-outline">
               {t.hero.ctaSecondary}
               <ArrowUpRight className="w-4 h-4" />
             </PageLink>
-          </motion.div>
-
-          {/* Lo que de verdad pasa al pulsar: el boton no abre un calendario. */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="mt-4 text-sm text-primary/70 max-w-md"
-          >
-            {t.hero.ctaNote}
-          </motion.p>
-
-          {/* La insignia flotante de confianza (DESIGN.md §5): el Principio 2
-              («enseña la prueba, no la afirmes») hecho objeto. El sistema la
-              describe sobre la imagen del hero y el componente no la tenía en
-              ninguna parte, así que la primera pantalla no traía ni una prueba.
-              Reutiliza `hero.stat3Label`, que ya existe en los tres idiomas: no
-              añade una afirmación nueva, sólo la pone donde se decide. */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.65 }}
-            className="mt-7 inline-flex items-center gap-3 rounded-2xl border border-border bg-card shadow-lift px-4 py-3"
-          >
-            <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-accent/20">
-              <ShieldCheck className="h-5 w-5 text-accent-ink" strokeWidth={1.8} />
-            </span>
-            <span className="text-sm font-semibold leading-tight text-primary">
-              {t.hero.badge}
-            </span>
           </motion.div>
         </div>
       </div>

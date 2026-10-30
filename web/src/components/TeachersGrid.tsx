@@ -111,16 +111,9 @@ export const TeachersGrid = () => {
             exactamente donde un padre se pregunta «¿y si no se llevan bien?».
             Sustituye al mecanismo que daba la competencia (la primera clase
             gratis) sin regalar una clase, que es lo que la academia no hace. */}
-        {/* Estaba a 14 px, al 70% y centrada: letra pequeña. Es la respuesta a
-            «¿y si no se llevan bien?», o sea lo que de verdad desbloquea la
-            decisión, y es el sustituto de la clase de prueba que la academia no
-            da. Ahora es un bloque con su superficie y su tamaño de cuerpo. */}
-        <motion.div
-          {...reveal(fadeUp)}
-          className="mt-10 mx-auto max-w-[62ch] rounded-2xl border border-border bg-card px-5 py-4 md:px-6 md:py-5"
-        >
-          <p className="text-primary/80 leading-relaxed">{rich(t.teachers.matchPromise)}</p>
-        </motion.div>
+        {/* La promesa de reasignación vivía aquí y ahora es una pregunta del
+            FAQ («¿y si mi hijo no conecta con su profesor?»), que es donde el
+            dueño la quiere. Sigue además completa en /music-teachers. */}
 
         {/* El pico emocional de la portada esta aqui, debajo de las caras y de la
             promesa de reasignacion, y hasta ahora no habia nada que pulsar: el

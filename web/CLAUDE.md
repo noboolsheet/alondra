@@ -301,10 +301,18 @@ olvida, el hook cae al comportamiento antiguo tras un tick de gracia, pero vuelv
 el fallo. Y armar no reescribe el estado, o el esqueleto parpadearía encima de un
 embed ya cargado.
 
-**El CTA del sitio es una llamada de descubrimiento gratuita de 15 minutos** (va a
-contacto). La academia **no ofrece clases de prueba ni gratuitas**: fue una
-decisión consciente, y «la primera clase gratis» de la competencia no es un modelo
-a copiar aquí. No escribas copy, CTA ni diseño que insinúe una clase gratis.
+**El CTA del sitio es una llamada de descubrimiento gratuita.** La academia **no
+ofrece clases de prueba ni gratuitas**: fue una decisión consciente, y «la primera
+clase gratis» de la competencia no es un modelo a copiar aquí. No escribas copy,
+CTA ni diseño que insinúe una clase gratis.
+
+**El CTA del hero abre WhatsApp, en los dos tamaños y con la misma etiqueta**
+(30-10-2026, decisión del dueño). Antes el móvil abría WhatsApp y el escritorio
+llevaba al formulario de contacto, con etiquetas distintas a propósito para que
+las mismas palabras no prometieran el mismo destino y entregaran dos. Ahora los
+dos van al mismo sitio, así que la etiqueta es una sola y quien dice adónde va es
+el icono de WhatsApp. El resto de llamadas de la portada (profesores, cierre,
+barra fija) siguen yendo a `/contact`, que es el embudo que mide `generate_lead`.
 
 **`StickyCallBar` da la llamada al pulgar en móvil.** La portada mide unas
 dieciséis pantallas a 390 px y la única acción permanente era la píldora de
@@ -329,6 +337,12 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
 - **Nunca** prometas resultados garantizados, beneficios cognitivos o clínicos,
   «el estándar de los mejores conservatorios del mundo», ni superlativos del tipo
   «la mejor academia de Miami».
+- **Excepción explícita y única: el titular del hero.** «Dale a tu hijo el
+  superpoder de la música. Descubre su potencial hoy mismo» se retiró en
+  `87add42` por prometer un beneficio, y el **30-10-2026 el dueño pidió reponerlo:
+  es el titular que quiere Ilena**. No lo vuelvas a quitar por disciplina de
+  claims sin hablarlo con ella. La excepción es ese titular y nada más: no abre
+  la puerta a otras promesas de beneficio en copy nueva.
 - La cifra de «500+ estudiantes» es de **la carrera de Ilena**, nunca de la
   academia, que tiene un puñado de alumnos activos.
 - La **musicoterapia** puede aparecer en las biografías de Ilena y Olivia como

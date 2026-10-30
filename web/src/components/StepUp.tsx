@@ -119,14 +119,6 @@ export const StepUp = ({ compact = false }: { compact?: boolean }) => {
               {t.stepUp.noteLinkLabel}
             </a>
           </p>
-          <PageLink
-            to="contact"
-            data-cta="call"
-            className="mt-4 inline-flex items-center gap-1.5 py-2 font-semibold text-accent-ink transition-all hover:gap-2.5"
-          >
-            {t.ctaBanner.button}
-            <ArrowRight className="w-4 h-4" />
-          </PageLink>
         </motion.div>
       </div>
     </section>
