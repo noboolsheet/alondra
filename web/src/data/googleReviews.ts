@@ -41,10 +41,10 @@ export interface GoogleReview {
 // URL de **búsqueda**, que dependía de que Google resolviera el negocio correcto
 // y, mientras no lo hacía, podía abrir la ficha de otro.
 //
-// OJO: el sufijo `/review` abre el formulario para **escribir** una reseña, no la
-// lista para leerlas. Si lo que se quiere es «ver las reseñas», el mismo enlace
-// sin `/review` lleva a la ficha.
-export const googleProfileUrl = "https://g.page/r/CRaRZQbF8R0pECE/review";
+// Sin el sufijo `/review` a propósito: ése abre el formulario para **escribir**
+// una reseña, y la insignia dice «ver todas las reseñas». Así lleva a la ficha,
+// que es donde se leen.
+export const googleProfileUrl = "https://g.page/r/CRaRZQbF8R0pECE";
 
 export const googleRating = 5.0;
 export const googleReviewCount = 9;
