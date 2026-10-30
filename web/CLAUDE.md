@@ -306,13 +306,35 @@ ofrece clases de prueba ni gratuitas**: fue una decisión consciente, y «la pri
 clase gratis» de la competencia no es un modelo a copiar aquí. No escribas copy,
 CTA ni diseño que insinúe una clase gratis.
 
-**El CTA del hero abre WhatsApp, en los dos tamaños y con la misma etiqueta**
-(30-10-2026, decisión del dueño). Antes el móvil abría WhatsApp y el escritorio
-llevaba al formulario de contacto, con etiquetas distintas a propósito para que
-las mismas palabras no prometieran el mismo destino y entregaran dos. Ahora los
-dos van al mismo sitio, así que la etiqueta es una sola y quien dice adónde va es
-el icono de WhatsApp. El resto de llamadas de la portada (profesores, cierre,
-barra fija) siguen yendo a `/contact`, que es el embudo que mide `generate_lead`.
+**Todas las llamadas del sitio abren WhatsApp, con la misma etiqueta y el mismo
+icono** (30-10-2026, decisión del dueño). Antes el móvil abría WhatsApp y el
+escritorio llevaba al formulario, con etiquetas distintas a propósito para que
+las mismas palabras no prometieran el mismo destino y entregaran dos. Ahora el
+hero, el bloque de profesores, el cierre y la barra fija llevan los tres lo
+mismo: `t.hero.ctaPrimary` y el glifo de WhatsApp sobre `https://wa.me/...`. Las
+claves `ctaBanner.button` y `ctaBanner.note` se borraron al quedarse sin uso.
+
+**Consecuencia que hay que tener presente:** el formulario de `/contact` ya no
+tiene ningún CTA que apunte a él, sólo el enlace «Contacto» de la navegación, así
+que **`generate_lead` deja de dispararse prácticamente**. Las conversiones ahora
+se cuentan por los clics salientes a WhatsApp, que el listener delegado registra
+con su `data-track-loc` (`hero`, `teachers`, `cta_banner`, `sticky_mobile`,
+`header`, `header_menu`). Si comparas leads antes y después de esa fecha, la
+caída es de medición, no de negocio.
+
+**Lo que NO es un CTA de llamada** y por eso no lleva ni ese texto ni ese icono:
+los botones de envío de `ContactForm` y `ApplicationForm`, el de
+`RegistrationWidget`, el «conoce al equipo» de `/about` y el «volver al inicio»
+del 404. Comparten la clase `btn-cta` porque comparten la forma, no el destino.
+
+**El ancla de un desplegable se salta sin animación y reajustando.** Al llegar a
+`/music-teachers#<slug>`, `TeamAccordion` abre esa ficha y con ello cierra la de
+la directora, que está encima: la página se acorta varios cientos de píxeles bajo
+los pies. Con `behavior: "smooth"` el navegador seguía rumbo a la posición vieja
+y acababa casi al final de la página. `ScrollToTop` salta con `instant` (necesario
+porque `html` lleva `scroll-behavior: smooth`) y repite el ajuste unas veces hasta
+que el layout deja de moverse. Las fotos con `loading="lazy"` mueven el destino
+otra vez, así que el reajuste no sobra.
 
 **`StickyCallBar` da la llamada al pulgar en móvil.** La portada mide unas
 dieciséis pantallas a 390 px y la única acción permanente era la píldora de

@@ -1,4 +1,5 @@
 import { PageLink } from "@/components/PageLink";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { PageKey } from "@/i18n/routes";
@@ -44,17 +45,17 @@ export const CTABanner = ({ secondary }: { secondary?: Secondary }) => {
             </h2>
             <p className="mt-4 text-primary-foreground/80 max-w-xl mx-auto">{rich(t.ctaBanner.body, "font-semibold text-primary-foreground")}</p>
             <div className="mt-8 flex justify-center">
-              <PageLink
-                to="contact"
+              <a
+                data-track-loc="cta_banner"
+                href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-cta text-base"
-                onClick={() => track("cta_click", { location: "cta_banner", label: "discovery_call" })}
               >
-                {t.ctaBanner.button}
-                <ArrowRight className="w-4 h-4" />
-              </PageLink>
+                {t.hero.ctaPrimary}
+                <WhatsAppIcon className="w-4 h-4" />
+              </a>
             </div>
-            {/* Misma promesa real que en el hero: mensaje ahora, llamada en 48 h. */}
-            <p className="mt-4 text-sm text-primary-foreground/70">{t.ctaBanner.note}</p>
 
             {secondary && (
               <div className="mt-10 pt-8 border-t border-primary-foreground/15">

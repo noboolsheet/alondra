@@ -55,6 +55,7 @@ export const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           <PageLink
             to="home"
+            onClick={() => window.scrollTo({ top: 0 })}
             className="flex items-center gap-3 group rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Alondra Music Academy"
           >
@@ -139,7 +140,7 @@ export const Header = () => {
               className="hidden md:inline-flex items-center gap-2 btn-outline py-2.5 px-5 text-xs"
               aria-label={`WhatsApp ${t.contact.infoPhone}`}
             >
-              <Phone className="w-4 h-4" />
+              <WhatsAppIcon className="w-4 h-4" />
               {t.contact.infoPhone}
             </a>
             <button
@@ -203,7 +204,7 @@ export const Header = () => {
                     className="btn-cta w-full inline-flex items-center justify-center gap-2"
                     aria-label={`WhatsApp ${t.contact.infoPhone}`}
                   >
-                    <Phone className="w-4 h-4" />
+                    <WhatsAppIcon className="w-4 h-4" />
                     {t.contact.infoPhone}
                   </a>
                 </div>

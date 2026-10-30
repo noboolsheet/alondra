@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { PageLink } from "@/components/PageLink";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { useLang } from "@/i18n/LanguageContext";
-import { useTrack } from "@/lib/analytics";
 
 /**
  * La llamada de descubrimiento, siempre al alcance del pulgar en móvil.
@@ -28,7 +26,6 @@ const SHOW_AFTER = 560; // px de scroll: el alto del hero en móvil, en números
 
 export const StickyCallBar = () => {
   const { t } = useLang();
-  const track = useTrack();
   const prefersReduced = useReducedMotion();
   const [scrolledPast, setScrolledPast] = useState(false);
   const ctaOnScreen = useRef(new Set<Element>());
@@ -93,14 +90,16 @@ export const StickyCallBar = () => {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="sm:hidden fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-md px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         >
-          <PageLink
-            to="contact"
+          <a
+            data-track-loc="sticky_mobile"
+            href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-cta w-full"
-            onClick={() => track("cta_click", { location: "sticky_mobile", label: "discovery_call" })}
           >
-            {t.ctaBanner.button}
-            <ArrowRight className="w-4 h-4" />
-          </PageLink>
+            {t.hero.ctaPrimary}
+            <WhatsAppIcon className="w-4 h-4" />
+          </a>
         </motion.div>
       )}
     </AnimatePresence>

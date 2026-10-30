@@ -133,12 +133,10 @@ describe("arquitectura de información", () => {
     // La página tenía dos llamadas en dorado pidiendo cosas distintas. El CTA del
     // sitio es uno: la llamada de descubrimiento. La inscripción es la puerta de
     // quien ya pasó por ella, y por eso va cualificada y en secundario.
-    // Dentro de `main`: la píldora de WhatsApp de la cabecera también es dorada,
-    // pero es el teléfono, está en todas las páginas y no compite por la decisión.
-    // Y `ctaBanner.button` sale además como enlace de texto en StepUp, así que lo
-    // que se cuenta es el botón, no la cadena.
+    // La cadena es `hero.ctaPrimary` porque todas las llamadas del sitio dicen lo
+    // mismo y van al mismo sitio; el dorado de la cabecera queda fuera de `main`.
     await waitFor(() => expect(document.querySelectorAll("main .btn-cta")).toHaveLength(1));
-    expect(document.querySelector("main .btn-cta")).toHaveTextContent(translations.en.ctaBanner.button);
+    expect(document.querySelector("main .btn-cta")).toHaveTextContent(translations.en.hero.ctaPrimary);
     expect(screen.getByText(translations.en.registration.enrollQualifier)).toBeInTheDocument();
 
     const enroll = screen.getByText(translations.en.registration.enrollCta).closest("a");

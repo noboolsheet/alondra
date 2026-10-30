@@ -1,6 +1,7 @@
 import { BadgeCheck, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageLink } from "@/components/PageLink";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { useLang } from "@/i18n/LanguageContext";
 import { reveal, fadeUp, portraitIn } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
@@ -119,10 +120,17 @@ export const TeachersGrid = () => {
             promesa de reasignacion, y hasta ahora no habia nada que pulsar: el
             siguiente CTA estaba a unos siete mil pixeles. */}
         <motion.div {...reveal(fadeUp)} className="mt-8 flex justify-center">
-          <PageLink to="contact" data-cta="call" className="btn-cta">
-            {t.ctaBanner.button}
-            <ArrowRight className="w-4 h-4" />
-          </PageLink>
+          <a
+            data-cta="call"
+            data-track-loc="teachers"
+            href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-cta"
+          >
+            {t.hero.ctaPrimary}
+            <WhatsAppIcon className="w-4 h-4" />
+          </a>
         </motion.div>
       </div>
     </section>

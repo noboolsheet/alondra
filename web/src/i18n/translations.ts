@@ -126,9 +126,6 @@ export type Dict = {
   ctaBanner: {
     title: string;
     body: string;
-    button: string;
-    /** Misma promesa real que hero.ctaNote; el boton no promete calendario. */
-    note: string;
   };
   widget: {
     title: string;
@@ -482,8 +479,6 @@ export const translations: Record<Lang, Dict> = {
     ctaBanner: {
       title: "Ready to begin your musical journey?",
       body: "Request a **free discovery call** and we'll match your child with the ideal instructor.",
-      button: "Request your free 15-minute call",
-      note: "Tell us your child's age and we call you within 48 hours.",
     },
     widget: {
       title: "Complete your enrollment",
@@ -1030,8 +1025,6 @@ export const translations: Record<Lang, Dict> = {
     ctaBanner: {
       title: "¿Listos para comenzar tu viaje musical?",
       body: "Pide una **llamada de conocimiento gratuita** y encontramos el instructor ideal para tu hijo.",
-      button: "Solicita tu llamada gratuita de 15 min",
-      note: "Cuéntanos la edad de tu hijo y te llamamos en menos de 48 horas.",
     },
     widget: {
       title: "Completa tu inscripción",
@@ -1513,8 +1506,6 @@ export const translations: Record<Lang, Dict> = {
     ctaBanner: {
       title: "Prêts à commencer votre voyage musical ?",
       body: "Demandez un **appel de découverte gratuit** et nous trouverons le professeur idéal pour votre enfant.",
-      button: "Demandez votre appel gratuit de 15 min",
-      note: "Dites-nous l'âge de votre enfant et nous vous appelons sous 48 heures.",
     },
     widget: {
       title: "Finalisez votre inscription",
