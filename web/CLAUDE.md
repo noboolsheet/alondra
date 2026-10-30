@@ -59,8 +59,8 @@ slug por idioma. El inglés vive en la raíz, el español bajo `/es`, el francé
 por lo que la gente escribe en ese idioma (`/pricing`, `/es/precios`,
 `/fr/tarifs`).
 
-`src/App.tsx` envuelve todo en `MotionConfig` → `QueryClientProvider` →
-`ThemeProvider` → `TooltipProvider` → `BrowserRouter` → `LanguageProvider`, monta
+`src/App.tsx` envuelve todo en `MotionConfig` → `ThemeProvider` →
+`TooltipProvider` → `BrowserRouter` → `LanguageProvider`, monta
 los dos toasters (`Toaster` de shadcn + `Sonner`), `ScrollToTop` y `RouteEffects`.
 Los `<Route>` se generan iterando el mapa de rutas: no se escriben a mano.
 
@@ -341,11 +341,16 @@ mismo componente. En `/contact` vivía además un recuadro «contacto directo» 
 lado del formulario que repetía esos mismos datos tres bloques más abajo; se
 quitó.
 
-**Capa de UI.** `src/components/ui/*` es el set estándar de shadcn-ui (primitivas
-de Radix); en general no los edites, compónlos. `src/components/*` (los que no
+**Capa de UI.** `src/components/ui/*` son primitivas de shadcn-ui (sobre Radix);
+en general no los edites, compónlos. Están **sólo las siete que el sitio usa**
+(`accordion`, `button`, `carousel`, `sonner`, `toast`, `toaster`, `tooltip`): las
+otras 42 que venían con la plantilla de Lovable se borraron, y con ellas 36
+dependencias que no entraban en el bundle pero sí en cada `npm ci` y en cada
+`npm audit`. Si necesitas una, tráela de shadcn con su dependencia, no la
+reconstruyas a mano. `src/components/*` (los que no
 están en `ui`) son las secciones propias. Iconos con `lucide-react`, animación con
-`framer-motion`, andamiaje de datos con `@tanstack/react-query` (está puesto, pero
-el sitio es estático).
+`framer-motion`, y nada de andamiaje de datos: el sitio es estático y
+`@tanstack/react-query` se quitó al no tener una sola consulta.
 
 ## Disciplina de claims
 
@@ -423,6 +428,6 @@ propósito. No las reintroduzcas, y aplica el mismo test a la copy nueva:
   así que comprueba un reveal con `whileInView` usando `waitFor`/`findBy*`, no un
   `getBy*` + `toBeVisible()` sincrónico.
 - ESLint tiene `@typescript-eslint/no-unused-vars` **desactivado** y
-  `react-refresh/only-export-components` como warning. Hay **3 errores
-  preexistentes** (dos en `src/components/ui/`, boilerplate de shadcn, y uno en
-  `tailwind.config.ts` por un `require()`): son esperados.
+  `react-refresh/only-export-components` como warning. Queda **1 error
+  preexistente**, el `require()` de `tailwind.config.ts`: es esperado. Los otros
+  dos vivían en componentes de `ui/` que ya no existen.

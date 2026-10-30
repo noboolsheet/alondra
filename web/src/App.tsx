@@ -1,7 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
 import { lazy, Suspense, type ReactNode } from "react";
@@ -25,8 +24,6 @@ const RouteFallback = () => (
   </div>
 );
 
-const queryClient = new QueryClient();
-
 // Per-route side effects. Must live inside <BrowserRouter> and <LanguageProvider>.
 const RouteEffects = () => {
   usePageviews();
@@ -45,15 +42,13 @@ const RouteEffects = () => {
  */
 export const AppProviders = ({ children }: { children: ReactNode }) => (
   <MotionConfig reducedMotion="user">
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          {children}
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        {children}
+      </TooltipProvider>
+    </ThemeProvider>
   </MotionConfig>
 );
 
