@@ -78,7 +78,7 @@ const About = () => {
                   transition={{ duration: 0.5, delay: i * 0.1 }}
                   className="relative rounded-3xl bg-card border border-border p-6 overflow-hidden hover:shadow-lift transition-shadow"
                 >
-                  <div className="absolute top-4 right-4 text-6xl font-serif text-primary/5">{i + 1}</div>
+                  <div aria-hidden="true" className="absolute top-4 right-4 text-6xl font-serif text-primary/5">{i + 1}</div>
                   <div className="relative">
                     <div className="w-12 h-12 rounded-2xl bg-accent flex items-center justify-center mb-4">
                       <Icon className="w-6 h-6 text-accent-foreground" strokeWidth={1.8} />

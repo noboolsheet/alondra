@@ -44,7 +44,7 @@ const Enroll = () => {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="rounded-3xl border border-border bg-card shadow-soft p-8"
               >
-                <div className="font-serif font-semibold italic text-accent text-4xl leading-none">{String(i + 1).padStart(2, "0")}</div>
+                <div className="font-serif font-semibold italic text-accent-display text-4xl leading-none">{String(i + 1).padStart(2, "0")}</div>
                 <h3 className="mt-4 font-serif text-2xl text-primary">{step.title}</h3>
                 <p className="mt-2 text-sm text-primary/70 leading-relaxed">{rich(step.body)}</p>
               </motion.div>

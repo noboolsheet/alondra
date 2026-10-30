@@ -124,7 +124,7 @@ export const ApplicationForm = () => {
             <p className="mt-3 text-primary/70 max-w-sm mx-auto">{rich(t.careers.successBody)}</p>
             <button
               onClick={reset}
-              className="mt-6 text-sm font-semibold text-primary underline underline-offset-4 hover:text-accent transition-colors"
+              className="mt-6 text-sm font-semibold text-primary underline underline-offset-4 hover:text-accent-ink transition-colors"
             >
               {t.careers.successAgain}
             </button>

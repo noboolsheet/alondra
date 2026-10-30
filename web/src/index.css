@@ -299,7 +299,23 @@
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+
+    /* Se corta el movimiento, no la realimentación.
+       Antes esto era `transition-duration: 0.01ms` sobre todo, que además del
+       movimiento se llevaba por delante los cambios de color: el botón dejaba de
+       encenderse al pasar por encima, el anillo de foco aparecía de golpe y el
+       enlace no acusaba el hover. Nada de eso es movimiento, y quien pide menos
+       movimiento no está pidiendo menos información.
+
+       Restringir `transition-property` a las propiedades que no desplazan nada
+       deja los `transform`, los tamaños y las posiciones en salto instantáneo
+       (que es lo que se quería) y conserva 150 ms de color, borde y sombra.
+
+       La capa de framer-motion va aparte, con <MotionConfig reducedMotion="user">
+       en App.tsx: esto no la sustituye. */
+    transition-property: color, background-color, border-color, text-decoration-color,
+      fill, stroke, opacity, box-shadow !important;
+    transition-duration: 150ms !important;
   }
 }

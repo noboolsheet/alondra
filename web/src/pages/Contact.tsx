@@ -35,7 +35,7 @@ const Contact = () => {
                     <Mail className="w-5 h-5 text-accent" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">Email</div>
+                    <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">Email</div>
                     <div className="text-primary-foreground mt-0.5 break-all group-hover:text-accent transition-colors">{t.contact.infoEmail}</div>
                   </div>
                 </a>
@@ -44,7 +44,7 @@ const Contact = () => {
                     <Phone className="w-5 h-5 text-accent" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">Phone</div>
+                    <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">Phone</div>
                     <div className="text-primary-foreground mt-0.5 break-words group-hover:text-accent transition-colors">{t.contact.infoPhone}</div>
                   </div>
                 </a>
@@ -53,7 +53,7 @@ const Contact = () => {
                     <Clock className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">{t.contact.infoHours}</div>
+                    <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">{t.contact.infoHours}</div>
                     <div className="text-primary-foreground mt-0.5">{t.contact.infoHoursValue}</div>
                   </div>
                 </div>
