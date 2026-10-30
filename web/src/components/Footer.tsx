@@ -22,20 +22,17 @@ export const Footer = () => {
       <div className="container-full py-16">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-center">
           {/* Brand block */}
-          <div className="lg:-mt-8 lg:self-start max-w-[16rem]">
+          {/* 18rem, no 16: cinco iconos de 44 px con sus huecos miden 268, y a 256 el
+              quinto se caía solo a una segunda fila. */}
+          <div className="lg:-mt-8 lg:self-start max-w-[18rem]">
             <img src={logoUrl} alt="Alondra Music Academy" width={384} height={384} loading="lazy" className="w-32 h-32 md:w-36 md:h-36 rounded-full" />
             <p className="mt-5 text-sm text-primary-foreground/70 leading-relaxed">{rich(t.footer.tagline, "font-semibold text-primary-foreground")}</p>
-            {/* Contact */}
-            <div className="mt-5 flex flex-col gap-1 text-sm text-primary-foreground/70">
-              <a data-track-loc="footer" href={`mailto:${t.contact.infoEmail}`} className="inline-flex items-center gap-2 py-2 hover:text-primary-foreground transition-colors">
-                <Mail className="w-4 h-4" /> {t.contact.infoEmail}
-              </a>
-              <a data-track-loc="footer" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="inline-flex items-center gap-2 py-2 hover:text-primary-foreground transition-colors">
-                <Phone className="w-4 h-4" /> {t.contact.infoPhone}
-              </a>
-            </div>
-            {/* Socials */}
-            <div className="mt-4 flex gap-3">
+            {/* Contacto y redes, en una sola fila de iconos.
+                El correo y el telefono iban debajo como dos lineas de texto con
+                la direccion entera, que es lo mas largo del pie y repite lo que
+                ya dice el recuadro de contactos. Aqui basta el icono: la
+                etiqueta accesible lleva el dato para quien no lo ve. */}
+            <div className="mt-5 flex flex-wrap gap-3">
               <a href="https://www.instagram.com/alondra_music_academy/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <Instagram className="w-4 h-4" />
               </a>
@@ -44,6 +41,12 @@ export const Footer = () => {
               </a>
               <a data-track-loc="footer" href="https://wa.me/17868431028" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
                 <WhatsAppIcon className="w-4 h-4" />
+              </a>
+              <a data-track-loc="footer" href={`mailto:${t.contact.infoEmail}`} aria-label={t.contact.infoEmail} className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
+                <Mail className="w-4 h-4" />
+              </a>
+              <a data-track-loc="footer" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} aria-label={t.contact.infoPhone} className="w-11 h-11 rounded-full border border-primary-foreground/20 flex items-center justify-center hover:bg-accent hover:text-primary hover:border-accent transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary">
+                <Phone className="w-4 h-4" />
               </a>
             </div>
           </div>

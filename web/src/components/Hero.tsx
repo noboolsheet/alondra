@@ -1,6 +1,6 @@
 import { PageLink } from "@/components/PageLink";
 import { ArrowUpRight } from "lucide-react";
-import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { CallCta } from "@/components/CallCta";
 import { motion } from "framer-motion";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
@@ -103,16 +103,7 @@ export const Hero = () => {
                 entregar dos cosas. Ahora los dos van a WhatsApp y el icono dice
                 adónde. El seguimiento lo recoge el listener delegado por el
                 `data-track-loc`, no hace falta `onClick`. */}
-            <a
-              data-track-loc="hero"
-              href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-cta"
-            >
-              {t.hero.ctaPrimary}
-              <WhatsAppIcon className="w-4 h-4" />
-            </a>
+            <CallCta trackLoc="hero" />
             {/* `btn-outline` ya es el fondo transparente con borde y el relleno
                 al pasar por encima, y además cambia con el tema: el borde es
                 blanco sobre el campo morado y morado sobre el lavanda. Un borde

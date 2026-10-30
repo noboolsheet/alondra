@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { CallCta } from "@/components/CallCta";
 import { useLang } from "@/i18n/LanguageContext";
 
 /**
@@ -90,16 +90,7 @@ export const StickyCallBar = () => {
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="sm:hidden fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-md px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]"
         >
-          <a
-            data-track-loc="sticky_mobile"
-            href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-cta w-full"
-          >
-            {t.hero.ctaPrimary}
-            <WhatsAppIcon className="w-4 h-4" />
-          </a>
+          <CallCta trackLoc="sticky_mobile" className="w-full" />
         </motion.div>
       )}
     </AnimatePresence>

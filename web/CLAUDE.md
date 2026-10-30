@@ -306,43 +306,32 @@ ofrece clases de prueba ni gratuitas**: fue una decisión consciente, y «la pri
 clase gratis» de la competencia no es un modelo a copiar aquí. No escribas copy,
 CTA ni diseño que insinúe una clase gratis.
 
-**Todas las llamadas del sitio abren WhatsApp, con la misma etiqueta y el mismo
-icono** (30-10-2026, decisión del dueño). Antes el móvil abría WhatsApp y el
-escritorio llevaba al formulario, con etiquetas distintas a propósito para que
-las mismas palabras no prometieran el mismo destino y entregaran dos. Ahora el
-hero, el bloque de profesores, el cierre y la barra fija llevan los tres lo
-mismo: `t.hero.ctaPrimary` y el glifo de WhatsApp sobre `https://wa.me/...`. Las
-claves `ctaBanner.button` y `ctaBanner.note` se borraron al quedarse sin uso.
+**La llamada cambia de destino según el tamaño de pantalla, y es a propósito**
+(30-10-2026, decisión del dueño). Todas viven en `CallCta` (`src/components/`),
+que es el único sitio donde tocarlo:
 
-**Consecuencia que hay que tener presente:** el formulario de `/contact` ya no
-tiene ningún CTA que apunte a él, sólo el enlace «Contacto» de la navegación, así
-que **`generate_lead` deja de dispararse prácticamente**. Las conversiones ahora
-se cuentan por los clics salientes a WhatsApp, que el listener delegado registra
-con su `data-track-loc` (`hero`, `teachers`, `cta_banner`, `sticky_mobile`,
-`header`, `header_menu`). Si comparas leads antes y después de esa fecha, la
-caída es de medición, no de negocio.
+- **Móvil → WhatsApp.** El visitante ya tiene la app, escribir le cuesta un toque
+  y rellenar un formulario a pulgar es por donde se cae.
+- **Escritorio → `/contact`**, y allí elige entre escribir por WhatsApp o
+  rellenar el formulario, que es el que emite `generate_lead`. Cuando los cuatro
+  botones iban a WhatsApp ese evento dejó de dispararse: esto lo recupera sin
+  perder la vía rápida en el teléfono.
 
-**Lo que NO es un CTA de llamada** y por eso no lleva ni ese texto ni ese icono:
-los botones de envío de `ContactForm` y `ApplicationForm`, el de
-`RegistrationWidget`, el «conoce al equipo» de `/about` y el «volver al inicio»
-del 404. Comparten la clase `btn-cta` porque comparten la forma, no el destino.
+El icono acompaña al **destino**, no a la marca: glifo de WhatsApp donde abre
+WhatsApp, flecha donde navega dentro del sitio. Y lo que lleva icono de teléfono
+marca de verdad (`tel:`): el recuadro de contactos y el pie, nada más.
 
-**El ancla de un desplegable se salta sin animación y reajustando.** Al llegar a
-`/music-teachers#<slug>`, `TeamAccordion` abre esa ficha y con ello cierra la de
-la directora, que está encima: la página se acorta varios cientos de píxeles bajo
-los pies. Con `behavior: "smooth"` el navegador seguía rumbo a la posición vieja
-y acababa casi al final de la página. `ScrollToTop` salta con `instant` (necesario
-porque `html` lleva `scroll-behavior: smooth`) y repite el ajuste unas veces hasta
-que el layout deja de moverse. Las fotos con `loading="lazy"` mueven el destino
-otra vez, así que el reajuste no sobra.
+`CallCta` pinta las dos variantes y esconde una con `sm:hidden`, no con
+`useIsMobile`: las quince rutas se prerenderizan, y decidirlo en JavaScript
+dejaría en el HTML la variante equivocada hasta que hidratara. El efecto
+secundario es que en jsdom se ven las dos, así que el test de `/pricing` cuenta
+**etiquetas distintas**, no nodos.
 
-**`StickyCallBar` da la llamada al pulgar en móvil.** La portada mide unas
-dieciséis pantallas a 390 px y la única acción permanente era la píldora de
-WhatsApp de la cabecera, arriba y fuera del arco del pulgar. La barra sale sólo
-por debajo de `sm`, aparece cuando el hero ya se ha ido y **se retira al llegar
-al cierre**, que lleva su propio dorado: dos llamadas idénticas a la vez obligan
-a elegir entre lo mismo, y por eso tampoco hace falta compensar con relleno
-abajo. Emite `cta_click` con `location: "sticky_mobile"`, etiqueta nueva en GA4.
+**El recuadro de contactos tiene las tres vías**: teléfono (`tel:`), correo y
+WhatsApp, cada una con su icono. Sale en la portada y en `/contact`, que es el
+mismo componente. En `/contact` vivía además un recuadro «contacto directo» al
+lado del formulario que repetía esos mismos datos tres bloques más abajo; se
+quitó.
 
 **Capa de UI.** `src/components/ui/*` es el set estándar de shadcn-ui (primitivas
 de Radix); en general no los edites, compónlos. `src/components/*` (los que no

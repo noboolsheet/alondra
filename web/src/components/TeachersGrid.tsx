@@ -1,7 +1,7 @@
 import { BadgeCheck, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { PageLink } from "@/components/PageLink";
-import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { CallCta } from "@/components/CallCta";
 import { useLang } from "@/i18n/LanguageContext";
 import { reveal, fadeUp, portraitIn } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
@@ -119,18 +119,8 @@ export const TeachersGrid = () => {
         {/* El pico emocional de la portada esta aqui, debajo de las caras y de la
             promesa de reasignacion, y hasta ahora no habia nada que pulsar: el
             siguiente CTA estaba a unos siete mil pixeles. */}
-        <motion.div {...reveal(fadeUp)} className="mt-8 flex justify-center">
-          <a
-            data-cta="call"
-            data-track-loc="teachers"
-            href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-cta"
-          >
-            {t.hero.ctaPrimary}
-            <WhatsAppIcon className="w-4 h-4" />
-          </a>
+        <motion.div {...reveal(fadeUp)} className="mt-10 md:mt-16 flex justify-center">
+          <CallCta trackLoc="teachers" dataCta="call" />
         </motion.div>
       </div>
     </section>

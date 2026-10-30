@@ -27,8 +27,6 @@ export type Dict = {
     title2: string;
     subtitle: string;
     ctaPrimary: string;
-    /** Microcopy bajo el CTA: dice lo que de verdad pasa al pulsarlo. */
-    ctaNote: string;
     ctaSecondary: string;
     /** Insignia de confianza sobre la imagen del hero (DESIGN.md §5). */
     badge: string;
@@ -298,9 +296,8 @@ export const translations: Record<Lang, Dict> = {
       title1: "Give your child the superpower of music.",
       title2: "Discover their potential today.",
       subtitle:
-        "**The right teacher makes the difference.** We match your child with the one who truly connects with them, and lessons they look forward to, at home across Miami-Dade and Broward.",
+        "**Music lessons at home**, in the comfort of your own living room, across Miami-Dade and Broward. We choose the teacher who fits your child, so they have fun while they learn.",
       ctaPrimary: "Request a free call",
-      ctaNote: "Tell us your child's age and we call you within 48 hours.",
       ctaSecondary: "Explore lessons",
       badge: "Background-checked faculty",
       stat1: "12+", stat1Label: "Years of experience",
@@ -844,9 +841,8 @@ export const translations: Record<Lang, Dict> = {
       title1: "Dale a tu hijo el superpoder de la música.",
       title2: "Descubre su potencial hoy mismo.",
       subtitle:
-        "**El profesor adecuado hace la diferencia.** Elegimos para tu hijo el que mejor conecta con él, y clases a las que le apetece volver, en casa y en todo Miami-Dade y Broward.",
+        "**Clases de música a domicilio**, en la comodidad de tu propia casa, en todo Miami-Dade y Broward. Elegimos el profesor que encaja con tu hijo, para que se divierta mientras aprende.",
       ctaPrimary: "Solicita una llamada gratuita",
-      ctaNote: "Cuéntanos la edad de tu hijo y te llamamos en menos de 48 horas.",
       ctaSecondary: "Ver las clases",
       badge: "Profesorado con antecedentes verificados",
       stat1: "12+", stat1Label: "Años de experiencia",
@@ -1325,9 +1321,8 @@ export const translations: Record<Lang, Dict> = {
       title1: "Offrez à votre enfant le superpouvoir de la musique.",
       title2: "Révélez son potentiel dès aujourd'hui.",
       subtitle:
-        "**Le bon professeur fait toute la différence.** Nous choisissons pour votre enfant celui avec qui il s’entend le mieux, et des cours où il a envie de revenir, chez vous, dans tout Miami-Dade et Broward.",
+        "**Des cours de musique à domicile**, dans le confort de votre salon, dans tout Miami-Dade et Broward. Nous choisissons le professeur qui convient à votre enfant, pour qu’il s’amuse en apprenant.",
       ctaPrimary: "Demandez un appel gratuit",
-      ctaNote: "Dites-nous l'âge de votre enfant et nous vous appelons sous 48 heures.",
       ctaSecondary: "Voir les cours",
       badge: "Professeurs aux antécédents vérifiés",
       stat1: "12+", stat1Label: "Années d'expérience",

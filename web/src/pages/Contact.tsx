@@ -1,4 +1,3 @@
-import { Mail, Phone, Clock } from "lucide-react";
 import { Layout } from "@/components/Layout";
 import { ContactForm } from "@/components/ContactForm";
 import { CoverageMap } from "@/components/CoverageMap";
@@ -21,45 +20,13 @@ const Contact = () => {
       <CoverageMap />
 
       {/* Form + Info */}
+      {/* El formulario, a solas. Al lado vivia un recuadro «contacto directo» con
+          el correo, el telefono y el horario, que es exactamente lo que ya dice
+          el recuadro de cobertura tres bloques mas arriba en esta misma pagina.
+          Repetirlo no daba una via mas: daba la misma dos veces. */}
       <section className="py-16 md:py-24">
-        <div className="container-wide grid lg:grid-cols-5 gap-8 items-start">
-          <div className="lg:col-span-3">
-            <ContactForm />
-          </div>
-          <div className="lg:col-span-2 space-y-4">
-            <div className="on-brand-dark rounded-3xl bg-gradient-hero p-8 text-primary-foreground">
-              <h2 className="font-serif text-2xl">{t.contact.infoTitle}</h2>
-              <div className="mt-6 space-y-4">
-                <a data-track-loc="contact_page" href={`mailto:${t.contact.infoEmail}`} className="flex items-start gap-4 group">
-                  <div className="w-11 h-11 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-accent" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">Email</div>
-                    <div className="text-primary-foreground mt-0.5 break-all group-hover:text-accent transition-colors">{t.contact.infoEmail}</div>
-                  </div>
-                </a>
-                <a data-track-loc="contact_page" href={`tel:${t.contact.infoPhone.replace(/\D/g, "")}`} className="flex items-start gap-4 group">
-                  <div className="w-11 h-11 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <Phone className="w-5 h-5 text-accent" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">Phone</div>
-                    <div className="text-primary-foreground mt-0.5 break-words group-hover:text-accent transition-colors">{t.contact.infoPhone}</div>
-                  </div>
-                </a>
-                <div className="flex items-start gap-4">
-                  <div className="w-11 h-11 rounded-2xl bg-accent/20 flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-bold tracking-[0.2em] uppercase text-primary-foreground/70">{t.contact.infoHours}</div>
-                    <div className="text-primary-foreground mt-0.5">{t.contact.infoHoursValue}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="container-wide max-w-3xl">
+          <ContactForm />
         </div>
       </section>
     </Layout>

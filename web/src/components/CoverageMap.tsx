@@ -1,4 +1,5 @@
 import { MapPin, Clock, Phone, Mail, Loader2, ExternalLink } from "lucide-react";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { useLang } from "@/i18n/LanguageContext";
 import { useIframeStatus } from "@/hooks/use-iframe-status";
 import { rich } from "@/lib/richtext";
@@ -68,6 +69,19 @@ export const CoverageMap = () => {
                   <a data-track-loc="coverage" href={`mailto:${t.contact.infoEmail}`} className="flex items-center gap-2.5 py-2 min-w-0 text-primary hover:text-accent-ink transition-colors">
                     <Mail className="w-4 h-4 flex-shrink-0 text-accent" />
                     <span className="break-all min-w-0">{t.contact.infoEmail}</span>
+                  </a>
+                  {/* El telefono de arriba marca; este escribe. Son dos vias
+                      distintas al mismo numero y conviene que se vean las dos:
+                      el icono dice cual es cual. */}
+                  <a
+                    data-track-loc="coverage"
+                    href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2.5 py-2 min-w-0 text-primary hover:text-accent-ink transition-colors"
+                  >
+                    <WhatsAppIcon className="w-4 h-4 flex-shrink-0 text-accent" />
+                    <span className="min-w-0">WhatsApp</span>
                   </a>
                 </div>
               </div>

@@ -133,10 +133,15 @@ describe("arquitectura de información", () => {
     // La página tenía dos llamadas en dorado pidiendo cosas distintas. El CTA del
     // sitio es uno: la llamada de descubrimiento. La inscripción es la puerta de
     // quien ya pasó por ella, y por eso va cualificada y en secundario.
-    // La cadena es `hero.ctaPrimary` porque todas las llamadas del sitio dicen lo
-    // mismo y van al mismo sitio; el dorado de la cabecera queda fuera de `main`.
-    await waitFor(() => expect(document.querySelectorAll("main .btn-cta")).toHaveLength(1));
-    expect(document.querySelector("main .btn-cta")).toHaveTextContent(translations.en.hero.ctaPrimary);
+    // `CallCta` pinta las dos variantes, la de móvil y la de escritorio, y
+    // esconde una con `sm:hidden`. jsdom no aplica Tailwind, así que aquí se ven
+    // las dos: contar nodos contaría botones, no llamadas. Lo que esta página
+    // tiene que cumplir es que **sólo se pida una cosa en dorado**, así que se
+    // cuentan etiquetas distintas. El dorado de la cabecera queda fuera de `main`.
+    await waitFor(() => expect(document.querySelectorAll("main .btn-cta").length).toBeGreaterThan(0));
+    const dorados = [...document.querySelectorAll("main .btn-cta")];
+    expect(new Set(dorados.map((b) => b.textContent?.trim())).size).toBe(1);
+    expect(dorados[0]).toHaveTextContent(translations.en.hero.ctaPrimary);
     expect(screen.getByText(translations.en.registration.enrollQualifier)).toBeInTheDocument();
 
     const enroll = screen.getByText(translations.en.registration.enrollCta).closest("a");

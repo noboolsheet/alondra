@@ -1,5 +1,5 @@
 import { PageLink } from "@/components/PageLink";
-import { WhatsAppIcon } from "@/components/WhatsAppIcon";
+import { CallCta } from "@/components/CallCta";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { PageKey } from "@/i18n/routes";
@@ -45,16 +45,7 @@ export const CTABanner = ({ secondary }: { secondary?: Secondary }) => {
             </h2>
             <p className="mt-4 text-primary-foreground/80 max-w-xl mx-auto">{rich(t.ctaBanner.body, "font-semibold text-primary-foreground")}</p>
             <div className="mt-8 flex justify-center">
-              <a
-                data-track-loc="cta_banner"
-                href={`https://wa.me/${t.contact.infoPhone.replace(/\D/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-cta text-base"
-              >
-                {t.hero.ctaPrimary}
-                <WhatsAppIcon className="w-4 h-4" />
-              </a>
+              <CallCta trackLoc="cta_banner" className="text-base" />
             </div>
 
             {secondary && (
