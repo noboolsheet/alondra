@@ -38,10 +38,27 @@ const SITE_ID = `${SITE_ORIGIN}/#website`;
 /** Quita los marcadores `**negrita**` de la copy: el JSON-LD va en texto plano. */
 const plain = (text: string) => text.replace(/\*\*(.+?)\*\*/g, "$1");
 
-/** "$50" → 50. Devuelve null si la cadena no lleva un número. */
-const priceOf = (price: string): number | null => {
-  const digits = price.replace(/[^\d.]/g, "");
-  return digits ? Number(digits) : null;
+/**
+ * "$50" → 50. Devuelve null si la cadena no lleva **un** importe legible.
+ *
+ * Antes quitaba todo lo que no fuera dígito o punto y convertía lo que quedaba,
+ * así que un rango como "$35–$50" (que es la forma en que se escribe un precio
+ * en cuanto hay dos tarifas, y la que ya usa `priceRange` de la organización)
+ * salía pegado: **3550 dólares por clase**, publicados a Google como dato
+ * estructurado. Dos importes no son un precio: con `null` la oferta se queda
+ * fuera del catálogo (`if (price === null) return []`), que es la única salida
+ * honesta, en vez de publicar una cifra inventada.
+ *
+ * La coma se trata como separador de millar porque las tarifas van en USD en los
+ * tres idiomas ("$50", no "50,00 €"). Si algún día se cobra en euros, esto hay
+ * que mirarlo. Tests en `src/test/structuredData.test.tsx`.
+ */
+// Exportada sólo para los tests: es pura y lo que hay que fijar es su contrato.
+export const priceOf = (price: string): number | null => {
+  const importes = price.match(/\d+(?:[.,]\d+)*/g) ?? [];
+  if (importes.length !== 1) return null;
+  const n = Number(importes[0].replace(/,/g, ""));
+  return Number.isFinite(n) ? n : null;
 };
 
 /** La academia atiende dos condados y se desplaza al domicilio del alumno. */

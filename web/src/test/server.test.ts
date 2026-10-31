@@ -130,7 +130,11 @@ describe("POST /api/send-contact", () => {
     // TypeError porque el toString no es invocable, y un array anidado muy
     // profundo tira RangeError al unirse. La primera versión de `texto()` usaba
     // `String(v)` a secas y reproducía la caída por esa vía.
-    const hostiles = [1, true, null, {}, [], { toString: 0 }, { valueOf: 0, toString: 0 }];
+    // `unknown[]` explícito: sin anotación, TypeScript deduce un tipo común de
+    // los literales y luego rechaza los que no encajan en él (dos errores de
+    // `tsc` en esta línea). Lo que se prueba es justamente que el campo puede
+    // llegar con CUALQUIER tipo, así que el tipo de la lista es `unknown`.
+    const hostiles: unknown[] = [1, true, null, {}, [], { toString: 0 }, { valueOf: 0, toString: 0 }];
     for (const email of hostiles) {
       const res = await post({ ...VALID, email }, `203.0.113.${Math.floor(Math.random() * 250) + 1}`);
       expect(res.status).toBe(400);

@@ -1,48 +1,21 @@
-import { animate, useInView, useReducedMotion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/i18n/LanguageContext";
 
-// Splits values like "12+", "500+", "100%" into prefix / number / suffix.
-const parseStat = (raw: string) => {
-  const m = raw.match(/^(\D*)([\d.,]+)(\D*)$/);
-  if (!m) return { prefix: "", value: null as number | null, suffix: raw };
-  return { prefix: m[1], value: parseFloat(m[2].replace(/,/g, "")), suffix: m[3] };
-};
-
-// Counts up from 0 to the target when scrolled into view.
-const CountUp = ({ raw, duration = 1.8 }: { raw: string; duration?: number }) => {
-  const { prefix, value, suffix } = parseStat(raw);
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-  const prefersReduced = useReducedMotion();
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (value === null || !inView) return;
-    // Reduced motion: show the final figure immediately, no count-up.
-    if (prefersReduced) {
-      setDisplay(value);
-      return;
-    }
-    const controls = animate(0, value, {
-      duration,
-      ease: "easeOut",
-      onUpdate: (v) => setDisplay(Math.round(v)),
-    });
-    return () => controls.stop();
-  }, [inView, value, duration, prefersReduced]);
-
-  if (value === null) return <span ref={ref}>{raw}</span>;
-
-  return (
-    <span ref={ref}>
-      {prefix}
-      {display}
-      {suffix}
-    </span>
-  );
-};
-
+/**
+ * Las tres cifras del hero, en texto plano.
+ *
+ * Aquí había un contador que subía de 0 a la cifra al entrar en pantalla, y
+ * tenía un fallo que no se veía en el navegador: `renderToString` no corre
+ * efectos, así que el prerenderizado escribía el estado inicial del contador en
+ * el HTML y `dist/index.html` decía **«0+ años de experiencia, 0+ estudiantes,
+ * 0% profesores verificados»** en los tres idiomas. Lo leía quien no ejecuta
+ * JavaScript (justo el público para el que existe el prerenderizado) y también
+ * el visitante de verdad, desde el primer pintado hasta que hidrataba y la
+ * sección entraba en pantalla.
+ *
+ * Las cifras van tal cual vienen del diccionario: son dato, no animación. Hay un
+ * test que comprueba que el HTML prerenderizado las lleva dentro
+ * (`src/test/prerender.test.tsx`).
+ */
 export const Stats = () => {
   const { t } = useLang();
 
@@ -67,7 +40,7 @@ export const Stats = () => {
               className="flex items-baseline gap-4 py-4 first:pt-0 last:pb-0 sm:block sm:px-2 sm:py-0 sm:text-center"
             >
               <div className="min-w-[4.5rem] font-serif text-4xl sm:min-w-0 sm:text-5xl md:text-6xl text-primary leading-none">
-                <CountUp raw={s.v} />
+                {s.v}
               </div>
               <div className="text-sm text-primary/70 leading-snug sm:mt-2 sm:text-balance">{s.l}</div>
             </div>

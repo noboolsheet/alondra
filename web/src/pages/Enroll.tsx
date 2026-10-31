@@ -4,6 +4,7 @@ import { Layout } from "@/components/Layout";
 import { RegistrationWidget } from "@/components/RegistrationWidget";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
+import { viewportOnce } from "@/lib/motion";
 
 /**
  * Inscripción: material de cierre.
@@ -38,9 +39,9 @@ const Enroll = () => {
             {t.enroll.steps.map((step, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={viewportOnce}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="rounded-3xl border border-border bg-card shadow-soft p-8"
               >
@@ -57,9 +58,9 @@ const Enroll = () => {
       <section className="pb-14">
         <div className="container-wide max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={viewportOnce}
             transition={{ duration: 0.5 }}
             className="rounded-3xl border border-border bg-secondary/40 p-8 md:p-12"
           >

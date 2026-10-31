@@ -71,7 +71,7 @@ export const Hero = () => {
       <div className="relative w-full py-10 sm:py-20 md:py-28 pl-6 sm:pl-20 lg:pl-40 pr-5 sm:pr-6">
         <div className="max-w-2xl lg:max-w-3xl text-left">
           <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.05 }}
             className={`font-serif ${titleSize} text-primary leading-[0.98] text-balance`}
@@ -83,7 +83,7 @@ export const Hero = () => {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-6 text-lg text-primary/70 max-w-xl leading-relaxed"
@@ -92,7 +92,7 @@ export const Hero = () => {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.35 }}
             className="mt-8 flex flex-col sm:flex-row sm:items-center gap-3"

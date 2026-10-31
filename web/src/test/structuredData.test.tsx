@@ -2,7 +2,7 @@ import { render, waitFor } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { LanguageProvider } from "@/i18n/LanguageContext";
-import { useStructuredData } from "@/lib/structuredData";
+import { priceOf, useStructuredData } from "@/lib/structuredData";
 import { translations } from "@/i18n/translations";
 
 const Probe = () => { useStructuredData(); return null; };
@@ -122,5 +122,59 @@ describe("datos estructurados", () => {
     const raw = JSON.stringify(await graph("/"));
     expect(raw).not.toContain("aggregateRating");
     expect(raw).not.toContain("reviewCount");
+  });
+});
+
+/**
+ * El precio es el único dato del grafo que se **deduce** de una cadena de copy,
+ * y por eso tiene tests propios: lo que se escriba en `registration.formats[].price`
+ * deja de ser texto y pasa a ser una cifra que se le entrega a Google.
+ *
+ * El caso que motiva esto: "$35–$50" (la forma natural de escribir dos tarifas,
+ * y la que ya usa `priceRange`) se convertía en **3550**.
+ */
+describe("priceOf", () => {
+  it("lee un importe suelto, que es lo que hay hoy en las dos tarifas", () => {
+    expect(priceOf("$50")).toBe(50);
+    expect(priceOf("$35")).toBe(35);
+    // Con texto alrededor, en cualquiera de los tres idiomas.
+    expect(priceOf("desde $50")).toBe(50);
+    expect(priceOf("$50 / clase")).toBe(50);
+  });
+
+  it("acepta decimales sin redondearlos", () => {
+    expect(priceOf("$49.50")).toBe(49.5);
+    expect(priceOf("$37.25")).toBe(37.25);
+  });
+
+  it("entiende el separador de millar", () => {
+    expect(priceOf("$1,200")).toBe(1200);
+    expect(priceOf("$1,200.50")).toBe(1200.5);
+  });
+
+  it("un RANGO no es un precio: se descarta en vez de pegar las cifras", () => {
+    // Antes: 3550, 3550 y 3550. Un precio inventado en el JSON-LD es peor que
+    // una oferta sin precio, que es lo que pasa ahora (la oferta se omite).
+    expect(priceOf("$35–$50")).toBeNull();
+    expect(priceOf("$35-$50")).toBeNull();
+    expect(priceOf("de $35 a $50")).toBeNull();
+  });
+
+  it("sin cifras no se inventa nada", () => {
+    expect(priceOf("")).toBeNull();
+    expect(priceOf("consultar")).toBeNull();
+    expect(priceOf("$")).toBeNull();
+    expect(priceOf(".")).toBeNull();
+  });
+
+  it("un precio ilegible saca la oferta del catálogo, no la publica a medias", async () => {
+    // El contrato del que depende lo de arriba: `lessonService` omite la oferta
+    // cuando `priceOf` devuelve null (`if (price === null) return []`).
+    const nodes = await graph("/pricing");
+    const [service] = typed(nodes, "Service");
+    const catalog = service.hasOfferCatalog as { itemListElement: unknown[] };
+    // Las dos tarifas de hoy sí se publican: el cambio de `priceOf` no puede
+    // haber vaciado el catálogo.
+    expect(catalog.itemListElement).toHaveLength(2);
   });
 });

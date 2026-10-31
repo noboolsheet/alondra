@@ -132,7 +132,12 @@ export const GoogleReviews = () => {
               <GoogleG className="w-6 h-6" />
             </span>
 
-            <AnimatePresence mode="wait" custom={dir}>
+            {/* `initial={false}`: la primera reseña se pinta ya en su sitio, sin
+                animar su montaje. Lo que se gana es que el HTML prerenderizado no
+                la lleve en `opacity:0` (ver `src/lib/motion.ts`); el fundido y el
+                deslizamiento entre reseñas, que es el que se ve de verdad, se
+                mantiene intacto. */}
+            <AnimatePresence mode="wait" custom={dir} initial={false}>
               <motion.div
                 key={i}
                 custom={dir}

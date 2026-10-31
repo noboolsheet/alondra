@@ -5,6 +5,7 @@ import { StepUp } from "@/components/StepUp";
 import { CTABanner } from "@/components/CTABanner";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
+import { viewportOnce } from "@/lib/motion";
 
 /**
  * Precios, y sólo precios.
@@ -41,9 +42,9 @@ const Registration = () => {
             {t.registration.formats.map((f, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={viewportOnce}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="rounded-3xl border border-border bg-card shadow-soft p-8 flex flex-col"
               >
@@ -99,9 +100,9 @@ const Registration = () => {
             {t.registration.benefits.items.map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={viewportOnce}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="flex items-start gap-4 rounded-3xl border border-accent/30 bg-accent/10 p-8"
               >

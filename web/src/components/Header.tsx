@@ -148,7 +148,11 @@ export const Header = () => {
               onClick={() => setOpen(!open)}
               aria-label="Toggle menu"
             >
-              <AnimatePresence mode="wait">
+              {/* `initial={false}`: el glifo del menú se pinta ya visible. Con el
+                  montaje animado, el HTML prerenderizado llevaba el botón en
+                  `opacity:0` y sin JavaScript no se veía (ver `src/lib/motion.ts`).
+                  El giro al abrir y cerrar se mantiene. */}
+              <AnimatePresence mode="wait" initial={false}>
                 {open ? (
                   <motion.div key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.15 }}>
                     <X className="w-5 h-5 text-primary" />

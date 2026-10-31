@@ -284,7 +284,16 @@ let tunelResuelto = false;
 
 let arrancado = false;
 
-const resolverTunel = async () => {
+/**
+ * Relee la IP del conector. Corre al arrancar y cada minuto (la IP cambia si se
+ * recrea su contenedor).
+ *
+ * Exportada para los tests: el refresco que cae **dentro** del `await` de un
+ * envío es lo que hace que la identidad de una petición pueda cambiar a mitad
+ * de camino, y eso no se puede provocar desde fuera por HTTP. Ver
+ * `src/test/send-refund-identity.test.ts`.
+ */
+export const resolverTunel = async () => {
   const antes = tunelResuelto;
   try {
     const dirs = await dns.lookup(TUNNEL_CONTAINER, { all: true });
@@ -417,13 +426,22 @@ const quitarUna = (arr, v) => {
   return i === -1 ? arr : [...arr.slice(0, i), ...arr.slice(i + 1)];
 };
 
-/** Apunta un envío y devuelve su marca. Va pegado a su `atSendLimit`, sin await. */
+/**
+ * Apunta un envío y devuelve el apunte. Va pegado a su `atSendLimit`, sin await.
+ *
+ * Devuelve la CLAVE además de la marca, y eso no es cosmética: la devolución
+ * ocurre después del `await` del envío (hasta 20 s, el `socketTimeout`), y el
+ * refresco del conector corre cada minuto. Si la resolución del DNS cambia de
+ * estado dentro de esa ventana, la identidad de la misma petición cambia con
+ * ella, así que recalcularla al devolver dejaba la marca en el cubo de origen
+ * para siempre y descontaba de otra clave. Quien apunta dice dónde apuntó.
+ */
 const noteSend = (req) => {
   const now = Date.now();
-  const ip = ipOf(req);
-  sendLog.set(ip, [...(sendLog.get(ip) ?? []), now]);
+  const id = ipOf(req);
+  sendLog.set(id, [...(sendLog.get(id) ?? []), now]);
   allSends.push(now);
-  return now;
+  return { id, marca: now };
 };
 
 /**
@@ -437,12 +455,14 @@ const noteSend = (req) => {
  * autoinfligía solo tras un despliegue sin credenciales, que es justo cuando
  * `getTransporter()` devuelve null: los 500 de visitantes reales llenaban el cupo
  * y el formulario seguía cerrado un día entero después de arreglar la causa.
+ *
+ * Recibe el apunte de `noteSend`, no la petición: la clave tiene que ser la
+ * MISMA con la que se gastó el cupo (ver la cabecera de `noteSend`).
  */
-const refundSend = (req, marca) => {
-  const ip = ipOf(req);
-  const quedan = quitarUna(sendLog.get(ip) ?? [], marca);
-  if (quedan.length) sendLog.set(ip, quedan);
-  else sendLog.delete(ip);
+const refundSend = ({ id, marca }) => {
+  const quedan = quitarUna(sendLog.get(id) ?? [], marca);
+  if (quedan.length) sendLog.set(id, quedan);
+  else sendLog.delete(id);
   allSends = quitarUna(allSends, marca);
 };
 
@@ -589,10 +609,10 @@ app.post("/api/send-contact", asyncRoute(async (req, res) => {
   }
 
   if (atSendLimit(req)) return res.status(429).json({ ok: false, error: "too_many" });
-  const marca = noteSend(req);
+  const apunte = noteSend(req);
 
   return sendFormEmail(res, {
-    alFallar: () => refundSend(req, marca),
+    alFallar: () => refundSend(apunte),
     subject: `Nuevo contacto: ${name} · ${instrument} · ${zip}`,
     heading: "Nuevo mensaje de contacto",
     name,
@@ -647,10 +667,10 @@ app.post("/api/send-application", blockIfAtLimit, upload.single("cv"), asyncRout
     : [];
 
   if (atSendLimit(req)) return res.status(429).json({ ok: false, error: "too_many" });
-  const marca = noteSend(req);
+  const apunte = noteSend(req);
 
   return sendFormEmail(res, {
-    alFallar: () => refundSend(req, marca),
+    alFallar: () => refundSend(apunte),
     subject: `Nueva candidatura: ${name}`,
     heading: "Nueva candidatura",
     name,

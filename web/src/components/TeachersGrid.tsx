@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { PageLink } from "@/components/PageLink";
 import { CallCta } from "@/components/CallCta";
 import { useLang } from "@/i18n/LanguageContext";
-import { reveal, fadeUp, portraitIn } from "@/lib/motion";
+import { reveal, fadeUp, portraitIn, viewportOnce } from "@/lib/motion";
 import { rich } from "@/lib/richtext";
 
 /**
@@ -77,9 +77,9 @@ export const TeachersGrid = () => {
           {team.map((m, i) => (
             <motion.li
               key={m.slug}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={viewportOnce}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="flex flex-col text-center"
             >

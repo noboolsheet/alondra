@@ -30,6 +30,17 @@ const EMPTY = {
 /** Obligatorios. El resto ayudan, pero no valen una fricción extra. */
 const REQUIRED = ["name", "email", "phone", "zip", "instrument", "channel", "source"] as const;
 
+/**
+ * El mismo tope que `CAMPO_MAX` en `server/index.mjs`, declarado aquí.
+ *
+ * El servidor recorta cualquier campo a 2000 caracteres **en silencio**: un
+ * mensaje largo llegaba al buzón cortado a media frase y ni el visitante ni
+ * Ilena se enteraban. Con el tope declarado en el campo no se puede pasar, y el
+ * contador de debajo (asociado con `aria-describedby`, no una región viva, que
+ * en cada tecla sería ruido para un lector de pantalla) dice cuánto queda.
+ */
+const MENSAJE_MAX = 2000;
+
 export const ContactForm = () => {
   const { t } = useLang();
   const [data, setData] = useState(EMPTY);
@@ -45,7 +56,12 @@ export const ContactForm = () => {
   const validate = () => {
     const e: Record<string, string> = {};
     for (const key of REQUIRED) if (!data[key].trim()) e[key] = t.errors.required;
-    if (data.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = t.errors.email;
+    // Sobre el correo RECORTADO: el regex prohíbe espacios, así que un espacio
+    // delante o detrás (lo deja el autorrelleno del móvil y cualquier pegado)
+    // hacía que un correo perfectamente válido diera «email inválido» y el padre
+    // se quedaba ahí. El servidor ya validaba sobre el recortado, así que el
+    // cliente era más estricto que el servidor sin motivo.
+    if (data.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = t.errors.email;
     if (data.phone.trim() && !/^[\d\s+\-()]{7,}$/.test(data.phone)) e.phone = t.errors.phone;
     if (data.zip.trim() && !/^\d{5}(-\d{4})?$/.test(data.zip.trim())) e.zip = t.errors.zip;
     setErrors(e);
@@ -61,7 +77,9 @@ export const ContactForm = () => {
       const res = await fetch("/api/send-contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, promo, company }),
+        // El correo va recortado también en el envío: es el que acaba en el
+        // `replyTo` del mensaje que lee Ilena.
+        body: JSON.stringify({ ...data, email: data.email.trim(), promo, company }),
       });
       // El 429 es el tope de envíos, no un fallo: lleva su propio mensaje.
       if (!res.ok) throw new Error(res.status === 429 ? "too_many" : "failed");
@@ -81,13 +99,26 @@ export const ContactForm = () => {
     <div>
       <label htmlFor={name} className="block text-xs font-semibold tracking-wide uppercase text-primary/70 mb-2">{label}</label>
       {textarea ? (
-        <textarea
-          id={name}
-          rows={4}
-          value={data[name]}
-          onChange={(e) => setData({ ...data, [name]: e.target.value })}
-          className="w-full rounded-xl border border-primary/20 bg-background px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-accent/40 transition-all"
-        />
+        <>
+          <textarea
+            id={name}
+            rows={4}
+            maxLength={MENSAJE_MAX}
+            aria-describedby={`${name}-tope`}
+            value={data[name]}
+            // `maxLength` sólo acota lo que escribe o pega una persona; un valor
+            // puesto por script (autorrelleno de un gestor, extensión) lo salta y
+            // el contador llegaba a marcar «2500/2000». Con el recorte aquí, lo
+            // que se ve es exactamente lo que se manda, y el servidor nunca tiene
+            // que recortar nada.
+            onChange={(e) => setData({ ...data, [name]: e.target.value.slice(0, MENSAJE_MAX) })}
+            className="w-full rounded-xl border border-primary/20 bg-background px-4 py-3 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-accent/40 transition-all"
+          />
+          {/* Sólo cifras: dice el tope sin copy nueva que traducir a tres idiomas. */}
+          <p id={`${name}-tope`} className="mt-1 text-right text-xs text-primary/60">
+            {data[name].length}/{MENSAJE_MAX}
+          </p>
+        </>
       ) : (
         <input
           id={name}
@@ -123,7 +154,11 @@ export const ContactForm = () => {
 
   return (
     <div className="rounded-3xl bg-card border border-border shadow-soft p-6 sm:p-10">
-      <AnimatePresence mode="wait">
+      {/* `initial={false}`: el formulario se pinta ya visible (su `initial` acababa
+          en el HTML prerenderizado como `opacity:0`, ver `src/lib/motion.ts`). El
+          paso a la pantalla de éxito sigue animándose, que es el único cambio de
+          estado que el visitante ve aquí. */}
+      <AnimatePresence mode="wait" initial={false}>
         {sent ? (
           <motion.div
             key="success"

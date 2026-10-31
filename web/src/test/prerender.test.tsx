@@ -56,4 +56,42 @@ describe("prerenderizado", () => {
     expect(html).toContain(translations.es.registration.pricingTitle);
     expect(html).not.toContain(translations.en.registration.pricingTitle);
   });
+
+  /**
+   * Regresión: el HTML prerenderizado tiene que verse SIN JavaScript.
+   *
+   * `renderToString` pinta el estado inicial de cada animación de entrada, así
+   * que los `initial={{ opacity: 0 }}` acababan escritos en el fichero: 48
+   * elementos en la portada, y entre ellos el `<main>`, o sea la página entera
+   * declarada invisible con el contenido dentro. Quien no ejecuta JavaScript (los
+   * rastreadores que alimentan las respuestas generativas, que son la razón de
+   * prerenderizar) y quien lo tiene activado pero no recibe el bundle veían una
+   * página en blanco.
+   *
+   * El detalle de la solución está en la cabecera de `src/lib/motion.ts`: las
+   * entradas animan movimiento, no opacidad.
+   */
+  it("ninguna ruta prerenderizada esconde contenido con opacity:0", async () => {
+    for (const path of prerenderPaths()) {
+      const html = await render(path);
+      // `(?![.\d])` para que un `opacity:0.5` legítimo no cuente como oculto.
+      const ocultos = html.match(/style="[^"]*opacity:\s*0(?![.\d])[^"]*"/g) ?? [];
+      expect(ocultos, `${path} esconde ${ocultos.length} elemento(s)`).toEqual([]);
+      // El `<main>` es el caso grave: si él se oculta, da igual todo lo demás.
+      expect(html).not.toMatch(/<main[^>]*opacity:\s*0/);
+    }
+  });
+
+  it("las cifras del hero van en el HTML, no en un contador que arranca en cero", async () => {
+    // Aquí había un contador animado de 0 a la cifra, y como los efectos no
+    // corren al renderizar en servidor, el build escribía «0+ años de
+    // experiencia, 0+ estudiantes, 0% profesores verificados» en los tres
+    // idiomas. Lo leía un rastreador y lo veía el visitante hasta que hidrataba.
+    for (const lang of ["en", "es", "fr"] as const) {
+      const html = await render(pathFor("home", lang));
+      const t = translations[lang].hero;
+      for (const cifra of [t.stat1, t.stat2, t.stat3]) expect(html).toContain(cifra);
+      expect(html).not.toMatch(/>0<!-- -->[+%]/);
+    }
+  });
 });

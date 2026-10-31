@@ -4,6 +4,7 @@ import { Layout } from "@/components/Layout";
 import { ApplicationForm } from "@/components/ApplicationForm";
 import { useLang } from "@/i18n/LanguageContext";
 import { rich } from "@/lib/richtext";
+import { viewportOnce } from "@/lib/motion";
 
 const PERK_ICONS = [Heart, CalendarClock, TrendingUp, ShieldCheck];
 
@@ -38,9 +39,9 @@ const Careers = () => {
                 return (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
+                    viewport={viewportOnce}
                     transition={{ duration: 0.5, delay: i * 0.08 }}
                     className="rounded-3xl bg-card border border-border p-6"
                   >

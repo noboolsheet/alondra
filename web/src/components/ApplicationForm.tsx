@@ -28,7 +28,9 @@ export const ApplicationForm = () => {
     const e: Record<string, string> = {};
     if (!data.name.trim()) e.name = t.errors.required;
     if (!data.email.trim()) e.email = t.errors.required;
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = t.errors.email;
+    // Recortado, por lo mismo que en ContactForm: un espacio pegado delante del
+    // correo no es un correo inválido, y el servidor valida sobre el recortado.
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email.trim())) e.email = t.errors.email;
     if (!data.phone.trim()) e.phone = t.errors.required;
     else if (!/^[\d\s+\-()]{7,}$/.test(data.phone)) e.phone = t.errors.phone;
     if (!data.role.trim()) e.role = t.errors.required;
@@ -70,7 +72,7 @@ export const ApplicationForm = () => {
     setSending(true);
     try {
       const fd = new FormData();
-      Object.entries(data).forEach(([k, v]) => fd.append(k, v));
+      Object.entries(data).forEach(([k, v]) => fd.append(k, k === "email" ? v.trim() : v));
       fd.append("company", company);
       if (file) fd.append("cv", file);
       const res = await fetch("/api/send-application", { method: "POST", body: fd });
@@ -112,7 +114,11 @@ export const ApplicationForm = () => {
 
   return (
     <div className="rounded-3xl bg-card border border-border shadow-soft p-6 sm:p-10">
-      <AnimatePresence mode="wait">
+      {/* `initial={false}`: el formulario se pinta ya visible (su `initial` acababa
+          en el HTML prerenderizado como `opacity:0`, ver `src/lib/motion.ts`). El
+          paso a la pantalla de éxito sigue animándose, que es el único cambio de
+          estado que el visitante ve aquí. */}
+      <AnimatePresence mode="wait" initial={false}>
         {sent ? (
           <motion.div
             key="success"
