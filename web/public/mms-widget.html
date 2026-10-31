@@ -14,7 +14,64 @@
     </style>
   </head>
   <body>
+    <!--
+      Confirmación de carga hacia la página que nos incrusta.
+
+      El problema que resuelve: esta página es NUESTRA, así que el `load` del
+      iframe se dispara siempre, aunque el script de My Music Staff no haya
+      llegado (un bloqueador de anuncios, una caída del proveedor). Ese `load`
+      cancelaba el reloj de `useIframeStatus` y el mensaje alternativo con los
+      contactos no aparecía jamás: el visitante se quedaba mirando un recuadro
+      vacío de 700 px. Comprobado en Chrome: con `app.mymusicstaff.com`
+      bloqueado, el `load` llega igual y el fallback no salía.
+
+      Lo que se mide es lo único que de verdad significa «hay formulario»: que
+      este documento haya crecido. Con el widget puesto, el alto pasa de 0 a
+      ~1500 px en unos segundos; con el script bloqueado se queda en 0 para
+      siempre. No vale comprobar que exista el iframe del tercero: aparece
+      enseguida y con 0 px de alto.
+
+      El aviso va al origen propio, nunca a "*": si algún día alguien incrusta
+      esta página desde otro dominio, no recibe nada.
+    -->
+    <script>
+      (function () {
+        var ORIGEN = window.location.origin;
+        var ALTO_MINIMO = 200; // px: por debajo de esto no hay formulario que valga
+        var LIMITE_MS = 20000; // tope propio, para no sondear eternamente
+        var INTERVALO_MS = 200;
+        var avisado = false;
+        var desde = Date.now();
+
+        function avisar(tipo, motivo) {
+          // Una sola vez, y sólo si estamos dentro de un iframe.
+          if (avisado || window.parent === window) return;
+          avisado = true;
+          window.parent.postMessage({ fuente: "alondra-mms", tipo: tipo, motivo: motivo || "" }, ORIGEN);
+        }
+
+        // Lo usa el `onerror` del script de abajo: es la vía rápida, y la más
+        // frecuente (un bloqueador corta la petición y el error llega al vuelo,
+        // sin esperar a ningún plazo).
+        window.alondraAvisarWidget = avisar;
+
+        var reloj = setInterval(function () {
+          if (avisado) return clearInterval(reloj);
+          if (document.body && document.body.scrollHeight >= ALTO_MINIMO) {
+            clearInterval(reloj);
+            avisar("listo");
+          } else if (Date.now() - desde > LIMITE_MS) {
+            clearInterval(reloj);
+            avisar("fallo", "sin-render");
+          }
+        }, INTERVALO_MS);
+      })();
+    </script>
+
     <!-- My Music Staff registration widget (school sch_PDkJ7) -->
-    <script src="https://app.mymusicstaff.com/Widget/v4/Widget.ashx?settings=eyJTY2hvb2xJRCI6InNjaF9QRGtKNyIsIldlYnNpdGVJRCI6Indic190ejBKNyIsIldlYnNpdGVCbG9ja0lEIjoid2JiX3p2ejZ6SjUifQ=="></script>
+    <script
+      src="https://app.mymusicstaff.com/Widget/v4/Widget.ashx?settings=eyJTY2hvb2xJRCI6InNjaF9QRGtKNyIsIldlYnNpdGVJRCI6Indic190ejBKNyIsIldlYnNpdGVCbG9ja0lEIjoid2JiX3p2ejZ6SjUifQ=="
+      onerror="window.alondraAvisarWidget &amp;&amp; window.alondraAvisarWidget('fallo', 'script')"
+    ></script>
   </body>
 </html>

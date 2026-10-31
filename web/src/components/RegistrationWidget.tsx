@@ -9,9 +9,23 @@ import { rich } from "@/lib/richtext";
 // (public/mms-widget.html) inside an iframe, so the widget runs in its own
 // document exactly like a normal embed would.
 
+/**
+ * Nombre acordado con `public/mms-widget.html`, que es quien manda el aviso.
+ *
+ * No se puede compartir una constante con un fichero HTML estático, así que la
+ * pareja se mantiene a mano: si cambias esta cadena, cámbiala allí.
+ *
+ * Por qué hace falta: esa página es nuestra y carga siempre, así que su `load`
+ * llegaba aunque el script de My Music Staff estuviera bloqueado o caído. Eso
+ * cancelaba el reloj y el recuadro se quedaba vacío, sin el mensaje alternativo
+ * con los contactos. Ahora el formulario sólo se muestra cuando el propio
+ * documento de dentro confirma que ha pintado algo.
+ */
+const CONFIRMACION = "alondra-mms";
+
 export const RegistrationWidget = () => {
   const { t } = useLang();
-  const { status, reloadKey, onLoad, onError, reload, containerRef } = useIframeStatus();
+  const { status, reloadKey, onLoad, onError, reload, containerRef } = useIframeStatus(10000, CONFIRMACION);
   const phoneDigits = t.contact.infoPhone.replace(/[^\d+]/g, "");
 
   return (
@@ -37,7 +51,11 @@ export const RegistrationWidget = () => {
               key={reloadKey}
               title="My Music Staff registration"
               src="/mms-widget.html"
-              className="h-full w-full border-0 bg-transparent"
+              // Oculto hasta que confirme: así no se ve el recuadro a medio
+              // pintar. `invisible` y no `hidden`: un iframe con `display:none`
+              // no llega a pedirse con `loading="lazy"`, y entonces no podría
+              // confirmar nunca.
+              className={`h-full w-full border-0 bg-transparent ${status === "loaded" ? "" : "invisible"}`}
               loading="lazy"
               onLoad={onLoad}
               onError={onError}
